@@ -1,9 +1,9 @@
 theme: minima
-title: Design notes
-author: PeteMontgomery 
+title: Design / engineering notes for Terrahawk
+# author: PeteMontgomery 
 #email: your-email@domain.com
 description: > # this means to ignore newlines until "baseurl:"
-  Design & engineering notes for Terrahawk. 
+  Design / engineering notes for Terrahawk. 
 # social links
 twitter_username: JNCC_UK # DO NOT include the @ character, or else the build will fail!
 github_username:  jncc # DO NOT include the @ character, or else the build will fail!
