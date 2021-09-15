@@ -7,6 +7,6 @@ tags: algorithms geospatial
 
 All about nearest neighbours.
 
-![5km grid]({{ site.baseurl }}/img/5km-grid.png)
+![5km grid]({{ site.baseurl }}/img/5km-grid.PNG)
 
 Does this work?
