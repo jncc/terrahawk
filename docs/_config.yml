@@ -1,0 +1,12 @@
+theme: minima
+title: Design notes
+author: PeteMontgomery 
+#email: your-email@domain.com
+description: > # this means to ignore newlines until "baseurl:"
+  Design & engineering notes for Terrahawk. 
+# social links
+twitter_username: JNCC_UK # DO NOT include the @ character, or else the build will fail!
+github_username:  jncc # DO NOT include the @ character, or else the build will fail!
+
+show_excerpts: true # set to false to remove excerpts on the homepage
+list_title: ' ' # get rid of the silly 'Posts' heading on the homepage? doesn't seem to work tho.
