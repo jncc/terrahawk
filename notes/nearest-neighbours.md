@@ -2,7 +2,7 @@
 Nearest neighbours
 ==================
 
-Generate the lookup data for the `nearest50` anomoly detection method.
+Generate the lookup data for our `nearest50` anomoly detection method.
 
     -- *get the 50 nearest polygons of the same habitat within 50km!*
 

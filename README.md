@@ -1,2 +1,5 @@
-# terrahawk
-Habitat anomaly detection
+
+Terrahawk
+=========
+
+Habitat anomaly detection.

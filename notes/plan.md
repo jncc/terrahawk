@@ -160,9 +160,9 @@ Sprint 10 (to July 9)
   - `satellite/index/year/month/day/frame.tif` (each index will have a separate metadata record on CEDA)
 - [x] Big Data work with Bytes {pm, fm}
   - [x] Complete Glue pre-processing to parquet (to match new workflow output)
-  - [x] Partition key generation step (polyid)
+  - [x] Partition key generation step (polyid)   
   - [x] By-month aggregation
-  - [ ] Example "hardest" query running in <2 seconds
+  - [x] ~~Example "hardest" query running in <2 seconds~~
   - [x] Example Athena query in Lambda
 
 Sprint 11 (to July 23)
@@ -192,18 +192,56 @@ Sprint 13 (to August 27)
   - configuration / setup basket {cj}
 - [x] 🎁 Jasmin decision about putting intermediate products (index values) on CEDA archive. {uw}
 
-Next Sprint 
------------
+Sprint 14 (to September 17)
+---------------------------
 
 - [ ] 🎁 Regenerate the "nearest50" neighbours using open licence data for `liveng0` {ih, pm}
 - [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
 - [ ] Double-check that there's no shift problem for S2 {uw}
 - [ ] Plan for how to actually get index files to CEDA archive
-- [ ] Complete (or get Bytes to start) implementation of finished Glue jobs based on completed data and SQL {pm, fm}
 - [ ] Monitor contractor for S1 top-shift problem {uw, cj}
 - [ ] Ensure that Cloudhealth is billing everything in `jncc-habmon-alpha` account {jp}
 - [ ] Check / review time recording against plan {jp}
 - [ ] Investigate QA processes for index files {uw}
+- [ ] 🎁 Complete (or get Bytes to start) implementation of finished Glue jobs based on completed data and SQL {pm, fm}
+- [ ] 🥳 Moved to "code-based" Glue jobs {pm}
+- [ ] 🥳 Generate gridded  partition value for each polygon {pm}
+- [ ] 🥳 Generate Z-scores in final output {pm}
+- [ ] 🥳 New Git repo, tidy & archive all notes & docs {pm}
+
+- 🙋 At this point, can we reliably generate stats and do we have a working comparison method?
+- ⏱ We are at least ~2 weeks behind schedule. Due to our Glue issues (and summer break stop-starting?).
+
+*End of alpha phase 1; Start of alpha phase 2.*
+
+Sprint 15 (to October 1)
+------------------------ 
+
+- What to go in here?
+
+Stats data workstream:
+
+- [ ] QA the current results in more depth {?}
+- [ ] Solve S1 shift problem {?}
+- [ ] Process for getting indexes on CEDA {?}
+- [ ] 🎁 Run all stats all the way through {?}
+- [ ] QA the final stats {ih}
+
+App services workstream:
+
+- [ ] 🎁 Field data API prototype {cj}
+  - research & design 
+  - get data into Postgres
+  - deploy API
+
+UI workstream
+-------------
+
+- [ ] 🎁 Implement React map, layout panels
+- [ ] 🎁 Parameterise on Index, Statistic, Date
+- [ ] 🎁 Implement thumbnails
+- [ ] 🎁 Charts for selected polygon
+- [ ] 🎁 Field data
 
 Backlog
 -------
@@ -252,7 +290,6 @@ Backlog
 
 - [ ] Use national character areas to improve habitat means
 
-
 - [ ] Static website hosting on S3 / Cloudfront {pm}
 
 - [ ] JNCC Gazetteer service https://gazetteer.jncc.gov.uk
@@ -284,72 +321,8 @@ Workstreams
 - Additional habitat maps (Scotland, etc)
 - ~~Vector tiles investigation~~
 
-Choice
--------
-
-(A) Cautious - stay with Postgres for now, scale to England, then see.
-- Cheapest and fastest way to England-scale.
-- We're ready to go.
-- This is good "MVP" practice - do it as simply as you can first, then iterate.
-- Lower-risk - good if this ends up not being useful.
-- Risks
- - loading new data becomes a management nightmare
- - we have to swap out the backend and simultaneously run an active service
- - data migration challenge
-
-(B) Ambitious - swap the "backend" to a "Big Data" solution
-- We'll need help (but we can get immediately from Bytes)
-- We'll need to commit more dev up-front
-- Note that there shouldn't be much of a "calendar" delay. The UI can now be built quite independently of the backend.
-
-
-Alpha sprint planning
----------------------
-
-- {pm} has ~13 weeks work time until 1 Nov
-- One sprint = 2 weeks
-
-**Phase 1 {pm with fm}**
-
-- 2 sprints: (including this one) Finish Glue / Athena, fully loaded and API with handover to {?dev}
-  - to the point where {?dev} is able to own, understand and run the full Yorkshire stats again
-- 2 sprints: Habitat means {pm}
-  - with some handover to {?dev}
-- 1 sprint: Leave (actually 2.5 weeks spread throughout August)
-- Prepare for Field Data implementation {pr}
-
-**Phase 2 (three parallel workstreams)**
-
-    |------------------------------------------------------------------------------------------------------------------------------|
-    | Stats data {fm/cj, with ih}     | Field data {?dev to lead}        | Alpha UI {pm}                                           |
-    |                                 | *Depends on {pr} for datasets*   | *UI will be alpha quality, existing alpha URL, no SSL.* |
-    |---------------------------------|----------------------------------|---------------------------------------------------------|
-    | 2 sprints (hopefully none)      | 2 sprints                        | 1 sprint: Implement React map, layout panels            |
-    | depending on data QA issues     |                                  |                                                         |
-    | Rerun processing if neccessary  | Design & implement backend DB    | 1 sprint: Parameterise on Index, Statistic, Date        |
-    | and QA                          | table(s) and API                 |                                                         |
-    | *Indexes on CEDA*               | with example datasets            | 1 sprint: Implement thumbnails                          |
-    | QA the stats API {ih}           |                                  |                                                         |
-    | 2 sprints Scotland processing`*`| (leeway)                         | 1 sprint: Charts for selected polygon                   |
-    | (leeway)                        | Stretch: Gazetteer               |                                                         |
-    |                                 |                                  |                                                         |
-    |---------------------------------|----------------------------------|---------------------------------------------------------|
-
-`*` Simple ARD Project time but need to factor in dev absence
-
-**Post-Alpha**
-
-- ... more planning, react to feedback
-- 3 sprints: Redeploy to new account, codify Glue jobs in Terraform (do we deploy Glue/Spark scripts from main repo, not terraform), use dedicated security roles etc, use JNCC static site module.
-- 1 sprint: Web essentials
-- 1 sprint: Accessibility, branding
-- 1 sprint: Maps page (multiple mapping frameworks)
-
 Web app - obvious to-dos
 --------------------------
-
-- [ ] Replace Parcel.js
-- [ ] Make repo public
 
 - Terraform
   - [ ] SSL / cloudfront (perhaps can still deploy with sls once set up in terraform? https://www.serverless.com/learn/tutorial/creating-aws-cloudfront-distribution)

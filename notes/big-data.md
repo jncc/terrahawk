@@ -170,23 +170,3 @@ Time series for one polygon takes <1 sec.
       and polyid_partition='23'
       and polyid='239876'
       order by year, month
-
-Habitat means
--------------
-
-- Generated nearest neighbours (see nearest-neighbours.md)
-
-- Join each stat row (from `polygon_stats_by_month`) with the aggregation of the stats in the rows with the same index and date for the neighbouring polygons:
-
-    select a.framework, a.indexname, a.polyid, a.year, a.month,
-      cast(avg(b.mean) as real)     as cf_mean,    -- "habitat mean"
-      cast(stddev(b.mean) as real)  as cf_mean_sd, -- "sd of habitat mean"
-      count(*)                      as cf_count    -- count of contributing polygons
-    from polygon_stats_by_month a
-    inner join framework_liveng_0_nearest50_sample n
-      on a.polyid=n.polyid
-    inner join polygon_stats_by_month b
-      on a.framework=b.framework and a.indexname=b.indexname and n.neighbour=b.polyid and a.year=b.year and a.month=b.month
-    where a.polyid = 508326 -- just for testing
-    group by a.framework, a.indexname, a.polyid, a.year, a.month
-    order by a.framework, a.indexname, a.polyid, a.year, a.month
