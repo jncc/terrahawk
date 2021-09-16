@@ -1,0 +1,32 @@
+README:
+
+Contains, or is derived from, information supplied by Ordnance Survey. (c) Crown copyright and database rights 2017. Ordnance Survey 100022021
+
+Indices were calculated by JNCC from analysis-ready Sentinel-1 and Sentinel-2 data processed by JNCC and Defra.  This project was funded by the Caroline Herschel Framework Partnership Agreement on Copernicus User Uptake.
+
+A polygon is flagged as different from the mean if in a month or season if its value for a given index (NDVI, NDWI, NDMI, RVI, RVIv) and statistic (mean, median, 1st quartile, 3rd quartile) is more than 1 standard deviation different from the habitat level mean value for the given index and statistic.
+
+This csv contains 21 fields as follows:
+PolygonID        - polygon unique identifier
+LE_ID            - Living England polygon identifier
+Index            - selected index
+TimePeriod       - time period
+Habitat          - habitat
+AcquisitionDates - cloud and shadow free imagery acquisition dates for that polygon, within the specified time period
+Mean             - mean index value
+MeanDiff         - how many standard deviations different is this polygon from the habitat level mean of mean index value
+HabitatMean      - mean of polygon mean index value for all polygons of this habitat type
+HabitatMean_SD   - standard deviation of polygon mean index value for all polygons of this habitat type
+Median           - median index value
+MedianDiff       - how many standard deviations different is this polygon from the habitat level mean of median index value
+HabitatMedian    - mean of polygon median index value for all polygons of this habitat type
+HabitatMedian_SD - standard deviation of polygon median index value for all polygons of this habitat type
+Q1               - index value first quartile
+Q1Diff           - how many standard deviations different is this polygon from the habitat level mean of index value 1st quartile
+HabitatQ1        - mean of polygon index value 1st quartile for all polygons of this habitat type
+HabitatQ1_SD     - standard deviation of polygon index value 1st quartile for all polygons of this habitat type
+Q3               - index value third quartile
+Q3Diff           - how many standard deviations different is this polygon from the habitat level mean of index value 3rd quartile
+HabitatQ3        - mean of polygon index value 3rd quartile for all polygons of this habitat type
+HabitatQ3_SD     - standard deviation of polygon index value 3rd quartile for all polygons of this habitat type
+

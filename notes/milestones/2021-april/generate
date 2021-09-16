@@ -1,0 +1,4 @@
+
+pandoc -i achievements.md -o output/achievements.docx
+pandoc -i proposal.md     -o output/proposal.docx
+pandoc -i wireframes.md    -o output/wireframes.docx

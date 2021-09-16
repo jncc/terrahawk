@@ -1,0 +1,380 @@
+siteSelectNULL:
+    site: 
+        display: Please select a site below
+        app: siteSelectNULL
+    spatial_framework:
+        - framework_display: Please select a site
+          framework_app: frameSelectNULL
+          habcol:
+    indices:
+        - index: Please select a site
+    stats:
+        - stat: Please select a site
+          statcol: statSelectNULL
+    temporal_framework:
+        - framework_display: Please select a site
+          framework_app: timeSelectNULL
+
+corsbodeilio:
+    country:
+        display: Wales
+        app: wales
+    site: 
+        display: Cors Bodeilio
+        app: corsbodeilio
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+          idcol:
+        - framework_display: Phase 1
+          framework_app: phase1
+          habcol: Name
+          idcol: OBJECTID          
+        - framework_display: 
+          framework_app: 
+          habcol: 
+          idcol:          
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+darkpeak:
+    country:
+        display: England
+        app: england
+    site: 
+        display: Dark Peak
+        app: darkpeak
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+          idcol:          
+        - framework_display: LE and PHI
+          framework_app: phi
+          habcol: main_habit
+          idcol: polygon_id
+        - framework_display: 
+          framework_app: 
+          habcol: 
+          idcol:          
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+flandersmoss:
+    country:
+        display: Scotland
+        app: scotland
+    site: 
+        display: Flanders Moss
+        app: flandersmoss
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+        - framework_display: EUNIS
+          framework_app: eunis
+          habcol: EUNIS_DESC
+          idcol: Id
+        - framework_display: 1ha Grid
+          framework_app: hagrid 
+          habcol: EUNIS_DESC
+          idcol: DN
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+hes2:
+    country:
+        display: Scotland
+        app: scotland 
+    site: 
+        display: HES Site 2
+        app: hes2
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+        - framework_display: EUNIS
+          framework_app: eunis
+          habcol: EUNIS_DESC
+          idcol: Id
+        - framework_display: 1ha Grid
+          framework_app: hagrid 
+          habcol: EUNIS_DESC
+          idcol: DN
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+inshmarshes:
+    country:
+        display: Scotland
+        app: scotland
+    site: 
+        display: Insh Marshes
+        app: inshmarshes
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+        - framework_display: EUNIS
+          framework_app: eunis
+          habcol: EUNIS_DESC
+          idcol: Id
+        - framework_display: 1ha Grid
+          framework_app: hagrid 
+          habcol: EUNIS_DESC
+          idcol: DN
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+malvernhills:
+    country:
+        display: England
+        app: england
+    site: 
+        display: Malvern Hills
+        app: malvernhills
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+          idcol:          
+        - framework_display: LE and PHI
+          framework_app: phi
+          habcol: main_habit
+          idcol: polygon_id
+        - framework_display: 
+          framework_app: 
+          habcol: 
+          idcol:          
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+rhostonyrefail:
+    country:
+        display: Wales
+        app: wales
+    site: 
+        display: Rhos Tonyrefail
+        app: rhostonyrefail
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol:
+          idcol:          
+        - framework_display: Phase 1
+          framework_app: phase1
+          habcol: Name
+          idcol: OBJECTID          
+        - framework_display: 
+          framework_app: 
+          habcol: 
+          idcol:          
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
+
+skyreburn:
+    country:
+        display: Scotland
+        app: scotland 
+    site: 
+        display: Skyreburn
+        app: skyreburn
+    spatial_framework:
+        - framework_display: Please select a spatial framework below
+          framework_app: frameSelectNULL
+          habcol: 
+        - framework_display: EUNIS
+          framework_app: eunis
+          habcol: EUNIS_DESC
+          idcol: Id
+        - framework_display: 1ha Grid
+          framework_app: hagrid 
+          habcol: EUNIS_DESC
+          idcol: DN
+    indices:
+        - index: NDVI
+          index_display: NDVI (plant productivity)
+        - index: NDWI
+          index_display: NDWI (surface water)
+        - index: NDMI
+          index_display: NDMI (plant water content)
+        - index: RVI
+          index_display: RVI (vegetation structure)
+        - index: RVIv
+          index_display: RVIv (vegetation structure)        
+    stats:
+        - stat: Mean
+          statcol: mean
+        - stat: Median
+          statcol: median
+        - stat: Q1
+          statcol: Q1
+        - stat: Q3
+          statcol: Q3
+    temporal_framework:
+        - framework_display: Seasonally
+          framework_app: seasonal
+        - framework_display: Monthly
+          framework_app: monthly
