@@ -195,19 +195,19 @@ Sprint 13 (to August 27)
 Sprint 14 (to September 17)
 ---------------------------
 
-- [ ] 🎁 Regenerate the "nearest50" neighbours using open licence data for `liveng0` {ih, pm}
-- [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
-- [ ] Double-check that there's no shift problem for S2 {uw}
-- [ ] Plan for how to actually get index files to CEDA archive
-- [ ] Monitor contractor for S1 top-shift problem {uw, cj}
-- [ ] Ensure that Cloudhealth is billing everything in `jncc-habmon-alpha` account {jp}
-- [ ] Check / review time recording against plan {jp}
-- [ ] Investigate QA processes for index files {uw}
-- [ ] 🎁 Complete (or get Bytes to start) implementation of finished Glue jobs based on completed data and SQL {pm, fm}
-- [ ] 🥳 Moved to "code-based" Glue jobs {pm}
-- [ ] 🥳 Generate gridded partition value for each polygon {pm}
-- [ ] 🥳 Generate Z-scores in final output {pm}
-- [ ] 🥳 New Git repo, tidy & archive all notes & docs {pm}
+- [x] 🎁 Regenerate the "nearest50" neighbours using open licence data for `liveng0` {ih, pm}
+- [x] ~~🎁 Write metadata for intermediate products on CEDA {ih}~~
+- [x] ~~Double-check that there's no shift problem for S2 {uw}~~
+- [x] ~~Plan for how to actually get index files to CEDA archive {uw}~~
+- [x] Monitor contractor for S1 top-shift problem {uw, cj} - method for fix delivered
+- [x] ~~Ensure that Cloudhealth is billing everything in `jncc-habmon-alpha` account {jp}~~
+- [x] ~~Check / review time recording against plan {jp}~~
+- [x] Investigate QA processes for index files {uw}
+- [x] 🎁 Complete (or get Bytes to start) implementation of finished Glue jobs based on completed data and SQL {pm, fm}
+- [x] 🥳 Moved to "code-based" Glue jobs {pm}
+- [x] 🥳 Generate gridded partition value for each polygon {pm}
+- [x] 🥳 Generate Z-scores in final output {pm}
+- [x] 🥳 New Git repo, tidy & archive all notes & docs {pm}
 
 - 🙋 At this point, can we reliably generate stats and do we have a working comparison method?
 - ⏱ We are at least ~2 weeks behind schedule. Due to our Glue issues (and summer break stop-starting?).
@@ -217,7 +217,21 @@ Sprint 14 (to September 17)
 Sprint 15 (to October 1)
 ------------------------ 
 
-- What to go in here?
+- [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
+- [ ] Double-check that there's no shift problem for S2 {uw}
+- [ ] Plan for how to actually get index files to CEDA archive {uw}
+- [ ] Ensure that Cloudhealth is billing everything in `jncc-habmon-alpha` account {jp}
+- [ ] Check / review time recording against plan {jp}
+- [ ] Initial meeting on QA for index files {ih, pr}
+- [ ] 🎁 Process all S2 data {ih, pm}
+- [ ] 🎁 Implement React map, layout panels {pm}
+- [ ] 🎁 Field data API prototype {cj}
+  - research & design 
+  - get some data into Postgres
+  - deploy API (stretch)
+
+Upcoming sprints
+----------------
 
 Stats data workstream:
 
@@ -229,14 +243,12 @@ Stats data workstream:
 
 App services workstream:
 
-- [ ] 🎁 Field data API {cj}
-  - research & design 
-  - get data into Postgres
-  - deploy API
+- [ ] Gazetteer {cj}
+  - Design & implement backend DB with several datasets
+  - API
 
 UI workstream:
 
-- [ ] 🎁 Implement React map, layout panels
 - [ ] 🎁 Parameterise on Index, Statistic, Date
 - [ ] 🎁 Implement thumbnails
 - [ ] 🎁 Charts for selected polygon
@@ -245,7 +257,7 @@ UI workstream:
 Backlog
 -------
 
-- [ ] Solve "top 2km" S1 scene issue
+- [ ] Implement contractor's fix for S1 top-shift problem :-)
 
 - [ ] Reprocess Yorkshire data
   - We need to know where the indexes and COGs are going before we process all England. Short-term solution if we can't get COGs on to CEDA.
