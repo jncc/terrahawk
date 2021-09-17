@@ -205,7 +205,7 @@ Sprint 14 (to September 17)
 - [ ] Investigate QA processes for index files {uw}
 - [ ] 🎁 Complete (or get Bytes to start) implementation of finished Glue jobs based on completed data and SQL {pm, fm}
 - [ ] 🥳 Moved to "code-based" Glue jobs {pm}
-- [ ] 🥳 Generate gridded  partition value for each polygon {pm}
+- [ ] 🥳 Generate gridded partition value for each polygon {pm}
 - [ ] 🥳 Generate Z-scores in final output {pm}
 - [ ] 🥳 New Git repo, tidy & archive all notes & docs {pm}
 
@@ -229,13 +229,12 @@ Stats data workstream:
 
 App services workstream:
 
-- [ ] 🎁 Field data API prototype {cj}
+- [ ] 🎁 Field data API {cj}
   - research & design 
   - get data into Postgres
   - deploy API
 
-UI workstream
--------------
+UI workstream:
 
 - [ ] 🎁 Implement React map, layout panels
 - [ ] 🎁 Parameterise on Index, Statistic, Date
