@@ -4,12 +4,13 @@ Uploading partitioning info
 
 Dump the partitions table to a CSV file:
 
-    psql "user=docker password=docker host=localhost port=5430 dbname=gis" -c "\copy framework_liveng0_partitions to 'framework_liveng0_partitions.csv' csv header"
+    psql "user=docker password=docker host=localhost port=5430 dbname=gis" -c "\copy framework_liveng0_partitions_10km to 'framework_liveng0_partitions_10km.csv' csv header"
+
     (ignore "Warning: No existing cluster is suitable as a default target.")
 
 Copy up to S3:
 
-    aws s3 cp ./framework_liveng0_partitions.csv s3://jncc-habmon-alpha-stats-data/partitions/csv/framework=liveng0/data.csv --profile jncc-habmon-alpha-admin
+    aws s3 cp ./framework_liveng0_partitions_10km.csv s3://jncc-habmon-alpha-stats-data/partitions/csv/framework=liveng0/data.csv --profile jncc-habmon-alpha-admin
 
 Make a table in Athena: (this will need some tweaks when adding additional future frameworks)
 
@@ -30,13 +31,13 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
     MSCK REPAIR TABLE stats_partitions_csv;
 
-Convert to Parquet:
+Convert to Parquet: (Note I used `lg` for "large" 10km-square partitionsm and `sm` for "small" 5km-square partitions as not sure which would perform best.)
 
-    CREATE TABLE statsdb.stats_stats_partitions_LIVENG0_DELETEME
+    CREATE TABLE statsdb.stats_partitions_LIVENG0_DELETEME
     WITH (
         format = 'PARQUET',
         parquet_compression = 'SNAPPY',
-        external_location = 's3://jncc-habmon-alpha-stats-data/partitions/parquet/framework=liveng0'
+        external_location = 's3://jncc-habmon-alpha-stats-data/partitions-lg/parquet/framework=liveng0/'
     ) AS SELECT polyid, partition FROM stats_partitions_csv
 
 Make the final table:
@@ -51,7 +52,7 @@ Make the final table:
     ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
     STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
     OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
-    LOCATION 's3://jncc-habmon-alpha-stats-data/partitions/parquet/'
+    LOCATION 's3://jncc-habmon-alpha-stats-data/partitions-lg/parquet/'
     TBLPROPERTIES (
         'has_encrypted_data'='false',
         'parquet.compression'='SNAPPY'

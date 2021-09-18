@@ -73,9 +73,8 @@ Postgres PostGIS spatial extensions will need to be enabled for spatial operatio
 
 - Load the partition values.
 
-    - Load the OSGB 5km and 10km grid into QGIS and export as Postgres dump.
+    - Load the OSGB 10km grid into QGIS and export as Postgres dump.
 
-        - https://github.com/charlesroper/OSGB_Grids/blob/master/GeoJSON/OSGB_Grid_5km.geojson
         - https://github.com/charlesroper/OSGB_Grids/blob/master/GeoJSON/OSGB_Grid_10km.geojson
 
     - Import into Postgres.
