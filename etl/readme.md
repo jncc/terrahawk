@@ -7,14 +7,19 @@ Diagram
 
         s3://...stats-raw/parquet/   (written to S3 from Jasmin)
         🏢stats_raw
+              |                  **there is also an equivalent `seasonally` branch!**
+       💥aggregate-monthly         
               |
-       💥aggregate-monthly         **there is also an equivalent `seasonally` branch!**
-              |
-    s3://...stats-data/aggregated-monthly/parquet/      s3://...stats-data/neighbours/nearest50/parquet/
-    🏢stats_aggregated_monthly                         🏢stats_neighbours_nearest50
-                            \                         /
-                        💥compare-monthly-nearest50
-                                    |
+    s3://...stats-data/aggregated-monthly/parquet/      
+    🏢stats_aggregated_monthly                         
+                            \         s3://...stats-data/neighbours/nearest50/parquet/
+                             \        🏢stats_neighbours_nearest50
+                              \           |
+                               \          |     s3://...stats-data/partitions-lg/parquet/
+                                \         |     🏢stats_partitions
+                                 \        |        /
+                             💥compare-monthly-nearest50
+                                          |
                       s3://...stats-data/compared-monthly-nearest50/parquet/
                       🏢stats_compared_monthly_nearest50
 

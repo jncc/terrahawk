@@ -24,7 +24,6 @@ source = glueContext.create_dynamic_frame.from_catalog(database = "statsdb", tab
 
 sql = '''
     select
-        substring(polyid, 0, 2) as polyid_partition,
         count(*) as count,
         framework,
         indexname,

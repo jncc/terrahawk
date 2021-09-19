@@ -61,10 +61,17 @@ comparisons = sparkSqlQuery(
   mapping = {"aggregated": aggregated, "neighbours": neighbours},
   transformation_ctx = "comparisons")
 
+partitions = glueContext.create_dynamic_frame.from_catalog(
+  database = "statsdb",
+  table_name = "stats_partitions",
+  transformation_ctx = "partitions")
+
 # to avoid having to group by every single row in the aggregated table,
 # which makes things even harder to understand, join again
 # to get all the original columns from the input table paired with the generated comparisons
-# (this step could be done in the first query though)
+# also generate the z-scores
+# also get the poly_partition
+# (this step could be probably all be done in the first query though...)
 resultSql = '''
     select
       a.*,
@@ -86,29 +93,31 @@ resultSql = '''
       cast(abs((a.min    - c.cf_min)    / c.cf_min_sd)    as float) as z_min_abs,
       cast(abs((a.max    - c.cf_max)    / c.cf_max_sd)    as float) as z_max_abs,
       cast(abs((a.q1     - c.cf_q1)     / c.cf_q1_sd)     as float) as z_q1_abs,
-      cast(abs((a.q3     - c.cf_q3)     / c.cf_q3_sd)     as float) as z_q3_abs
+      cast(abs((a.q3     - c.cf_q3)     / c.cf_q3_sd)     as float) as z_q3_abs,
+      p.partition as poly_partition
     from aggregated a
     inner join comparisons c
       on a.framework=c.framework and a.indexname=c.indexname and a.polyid=c.polyid and a.year=c.year and a.month=c.month
+    inner join partitions p
+      on a.framework = p.framework and a.polyid = p.polyid
 '''
 
 result = sparkSqlQuery(
   glueContext,
   query = resultSql,
-  mapping = {"aggregated": aggregated, "comparisons": comparisons },
+  mapping = {"aggregated": aggregated, "comparisons": comparisons, "partitions": partitions},
   transformation_ctx = "result")
-
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/compared-monthly-nearest50/parquet/",
+    path = "s3://jncc-habmon-alpha-stats-data/compared-monthly-nearest50-10km/parquet/",
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
-    partitionKeys = ["framework", "indexname", "polyid_partition"],
+    partitionKeys = ["framework", "indexname", "poly_partition"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "stats_compared_monthly_nearest50")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "stats_compared_monthly_nearest50_10km")
 sink.setFormat("glueparquet")
 sink.writeFrame(result)
 

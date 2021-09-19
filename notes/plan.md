@@ -224,6 +224,7 @@ Sprint 15 (to October 1)
 - [ ] Check / review time recording against plan {jp}
 - [ ] Initial meeting on QA for index files {ih, pr}
 - [ ] 🎁 Process all S2 data {ih, pm}
+  - use new OSGB gridsquare polygon partitioning scheme
 - [ ] 🎁 Implement React map, layout panels {pm}
 - [ ] 🎁 Field data API prototype {cj}
   - research & design 
