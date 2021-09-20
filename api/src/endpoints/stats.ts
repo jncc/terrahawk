@@ -1,11 +1,12 @@
 
+import * as format from 'pg-format'
 
 // example: POST /stats
 // {
 //     "framework": "liveng0",
 //     "indexname": "NDVI",
-//     "poly_parition": ["SD87", "SD88"],
-//     "polyid": ["489639", "489640", "489647", "489658"]
+//     "polyPartitions": ["SD87", "SD88"],
+//     "polyids": ["489639", "489640", "489647", "489658"]
 // }
 
 import { athenaExpress } from "../aws"
@@ -17,7 +18,13 @@ export const getStats = async (input: any) => {
 
     let args = parseArgs(input)
 
-    let sql = `
+    // https://github.com/datalanche/node-pg-format
+    // %% outputs a literal % character.
+    // %I outputs an escaped SQL identifier.
+    // %L outputs an escaped SQL literal.
+    // %s outputs a simple string.
+
+    let sql = format(`
         select s.polyid,
             max(s.z_mean_abs)   as z_mean_abs,
             max(s.z_median_abs) as z_median_abs,
@@ -27,13 +34,20 @@ export const getStats = async (input: any) => {
             max(s.z_q3_abs)     as z_q3_abs
         from stats_compared_monthly_nearest50_10km s
         where
-            framework='liveng0'
-            and indexname='NDVI'
-            and poly_partition in ('SD87', 'SD88')
-            and polyid in ('489639', '489640', '489647', '489658')
+            framework=%L
+            and indexname=%L
+            and poly_partition in (%L)
+            and polyid in (%L)
         group by polyid
-        limit 10
-        `
+        `,
+        args.framework,
+        args.indexname,
+        args.polyPartitions,
+        args.polyids
+        )
+
+    // TODO: remove
+    console.log(sql)
 
     let query = { sql, db: "statsdb" }
     let result = await athenaExpress().query(query)

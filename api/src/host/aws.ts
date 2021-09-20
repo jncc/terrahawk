@@ -41,14 +41,14 @@ export let lookupsHandler: APIGatewayProxyHandler = async (event) => {
 
 export let coloursHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
-  return success(await getColours(body))
+  let result = await getColours(body)
+  return success(result)
 }
 
 export let statsHandler: APIGatewayProxyHandler = async (event) => {
 
-  let query = { year: 2018, month: 4 } as MonthlyQuery
-
-  let result = await getStats(query)
+  let body = JSON.parse(event.body ?? "{}")
+  let result = await getStats(body)
   return success(result)
 }
 

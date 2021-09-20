@@ -52,10 +52,9 @@ if (env.NODE_ENV === 'development') {
         res.json(result)
     }))
 
-    app.get('/stats', asyncHandler(async(req, res) => {
+    app.post('/stats', asyncHandler(async(req, res) => {
 
-        let query = { year: 2018, month: 4 } as MonthlyQuery
-        let result = await getStats(query)
+        let result = await getStats(req.body)
         res.json(result)
     }))
 
