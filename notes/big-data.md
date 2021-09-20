@@ -122,7 +122,7 @@ Partitioning
 Suggestion: use the first two characters of the polyid. Examine count / distribution with this strategy:
 
     select substring(cast(polyid as text), 0, 3) as polyid_partition, count(*)
-    from framework_liveng_0
+    from framework_liveng0
     group by polyid_partition
     order by polyid_partition
     limit 1000

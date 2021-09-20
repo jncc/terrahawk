@@ -1,0 +1,14 @@
+
+node_modules/
+.env*
+.cache/
+dist/
+tsc/
+*.log
+.serverless/
+built/
+
+#python virtual environments
+################################
+*.venv
+__pycache__

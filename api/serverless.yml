@@ -1,0 +1,120 @@
+
+service: habmon-api
+
+# Serverless framework version
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  region: eu-west-2
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+  stage: alpha # stage is an AWS Lambda concept - we don't need it
+
+  vpc:
+    securityGroupIds:
+      - sg-215afa5a
+    subnetIds:
+      - subnet-0151ec004695512a4
+      - subnet-070f54b1acce7ef09
+      - subnet-01a070d7b277bb352
+
+  stackTags:
+      AccountSet: habmon
+      Environment: alpha
+      Project: habmon
+
+  httpApi:
+    cors: true # could remove if eventually all on same domain
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+  environment:
+    NODE_ENV: production
+    PGHOST: ${file(./.env.${env:ENVNAME}.yml):PGHOST}
+    PGDATABASE: ${file(./.env.${env:ENVNAME}.yml):PGDATABASE}
+    PGPORT: ${file(./.env.${env:ENVNAME}.yml):PGPORT}
+    PGUSER: ${file(./.env.${env:ENVNAME}.yml):PGUSER}
+    PGPASSWORD: ${file(./.env.${env:ENVNAME}.yml):PGPASSWORD}
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
+
+functions:
+  hello:
+    handler: built/host/aws.helloHandler
+    events:
+      - httpApi:
+          path: /hello
+          method: GET
+  error:
+    handler: built/host/aws.errorHandler
+    events:
+      - httpApi:
+          path: /error
+          method: GET
+  alive:
+    handler: built/host/aws.aliveHandler
+    events:
+      - httpApi:
+          path: /alive
+          method: GET
+  athena:
+    handler: built/host/aws.athenaHandler
+    events:
+      - httpApi:
+          path: /athena
+          method: POST
+  polygons:
+    handler: built/host/aws.polygonsHandler
+    events:
+      - httpApi:
+          path: /polygons
+          method: POST
+  lookups:
+    handler: built/host/aws.lookupsHandler
+    events:
+      - httpApi:
+          path: /lookups
+          method: GET
+  colours:
+    handler: built/host/aws.coloursHandler
+    events:
+      - httpApi:
+          path: /colours
+          method: POST
+  stats:
+    handler: built/host/aws.statsHandler
+    events:
+      - httpApi:
+          path: /stats
+          method: GET
+
+# plugins:
+#   - serverless-finch
+
+# custom:
+#   client:
+#     bucketName: jncc-habmon-alpha-slsjs-finch
+#     distributionFolder: dist

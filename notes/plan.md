@@ -258,6 +258,14 @@ UI workstream:
 Backlog
 -------
 
+- [ ] Questions for AWS or Bytes glue expert
+  - *Parquet file size*
+  - Chain jobs (maybe not needed)?
+  - Bookmarking?
+
+- [ ] UI techincal debt
+  - Serverless.js 'Deprecation warning: Detected ".env" files.'
+
 - [ ] Implement contractor's fix for S1 top-shift problem :-)
 
 - [ ] Reprocess Yorkshire data
@@ -268,6 +276,14 @@ Backlog
 - [ ]  Database normalisation (storage optimisation)?
     - `habitat`
     - `frame`
+
+- [ ] JNCC Gazetteer service https://gazetteer.jncc.gov.uk
+  - public, UK-wide gazetteer service for conservation-related sites of interest
+  - free text search returns 
+  - optionally specify which datasets you want to search, polygon area filter, etc. at later date.
+  - licencing?
+  - supported, documented web service
+  - scalable due to RDS Aurora and Lambda - gives us a chance to explore Aurora
 
 - [ ] Accessibility in React https://reactjs.org/docs/accessibility.html
 
@@ -303,14 +319,6 @@ Backlog
 - [ ] Use national character areas to improve habitat means
 
 - [ ] Static website hosting on S3 / Cloudfront {pm}
-
-- [ ] JNCC Gazetteer service https://gazetteer.jncc.gov.uk
-  - public, UK-wide gazetteer service for conservation-related sites of interest
-  - free text search returns 
-  - optionally specify which datasets you want to search, polygon area filter, etc. at later date.
-  - licencing?
-  - supported, documented web service
-  - scalable due to RDS Aurora and Lambda - gives us a chance to explore Aurora
 
 Workstreams
 -----------

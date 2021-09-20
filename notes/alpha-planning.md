@@ -5,7 +5,8 @@ Alpha project planning
 - {pm} has ~13 weeks work time until 1 Nov
 - One sprint = 2 weeks
 
-**Phase 1 {pm with fm}**
+Phase 1 {pm with fm}
+--------------------
 
 - 2 sprints: (including this one) Finish Glue / Athena, fully loaded and API with handover to {?dev}
   - to the point where {?dev} is able to own, understand and run the full Yorkshire stats again
@@ -14,7 +15,8 @@ Alpha project planning
 - 1 sprint: Leave (actually 2.5 weeks spread throughout August)
 - Prepare for Field Data implementation {pr}
 
-**Phase 2 (three parallel workstreams)**
+Phase 2 (three parallel workstreams)
+------------------------------------
 
     |--------------------------------- ---------------------------------------------------------------------------------------------|
     | Stats data {fm|cj, with ih}      | App services {cj}                | Alpha UI {pm}                                           |
@@ -34,7 +36,8 @@ Alpha project planning
 
 `*` Simple ARD Project time but need to factor in dev absence
 
-**Post-Alpha**
+Post-Alpha
+----------
 
 - ... more planning, react to feedback
 - 3 sprints: Redeploy to new account, codify Glue jobs in Terraform (do we deploy Glue/Spark scripts from main repo, not terraform), use dedicated security roles etc, use JNCC static site module.
