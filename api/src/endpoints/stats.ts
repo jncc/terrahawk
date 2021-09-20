@@ -9,10 +9,13 @@
 // }
 
 import { athenaExpress } from "../aws"
+import { parseArgs } from "./statsArgParser"
 
-export const getStats = async (args: any) => {
+export const getStats = async (input: any) => {
 
     console.log(`At ${(new Date()).toISOString()} - entering function`)
+
+    let args = parseArgs(input)
 
     let sql = `
         select s.polyid,
