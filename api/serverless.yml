@@ -109,7 +109,7 @@ functions:
     events:
       - httpApi:
           path: /stats
-          method: GET
+          method: POST
 
 # plugins:
 #   - serverless-finch
