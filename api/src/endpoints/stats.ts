@@ -26,12 +26,12 @@ export const getStats = async (input: any) => {
 
     let sql = format(`
         select s.polyid,
-            max(s.z_mean_abs)   as z_mean_abs,
-            max(s.z_median_abs) as z_median_abs,
-            max(s.z_min_abs)    as z_min_abs,
-            max(s.z_max_abs)    as z_max_abs,
-            max(s.z_q1_abs)     as z_q1_abs,
-            max(s.z_q3_abs)     as z_q3_abs
+            max(s.z_mean_abs)   as max_z_mean_abs,
+            max(s.z_median_abs) as max_z_median_abs,
+            max(s.z_min_abs)    as max_z_min_abs,
+            max(s.z_max_abs)    as max_z_max_abs,
+            max(s.z_q1_abs)     as max_z_q1_abs,
+            max(s.z_q3_abs)     as max_z_q3_abs
         from stats_compared_monthly_nearest50_10km s
         where
             framework=%L
