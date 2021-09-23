@@ -22,13 +22,12 @@ Generate the lookup data for our `nearest50` anomoly detection method.
     -- where cast(a.polyid as int) % 20 = 0 -- chunk if necessry
     -- limit 100000
 
-- Takes 38 seconds on my laptop to process ~850 polyids, so 22 polygons/sec.
-- 425788 polygons / 22 seconds => 5.4 hours
-- Done with 21259242 rows, a mean of 49.9 neighbours. 735 MB in Postres. 283M dumped as CSV. 92.0 MB converted to parquet.
+- Takes 38 seconds on my laptop to process ~850 polyids, so 22 polygons/sec. 425788 polygons in `liveng0` / 22 seconds => 5.4 hours.
+- Doing a mod operation on the polyid allows reliable chunking, so can do the whole thing in e.g. 20 separate runs.
 
 Makes a table like this:
 
-| polyid | neighbour |                                                                  |
+| polyid | neighbour |
 | ------ | --------- |
 | 508326 | 652497    |
 | 508326 | 652514    |
