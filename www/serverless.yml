@@ -1,0 +1,22 @@
+
+service: habmon-www
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  region: eu-west-2
+  stage: alpha # stage is an AWS Lambda concept - we don't need it
+
+plugins:
+  - serverless-finch
+
+custom:
+  # serverless-finch
+  client:
+    bucketName: jncc-habmon-alpha-www
+    distributionFolder: dist
+    tags: # seems to ignore provider.stackTags
+      AccountSet: habmon
+      Environment: alpha
+      Project: habmon

@@ -1,9 +1,14 @@
 
 module.exports = {
-  purge: ['./pages/**/*.{ts,tsx}'],
+  purge: ['./src/**/*.{ts,tsx}'],
   darkMode: false,
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        jncc: '#2d7a29',
+      }
+
+    }
   },
   variants: {
     extend: {},
