@@ -2,7 +2,7 @@
 Uploading partitioning info
 ===========================
 
-Dump the partitions table to a CSV file:
+Dump the `partitions` database table for the framework to a CSV file:
 
     psql "user=docker password=docker host=localhost port=5430 dbname=gis" -c "\copy framework_liveng0_partitions_10km to 'framework_liveng0_partitions_10km.csv' csv header"
 
