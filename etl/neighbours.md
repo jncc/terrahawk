@@ -49,7 +49,7 @@ Copy up to S3:
 
 Make a table in Athena: (this will need some tweaks when adding additional future frameworks)
 
-    CREATE EXTERNAL TABLE IF NOT EXISTS statsdb.stats_neighbours_nearest50_csv (
+    CREATE EXTERNAL TABLE IF NOT EXISTS statsdb.neighbours_nearest50_csv (
       `polyid` string,
       `neighbour` string 
     )
@@ -64,20 +64,20 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
     TBLPROPERTIES ('has_encrypted_data'='false','skip.header.line.count' = '1');
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
-    MSCK REPAIR TABLE stats_neighbours_nearest50_csv;
+    MSCK REPAIR TABLE neighbours_nearest50_csv;
 
 Convert to Parquet:
 
-    CREATE TABLE statsdb.stats_neighbours_nearest50_LIVENG0_DELETEME
+    CREATE TABLE statsdb.neighbours_nearest50_LIVENG0_DELETEME
     WITH (
         format = 'PARQUET',
         parquet_compression = 'SNAPPY',
         external_location = 's3://jncc-habmon-alpha-stats-data/neighbours/nearest50/parquet/framework=liveng0'
-    ) AS SELECT polyid, neighbour FROM stats_neighbours_nearest50_csv
+    ) AS SELECT polyid, neighbour FROM neighbours_nearest50_csv
 
 Make the final table:
 
-    CREATE EXTERNAL TABLE statsdb.stats_neighbours_nearest50 (
+    CREATE EXTERNAL TABLE statsdb.neighbours_nearest50 (
         `polyid` string,
         `neighbour` string
     )
@@ -94,7 +94,7 @@ Make the final table:
     )
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
-    MSCK REPAIR TABLE stats_neighbours_nearest50;
+    MSCK REPAIR TABLE neighbours_nearest50;
 
 Historical first attempt (aborted as output table too hard to use)
 ------------------------------------------------------------------

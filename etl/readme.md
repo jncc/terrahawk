@@ -6,7 +6,7 @@ Diagram
 --------
 
         s3://...stats-raw/parquet/   (written to S3 from Jasmin)
-        🏢stats_raw
+        🏢raw_stats
               |                  **there is also an equivalent `seasonally` branch!**
        💥aggregate-monthly         
               |
@@ -24,14 +24,14 @@ Diagram
                       🏢stats_compared_monthly_nearest50
 
 
-Setting up 🏢stats_raw 
------------------------
+Setting up 🏢raw_stats 
+----------------------
 
 Use AWS Athena to make tables in the AWS Glue catalog.
 
 We write CSV as well as Parquet for our convenience. Parquet is currently hard to visualise.
 
-    CREATE EXTERNAL TABLE `stats_raw_csv`(
+    CREATE EXTERNAL TABLE `raw_stats_csv`(
       `indexname` string, 
       `polyid` string, 
       `date` string, 
@@ -66,14 +66,14 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
       'delimiter'=',');
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
-    MSCK REPAIR TABLE stats_raw_csv;
+    MSCK REPAIR TABLE raw_stats_csv;
 
     -- demo query
     select * 
-    from stats_raw_csv
+    from raw_stats_csv
     limit 100;
 
-    CREATE EXTERNAL TABLE `stats_raw`(
+    CREATE EXTERNAL TABLE `raw_stats`(
       `indexname` string, 
       `polyid` string, 
       `date` string, 
@@ -107,10 +107,10 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
     );
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
-    MSCK REPAIR TABLE stats_raw;
+    MSCK REPAIR TABLE raw_stats;
 
     -- demo query
     select * 
-    from stats_raw
+    from raw_stats
     limit 100;
 

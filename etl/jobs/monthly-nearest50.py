@@ -20,14 +20,42 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-aggregated = glueContext.create_dynamic_frame.from_catalog(
-  database = "statsdb",
-  table_name = "stats_aggregated_monthly",
+raw = glueContext.create_dynamic_frame.from_catalog(database = "statsdb", table_name = "raw_stats", transformation_ctx = "source")
+
+aggregateSql = '''
+    select
+        count(*) as count,
+        framework,
+        indexname,
+        year,
+        month,
+        polyid,
+        seasonyear,
+        season,
+        collect_list(date) as date,
+        collect_list(frame) as frame,
+        platform,
+        habitat,
+        avg(mean) as mean,
+        avg(sd) as sd,
+        avg(median) as median,
+        min(min) as min,
+        max(max) as max,
+        avg(q1) as q1,
+        avg(q3) as q3
+    from raw
+    group by framework, polyid, indexname, year, month, seasonyear, season, platform, habitat
+
+'''
+aggregated = sparkSqlQuery(
+  glueContext,
+  query = aggregateSql,
+  mapping = {"raw": raw},
   transformation_ctx = "aggregated")
 
 neighbours = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "stats_neighbours_nearest50",
+  table_name = "neighbours_nearest50",
   transformation_ctx = "neighbours")
 
 # 'cf' ≈ 'compare'
@@ -63,7 +91,7 @@ comparisons = sparkSqlQuery(
 
 partitions = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "stats_partitions",
+  table_name = "partitions",
   transformation_ctx = "partitions")
 
 # to avoid having to group by every single row in the aggregated table,
@@ -110,14 +138,14 @@ result = sparkSqlQuery(
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/compared-monthly-nearest50-10km/parquet/",
+    path = "s3://jncc-habmon-alpha-stats-data/monthly-nearest50/parquet/",
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "indexname", "poly_partition"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "stats_compared_monthly_nearest50_10km")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50")
 sink.setFormat("glueparquet")
 sink.writeFrame(result)
 

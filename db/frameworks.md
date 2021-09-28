@@ -24,7 +24,17 @@ Postgres PostGIS spatial extensions will need to be enabled for spatial operatio
 - locally, I used the `kartoza/postgis` Docker image
 - on AWS, I ran all these commands https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.PostgreSQL.CommonDBATasks.PostGIS.html
 
-`liveng0` (Living England, Yorkshire subset)
+Uploading a table from a local Postgres to AWS
+----------------------------------------------
+
+Could use pg_dump and pg_restore:
+
+    pg_dump -Fc --no-owner -h localhost -p 5430 -U docker -W -d gis -t framework_liveng0 > /c/Work/framework_liveng0.dump
+    pg_restore --no-owner -h postgresdb.xxxxxxxxxxx.eu-west-2.rds.amazonaws.com -p 5432 -U postgres -W -d habmon-alpha -t framework_liveng0 /c/Work/framework_liveng0.dump
+
+... but a difference in versions between my local and AWS Postgres meant pg_restore currently didn't work. We can recreate from scatch (locally or remotely) using the following steps. This could be a problem for the full framework though, as uploading a QGIS dump of `liveng` to AWS took an hour or so...
+
+Framework `liveng0` (Living England, Yorkshire subset)
 --------------------------------------------
 
 - Import Living England map into Postgres.
@@ -39,7 +49,7 @@ Postgres PostGIS spatial extensions will need to be enabled for spatial operatio
 
     - Import into Postgres.
 
-            psql "user=docker password=docker host=localhost port=5430 dbname=gis" -f /c/Work/liveng0-dump.sql
+            psql "user=docker password=docker host=localhost port=5430 dbname=gis" -f /c/Work/liveng0.sql
 
 - Rename the table to `framework_{framework-identifier}`, e.g. `framework_liveng0`.
 
@@ -90,7 +100,7 @@ Postgres PostGIS spatial extensions will need to be enabled for spatial operatio
             (select g.tile_name
             from osgb10km g
             where ST_Intersects(p.geometry_4326, g.wkb_geometry)
-            limit 1  -- choose just the first one (assign exactly one gridsqaure to each polygon!)
+            limit 1  -- choose the first one (assign exactly one gridsquare to each polygon!)
             ) g on true
             
             > Query returned successfully in 17 secs 828 msec.
@@ -110,6 +120,5 @@ Postgres PostGIS spatial extensions will need to be enabled for spatial operatio
             from framework_liveng0 p
             where partition = 'SD87'
 
-
-
+    - It might be useful to add an index on partition. Not necessary for the app, though.
     

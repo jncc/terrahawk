@@ -230,6 +230,8 @@ Sprint 15 (to October 1)
   - research & design 
   - get some data into Postgres
   - deploy API (stretch)
+- [ ] 🥳 Further QA of stats results - compare with Dark Peak pilot {ih, pm}
+- [ ] 🥳 Recreate (and document) the `framework_liveng0` table on AWS
 
 Upcoming sprints
 ----------------
