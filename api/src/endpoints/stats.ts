@@ -32,7 +32,7 @@ export const getStats = async (input: any) => {
             max(s.z_max_abs)    as max_z_max_abs,
             max(s.z_q1_abs)     as max_z_q1_abs,
             max(s.z_q3_abs)     as max_z_q3_abs
-        from stats_compared_monthly_nearest50_10km s
+        from monthly_nearest50 s
         where
             framework=%L
             and indexname=%L
