@@ -2,13 +2,13 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
 
 import { env } from '../env'
-import { MonthlyQuery } from '../query'
 import { getAlive } from '../endpoints/alive'
 import { getPolygons } from '../endpoints/polygons'
 import { getLookups } from '../endpoints/lookups'
 import { getColours } from '../endpoints/colours'
 import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
+import { getChoropleth } from '../endpoints/choropleth'
 
 export let helloHandler: APIGatewayProxyHandler = async (event) => {
 
@@ -28,6 +28,11 @@ export let aliveHandler: APIGatewayProxyHandler = async (event) => {
 
 export let athenaHandler: APIGatewayProxyHandler = async (event) => {
   return success(await getAthena(event.queryStringParameters))
+}
+
+export let choroplethHandler: APIGatewayProxyHandler = async (event) => {
+  let body = JSON.parse(event.body ?? "{}")
+  return success(await getChoropleth(body))
 }
 
 export let polygonsHandler: APIGatewayProxyHandler = async (event) => {

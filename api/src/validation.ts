@@ -34,6 +34,19 @@ export function parseIndexname(args: Args) {
     return args.indexname
 }
 
+export function parseBbox(args: Args) {
+    if (!args.bbox) {
+        throw `Expected 'bbox'.`
+    }
+    if (typeof args.bbox !== 'string') {
+        throw `Expected 'bbox' to be a string.`
+    }
+    if (args.bbox.length < 10) {
+        throw `Invalid bbox.`
+    }
+    return args.bbox
+}
+
 export function parsePolyids(args: Args) {
 
     if (!args.polyids) {

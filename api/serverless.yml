@@ -86,6 +86,12 @@ functions:
       - httpApi:
           path: /athena
           method: POST
+  choropleth:
+    handler: built/host/aws.choroplethHandler
+    events:
+      - httpApi:
+          path: /choropleth
+          method: POST
   polygons:
     handler: built/host/aws.polygonsHandler
     events:

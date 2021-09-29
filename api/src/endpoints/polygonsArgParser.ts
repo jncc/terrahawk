@@ -21,24 +21,6 @@
         throw `Expected 'bbox'.`
     }
 
-    // let polyids = args.polyids
-    // if (!polyids) {
-    //     throw `Expected 'polyids'.`
-    // }
-    // let polyidsArray = polyids.split(',')
-    // if (polyidsArray.length === 0) {
-    //     throw `Expected at least one polyid.`
-    // }
-    // if (!polyidsArray.every(id => id.match(/^\d+$/))) {
-    //     throw `Polyids must be integers.`
-    // }
-
-    // let statistic = args.statistic
-    // if (!statistic) {
-    //     throw `Expected 'statistic'.`
-    // }
-    // let validStatistic = parseStatistic(statistic)
-    
     return {
         framework,
         bbox,
