@@ -3,3 +3,11 @@
 @tailwind utilities;
 
 .leaflet-map-container { width: 100%; height: 100%; position: absolute; left:0; top:0; right:0; bottom:0; }
+
+.choropleth-0 { fill: #ffffff; }
+.choropleth-1 { fill: #fff9c4; }
+.choropleth-2 { fill: #fff59d; }
+.choropleth-3 { fill: #f48fb1; }
+.choropleth-4 { fill: #c2185b; }
+.choropleth-5 { fill: #ad1457; }
+.choropleth-6 { fill: #880e4f; }
