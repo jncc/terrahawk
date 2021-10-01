@@ -217,31 +217,40 @@ Sprint 14 (to September 17)
 Sprint 15 (to October 1)
 ------------------------ 
 
-- [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
-- [ ] Double-check that there's no shift problem for S2 {uw}
-- [ ] Plan for how to actually get index files to CEDA archive {uw}
-- [ ] Ensure that Cloudhealth is billing everything in `jncc-habmon-alpha` account {jp}
-- [ ] Check / review time recording against plan {jp}
-- [ ] Initial meeting on QA for index files {ih, pr}
-- [ ] 🎁 Process all S2 data {ih, pm}
+- [ ] ~~🎁 Write metadata for intermediate products on CEDA {ih}~~
+- [ ] ~~Double-check that there's no shift problem for S2 {uw}~~
+- [x] Plan for how to actually get index files to CEDA archive {uw}
+- [x] Ensure that Cloudhealth is billing everything in `jncc-habmon-alpha` account {jp}
+- [x] Check / review time recording against plan {jp}
+- [ ] ~~Initial meeting on QA for index files {ih, pr}~~
+- [x] 🎁 Process all S2 data {MOSTLY DONE} {ih, pm}
   - use new OSGB gridsquare polygon partitioning scheme
-- [ ] 🎁 Implement React map, layout panels {pm}
-- [ ] 🎁 Field data API prototype {cj}
-  - research & design 
-  - get some data into Postgres
-  - deploy API (stretch)
+- [x] 🎁 Implement React map, {MOSTLY DONE} ~~layout panels~~ {pm}
+- [ ] ~~🎁 Field data API prototype {cj}~~
+  - [x] initial meeting and design discussions
+- [x] 🥳 Recreate (and document) the `framework_liveng0` table on AWS {pm}
+- [x] 🥳 Move two seprarate web requests into to one `/choropleth` API {pm}
 - [ ] 🥳 Further QA of stats results - compare with Dark Peak pilot {ih, pm}
-- [ ] 🥳 Recreate (and document) the `framework_liveng0` table on AWS
+
+Sprint 16 (to October 15)
+-------------------------
+
+- [ ] Initial meeting on QA for index files (assertions in workflow?) {ih, pr, fm, uw}
+- [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
+- [ ] 🎁 Implement React layout panels and polygons caching {pm}
+- [ ] Double-check that there's no shift problem for S2 {uw}
+- [ ] 🎁 Re-run all S2 data {ih}
+- [ ] Find an OS grey base map service {jp, pr}
+- [ ] NCEA data science meeting {pm, fm}
 
 Upcoming sprints
 ----------------
 
 Stats data workstream:
 
-- [ ] QA the current results in more depth {?}
-- [ ] Solve S1 shift problem {?}
-- [ ] Process for getting indexes on CEDA {?}
-- [ ] 🎁 Run all stats all the way through {?}
+- [ ] Write index files to CEDA archive
+- [ ] 🎁 Run all stats all the way through {}
+- [ ] Solve S1 shift problem {}
 - [ ] QA the final stats {ih}
 
 App services workstream:
@@ -249,6 +258,11 @@ App services workstream:
 - [ ] Gazetteer {cj}
   - Design & implement backend DB with several datasets
   - API
+
+- [ ] 🎁 Field data API prototype {cj}
+  - research & design 
+  - get some data into Postgres
+
 
 UI workstream:
 
