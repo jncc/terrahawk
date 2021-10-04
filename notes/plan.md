@@ -209,8 +209,11 @@ Sprint 14 (to September 17)
 - [x] 🥳 Generate Z-scores in final output {pm}
 - [x] 🥳 New Git repo, tidy & archive all notes & docs {pm}
 
+Checkpoint
+----------
+
 - 🙋 At this point, can we reliably generate stats and do we have a working comparison method?
-- ⏱ We are at least ~2 weeks behind schedule. Due to our Glue issues (and summer break stop-starting?).
+- ⏱ We are at least 2 weeks behind calendar schedule. Due primarily to our Glue issues (and summer break stop-starting?).
 
 *End of alpha phase 1; Start of alpha phase 2.*
 
@@ -237,11 +240,11 @@ Sprint 16 (to October 15)
 
 - [ ] Initial meeting on QA for index files (assertions in workflow?) {ih, pr, fm, uw}
 - [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
-- [ ] 🎁 Implement React layout panels and polygons caching {pm}
-- [ ] Double-check that there's no shift problem for S2 {uw}
+- [ ] 🎁 Implement React layout panels, data fetching and polygon caching {pm}
 - [ ] 🎁 Re-run all S2 data {ih}
 - [ ] Find an OS grey base map service {jp, pr}
 - [ ] NCEA data science meeting {pm, fm}
+- [ ] Double-check that there's no shift problem for S2 {uw}
 
 Upcoming sprints
 ----------------
@@ -262,7 +265,6 @@ App services workstream:
 - [ ] 🎁 Field data API prototype {cj}
   - research & design 
   - get some data into Postgres
-
 
 UI workstream:
 
