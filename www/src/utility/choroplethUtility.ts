@@ -1,10 +1,10 @@
 
 export function getCssClassForZScore(z: number) {
-    return z > 3.0 ? 'choropleth-6' :
-           z > 2.5 ? 'choropleth-5' :
-           z > 2.0 ? 'choropleth-4' :
-           z > 1.7 ? 'choropleth-3' :
-           z > 1.4 ? 'choropleth-2' :
+    // return z > 3.0 ? 'choropleth-6' :
+        //    z > 2.5 ? 'choropleth-5' :
+    return       z > 2.0 ? 'choropleth-4' :
+        //    z > 1.7 ? 'choropleth-3' :
+        //    z > 1.4 ? 'choropleth-2' :
            z > 1.0 ? 'choropleth-1' :
                      'choropleth-0';
 }

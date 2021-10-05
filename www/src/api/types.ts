@@ -21,3 +21,14 @@ export type Choropoly = {
 //   polyPartitions: string[]
 //   polyids: string[]
 // }
+
+export type PolygonsQuery = {
+  framework: string
+  bbox: string
+}
+
+export type ChoroplethQuery = {
+  framework: string
+  indexname: string
+  bbox: string
+}

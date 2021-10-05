@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.leaflet-map-container { width: 100%; height: 100%; position: absolute; left:0; top:0; right:0; bottom:0; }
-
 .choropleth-0 { fill: #ffffff; }
 .choropleth-1 { fill: #fff9c4; }
 .choropleth-2 { fill: #fff59d; }
