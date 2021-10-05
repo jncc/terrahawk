@@ -10,7 +10,8 @@ import { getPolygonsImpl } from './polygons'
     {
         "framework": "liveng0",
         "indexname": "NDVI",
-        "bbox":      "POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))"
+        "polyPartitions": ["SD87", "SD88"],
+        "polyids": ["489639", "489640", "489647", "489658"]
     }
 */
 
@@ -20,28 +21,16 @@ export const getChoropleth = async (input: any) => {
 
     let args = parseArgs(input)
 
-    let polygons = await getPolygonsImpl(args)
-    console.log(`At ${(new Date()).toISOString()} - got polygons result`)
-
-    let maxZScoresForThesePolygons = await getMaxZScores({
+    let maxZScores = await getMaxZScores({
         framework:      args.framework,
         indexname:      args.indexname,
-        polyids:        polygons.map(p => p.polyid as string),
-        polyPartitions: [...new Set(polygons.map(p => p.partition))] // use Set for `distinct`
+        polyPartitions: args.polyPartitions,
+        polyids:        args.polyids,
     })
+
     console.log(`At ${(new Date()).toISOString()} - got maxZScores result`)
     
-    return {
-        result: polygons.map(p => {
-
-            let maxZScores = maxZScoresForThesePolygons.find((s: any) => s.polyid === p.polyid) as any
-            
-            return {
-                ...p,
-                ...maxZScores
-            }
-        })
-    }
+    return maxZScores
 }
 
 type MaxZScoreQuery = {
@@ -51,7 +40,7 @@ type MaxZScoreQuery = {
     polyids: string[]    
 }
 
-let getMaxZScores = async (q: MaxZScoreQuery) => {
+export let getMaxZScores = async (q: MaxZScoreQuery) => {
 
     // https://github.com/datalanche/node-pg-format
     // %% outputs a literal % character.
@@ -87,41 +76,3 @@ let getMaxZScores = async (q: MaxZScoreQuery) => {
     if (!result.Items) throw 'No items returned from query'
     return result.Items
 }
-
-    // could join on server for perf improvement - something like:
-    // let colourRows = await getColours({
-    //     framework: 'liveng0',
-    //     index: 'NDVI',
-    //     polyids: polygons.map(r => r.polyid)
-    // })
-
-    // let joined = polygons.map(p => ({
-    //     p,
-    //     c: colourRows.polygons.filter(p2 => p2.polyid === p.polyid)
-    // })).map(x => ({ ...x.p, ...x.c }))
-
-    // return { joined }
-    
-
-
-// import * as format from 'pg-format'
-
-// import { MonthlyQuery } from '../query'
-// import { query } from '../db'
-
-// export const getStats = async (q: MonthlyQuery) => {
-//     console.log(q)
-
-//     let sql = format(`
-//         select *
-//         from %I
-//         where year=$1 and month=$2
-//         limit 1000`,
-//         'polygon_stats_by_month')
-
-//     let result = await query(
-//         sql,
-//         [q.year, q.month])
-        
-//     return result.rows
-// }

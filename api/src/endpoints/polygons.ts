@@ -12,8 +12,6 @@ import { parseArgs } from './polygonsArgParser'
 
 export const getPolygons = async (args: any) => {
 
-    throw `Improve validation before exposing this function`
-
     console.log(`At ${(new Date()).toISOString()} - entering function`)
 
     let q = parseArgs(args)    

@@ -1,5 +1,5 @@
 
-import { ensureSomeArgs, parseBbox, parseFramework, parseIndexname, parsePolyids, parsePolyPartitions } from '../validation'
+import { ensureSomeArgs, parseBbox, parseFramework, parseIndexname } from '../validation'
 
 /**
  * Parses an args input map from Express or Lambda.
@@ -7,16 +7,13 @@ import { ensureSomeArgs, parseBbox, parseFramework, parseIndexname, parsePolyids
  export const parseArgs = (maybeArgs?: { [key: string]: unknown }) =>  {
 
     let args = ensureSomeArgs(maybeArgs)
-
     let framework = parseFramework(args)
     let indexname = parseIndexname(args)
-    let polyPartitions = parsePolyPartitions(args)
-    let polyids = parsePolyids(args)
+    let bbox = parseBbox(args)
 
     return {
         framework,
         indexname,
-        polyPartitions,
-        polyids,
+        bbox,
     }
 }
