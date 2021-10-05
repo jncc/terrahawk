@@ -272,6 +272,9 @@ UI workstream:
 - [ ] 🎁 Implement thumbnails
 - [ ] 🎁 Charts for selected polygon
 - [ ] 🎁 Field data
+- [ ] 🎁 Base map
+  - Europa, like gov.scot
+  - Use vector tiles https://labs.os.uk/public/os-data-hub-examples/os-vector-tile-api/vts-example-custom-style
 
 Backlog
 -------
