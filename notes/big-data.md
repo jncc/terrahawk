@@ -32,7 +32,7 @@ Things to explain
 
 | framework* | polyid*  | indexname* | date*          | seasonyear†| season†| habitat†                | gridsquare†| frame†                                             | mean        | sd        | ... |
 |------------|----------|------------|----------------|------------|--------|-------------------------|------------|----------------------------------------------------|-------------|-----------| --- |
-| liveng-0   | 708353   | NDVI       | 2021-02-27     | 2020       | Winter | Arable and horticulture | T30UWE     | S2B_20210227_lat54lon217_T30UWE_ORB080_utm30n_osgb | -0.88104787 | 0.3129950 | ... |
+| liveng0    | 708353   | NDVI       | 20210227       | 2020       | Winter | Arable and horticulture | T30UWE     | S2B_20210227_lat54lon217_T30UWE_ORB080_utm30n_osgb | -0.88104787 | 0.3129950 | ... |
 
 † Denormalised but useful data
 
@@ -50,11 +50,11 @@ Primary keys for `by_month` and `by_season` respectively:
 
 | framework* | polyid*  | indexname* | year* | month* |
 |------------|----------|------------|-------|--------|
-| liveng-0   | 708353   | NDVI       | 2021  | 2      |
+| liveng0    | 708353   | NDVI       | 2021  | 2      |
 
 | framework* | polyid*  | indexname* | seasonyear* | season* |
 |------------|----------|------------|-------------|---------|
-| liveng-0   | 708353   | NDVI       | 2020        | Winter  |
+| liveng0    | 708353   | NDVI       | 2020        | Winter  |
 
 Comparision values
 ------------------
@@ -66,11 +66,11 @@ A simple way is to provide (certainly much-duplicated) values for each stat row.
 
 | framework* | polyid*  | indexname* | year* | month*        | | comparison | comp_mean   | comp_mean_sd | ... |
 |------------|----------|------------|-------|---------------|-|------------|-------------|--------------| --- |
-| liveng-0   | 708353   | NDVI       | 2021  | 2             | | sametype   | -0.68104787 | 0.2134450    | ... |
+| liveng0    | 708353   | NDVI       | 2021  | 2             | | sametype   | -0.68104787 | 0.2134450    | ... |
 
 | framework* | polyid*  | indexname* | seasonyear* | season* | | comparison | comp_mean   | comp_mean_sd | ... |
 |------------|----------|------------|-------------|---------|-|------------|-------------|--------------| --- |
-| liveng-0   | 708353   | NDVI       | 2020        | Winter  | | sametype   | -0.68104787 | 0.2134450    | ... |
+| liveng0    | 708353   | NDVI       | 2020        | Winter  | | sametype   | -0.68104787 | 0.2134450    | ... |
 
 You can envisage different kinds of comparison:
 
@@ -97,7 +97,7 @@ So (just for monthly):
 
 | framework* | polyid*  | indexname* | year* | month* | habitat                 | frames (folded, shorted!)                             | mean        | comparison | comp_mean   | comp_mean_sd | mean_diff | ... |
 |------------|----------|------------|-------|--------|-------------------------|-------------------------------------------------------|-------------|------------|-------------|--------------|-----------| --- |
-| liveng-0   | 708353   | NDVI       | 2021  | 2      | Arable and horticulture | S2B_202102...osgb,S2B_202102...osgb,S2B_202102...osgb | -0.88104787 | sametype   | -0.68104787 | 0.2134450    | 1         | ... |
+| liveng0    | 708353   | NDVI       | 2021  | 2      | Arable and horticulture | S2B_202102...osgb,S2B_202102...osgb,S2B_202102...osgb | -0.88104787 | sametype   | -0.68104787 | 0.2134450    | 1         | ... |
 
 Max diff for each polyindex (~1000) in viewport within selected time series (of ~100 rows)
 ------------------------------------------------------------------------------------------
@@ -136,37 +136,3 @@ Correcting the Yorkshire data and outputting in Parquet in `jncc-habmon-alpha-st
 - 152 million rows (perhaps I rounded up? when I said ~200 million rows - should be the same as CSV)
 - 4.5GB (~1/4 of the size of 20 GB)
 
-jncc-habmon-alpha-stats-bymonth (currently called `AggregateByMonth2`)
---------------------------------------------------------------------
-
-    select
-        substring(polyid, 0, 2) as polyid_partition,
-        count(*) as count,
-        framework,
-        polyid,
-        indexname,
-        year,
-        month,
-        habitat,
-        avg(mean) as mean,
-        avg(sd) as sd,
-        avg(median) as median,
-        min(min) as min,
-        max(max) as max,
-        avg(q1) as q1,
-        avg(q3) as q3
-    from input
-    group by framework, polyid, indexname, year, month, habitat
-
-- 64 million rows (as expected 😀 for 2 or 3 passes per month)
-- 2.7 GB
-
-Time series for one polygon takes <1 sec.
-
-    select year, month, mean
-    from "jncc-habmon-alpha-stats-bymonth"
-    where framework='liveng-0'
-      and indexname='NDVI'
-      and polyid_partition='23'
-      and polyid='239876'
-      order by year, month
