@@ -15,12 +15,12 @@ export function App() {
     // fetchChoropleth().then(result => { setChoropolys(result.result) })
   }, [])
 
-  let polys = useGetPolygonsQuery({ framework: 'liveng0', bbox: 'POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))' })
-  console.log(polys.data)
+  // let polys = useGetPolygonsQuery({ framework: 'liveng0', bbox: 'POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))' })
+  // console.log(polys.data)
 
   return (
     <>
-    {polys.isLoading && <div>Loading</div>}
+    {/* {polys.isLoading && <div>Loading</div>} */}
     <MapScreenLayout choropolys={choropolys} />
     </>
   )
