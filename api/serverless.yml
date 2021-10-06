@@ -92,6 +92,12 @@ functions:
       - httpApi:
           path: /choropleth
           method: POST
+  choroplethfacade:
+    handler: built/host/aws.choroplethFacadeHandler
+    events:
+      - httpApi:
+          path: /choroplethfacade
+          method: POST
   polygons:
     handler: built/host/aws.polygonsHandler
     events:

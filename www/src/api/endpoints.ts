@@ -7,7 +7,7 @@ import { post } from './methods'
 import { Choropoly } from './types'
 
 export async function fetchChoropleth() {
-  return await post<{ result: Choropoly[] }>('/choropleth', {
+  return await post<{ result: Choropoly[] }>('/choroplethfacade', {
     framework: "liveng0",
     indexname: "NDVI",
     bbox: "POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))"

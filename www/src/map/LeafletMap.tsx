@@ -40,18 +40,18 @@ let makePolygonLayers = (ps: Choropoly[]) => {
     return (
       <GeoJSON key={p.polyid} data={p.geojson} style={style} onEachFeature={onFeatureCreated}  >
         <Tooltip offset={[40, 0]}>
-          Polygon <b>{p.polyid}</b>
+          <b>{p.habitat}</b>
           <br />
-          <i>{p.habitat}</i>
+          Polygon {p.polyid}
           <br />
-          {roundTo3Decimals(p.max_z_mean_abs)} max abs Z-score (mean)
+          <b>{roundTo3Decimals(p.max_z_mean_abs)}</b> maximum Z-score (mean)
         </Tooltip>
       </GeoJSON>
     )
   })
 }
 
-export let LeafletMapX = (props: Props) => {
+export let LeafletMap = (props: Props) => {
 
   let [center, setCenter] = React.useState(frameworks.liveng0.defaultCenter)
 
@@ -81,7 +81,7 @@ export let LeafletMapX = (props: Props) => {
 const defaultCenter = { lat: 51.505, lng: -0.09 }
 const defaultZoom = 13
 
-export let LeafletMap = (props: Props) => {
+export let LeafletMapX = (props: Props) => {
   let [center, setCenter] = React.useState(frameworks.liveng0.defaultCenter)
   let [latPad, lngPad] = [0.03, 0.06]
   let bounds = L.latLngBounds([center.lat - latPad, center.lng - lngPad], [center.lat + latPad, center.lng + lngPad])
@@ -106,7 +106,7 @@ export let LeafletMap = (props: Props) => {
       {map ? <EventListeners map={map} /> : null}
       {/* {makeLeafletMap} */}
       <MapContainer
-        className="absolute inset-0 left-48"
+        className="absolute inset-0" // left-48
         center={center}
         zoom={zoom}
         whenCreated={setMap}>

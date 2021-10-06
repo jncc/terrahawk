@@ -9,6 +9,7 @@ import { getColours } from '../endpoints/colours'
 import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
 import { getChoropleth } from '../endpoints/choropleth'
+import { getChoroplethFacade } from '../endpoints/choroplethFacade'
 
 export let helloHandler: APIGatewayProxyHandler = async (event) => {
 
@@ -33,6 +34,11 @@ export let athenaHandler: APIGatewayProxyHandler = async (event) => {
 export let choroplethHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
   return success(await getChoropleth(body))
+}
+
+export let choroplethFacadeHandler: APIGatewayProxyHandler = async (event) => {
+  let body = JSON.parse(event.body ?? "{}")
+  return success(await getChoroplethFacade(body))
 }
 
 export let polygonsHandler: APIGatewayProxyHandler = async (event) => {

@@ -1,4 +1,10 @@
 
+export type Poly = {
+  polyid: string
+  habitat: string
+  geojson: any
+}
+
 export type Choropoly = {
   polyid: string
   habitat: string
