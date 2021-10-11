@@ -9,6 +9,7 @@ import { getCssClassForZScore } from '../utility/choroplethUtility'
 import { roundTo3Decimals } from '../utility/numberUtility'
 import { increaseZoom } from './mapSlice'
 import { useStateSelector } from '../state/hooks'
+import { getPaddedBoundsAroundPoint } from '../utility/geospatialUtility'
 
 export type Props = {
   choropolys: Choropoly[]
@@ -51,7 +52,7 @@ let makePolygonLayers = (ps: Choropoly[]) => {
   })
 }
 
-export let LeafletMap = (props: Props) => {
+export let LeafletMapX = (props: Props) => {
 
   let [center, setCenter] = React.useState(frameworks.liveng0.defaultCenter)
 
@@ -81,32 +82,22 @@ export let LeafletMap = (props: Props) => {
 const defaultCenter = { lat: 51.505, lng: -0.09 }
 const defaultZoom = 13
 
-export let LeafletMapX = (props: Props) => {
-  let [center, setCenter] = React.useState(frameworks.liveng0.defaultCenter)
-  let [latPad, lngPad] = [0.03, 0.06]
-  let bounds = L.latLngBounds([center.lat - latPad, center.lng - lngPad], [center.lat + latPad, center.lng + lngPad])
+export let LeafletMap = (props: Props) => {
   
-
   let [map, setMap] = React.useState<L.Map>()
-  // let center = useStateSelector(s => s.map.center)
-  let zoom =  useStateSelector(s => s.map.zoom)
-
-  console.log(zoom)
-  // increaseZoom()
   
-  // let makeLeafletMap = // useMemo(() => //
-
-  //   ,
-  //   []
-  // )
-
+  let zoom =  useStateSelector(s => s.map.zoom)
+  let center =  useStateSelector(s => s.map.center)
+  let box = getPaddedBoundsAroundPoint(center)
+  let bounds = L.latLngBounds(box.southWest, box.northEast)
+ 
   return (
     <>
       {map ? <DisplayPosition map={map} /> : null}
       {map ? <EventListeners map={map} /> : null}
       {/* {makeLeafletMap} */}
       <MapContainer
-        className="absolute inset-0" // left-48
+        className="absolute inset-0 left-48" // 
         center={center}
         zoom={zoom}
         whenCreated={setMap}>
@@ -114,7 +105,7 @@ export let LeafletMapX = (props: Props) => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Rectangle bounds={bounds} color='#ff7800' weight={zoom} fill={false} interactive={false} />
+        <Rectangle bounds={bounds} color='#ff7800' weight={2} fill={false} interactive={false} />
 
       </MapContainer>
     </>

@@ -12,7 +12,7 @@ export function App() {
   let [choropolys, setChoropolys] = React.useState([] as Choropoly[])
 
   React.useEffect(() => {
-    fetchChoropleth().then(result => { setChoropolys(result.result) })
+    // fetchChoropleth().then(result => { setChoropolys(result.result) })
   }, [])
 
   // let polys = useGetPolygonsQuery({ framework: 'liveng0', bbox: 'POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))' })

@@ -3,6 +3,7 @@ export type Poly = {
   polyid: string
   habitat: string
   geojson: any
+  partition: string
 }
 
 export type Choropoly = {

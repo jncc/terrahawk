@@ -12,7 +12,7 @@ export let MapControls = (props: any) => {
     <div className="bottom-left-controls">
 
       <div className="mr-2">
-      <button onClick={() => dispatch(fetchPolygons())} aria-label="Zoom in">
+        <button onClick={() => dispatch(fetchPolygons())} aria-label="Zoom in">
           fetchPolygons
         </button>
         <br />
@@ -21,7 +21,7 @@ export let MapControls = (props: any) => {
         </button>
         <br />
         <div>
-          {state.stale ? <span>Stale</span> : <span>Not stale</span>}
+          Loading? {state.loading && <span>Yes</span>}
         </div>
         <button onClick={() => dispatch(increaseZoom())} aria-label="Zoom in">
           ZOOM IN!
