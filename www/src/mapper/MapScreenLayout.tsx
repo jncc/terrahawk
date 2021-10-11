@@ -1,7 +1,7 @@
 
 import * as React from 'react'
 import { connect as reduxConnect } from 'react-redux'
-import { Choropoly } from '../api/types'
+import { Choropoly } from './types'
 import { LeafletMap } from './LeafletMap'
 import { MapControls } from './MapControls'
 
@@ -26,8 +26,7 @@ const leftPanelAnimationVariants = {
 
 
 export type Props = {
-    choropolys: Choropoly[]
-  }
+}
   
 export const MapScreenLayout = (props: Props) => {
 
@@ -86,7 +85,7 @@ export const MapScreenLayout = (props: Props) => {
         </Delayed>*/}   
       </div>
       <MapControls />
-      <LeafletMap choropolys={props.choropolys} />
+      <LeafletMap />
     </div>
   </>
 }

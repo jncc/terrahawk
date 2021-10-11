@@ -1,30 +1,43 @@
+
 import React from 'react'
+
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { fetchPolygons, increaseZoom, ping } from './mapSlice'
+import { globalActions } from '../global/slice'
+import { mapperActions } from './slice'
 
 export let MapControls = (props: any) => {
 
   let dispatch = useStateDispatcher()
-  let state = useStateSelector(s => s.map)
+  let state = useStateSelector(s => s.mapper)
+  let globalState = useStateSelector(s => s.global)
 
   return (
     //   <Delayed delayInMilliseconds={800}>
     <div className="bottom-left-controls">
 
       <div className="mr-2">
-        <button onClick={() => dispatch(fetchPolygons())} aria-label="Zoom in">
+      
+
+        <button onClick={() => dispatch(mapperActions.devAction())}>
+          dev action
+        </button>
+        <br />
+        <button onClick={() => dispatch(mapperActions.mapCenterChanged())}>
           fetchPolygons
         </button>
         <br />
-        <button onClick={() => dispatch(ping())} aria-label="Zoom in">
+        <button onClick={() => dispatch(globalActions.ping())}>
           PING
         </button>
         <br />
         <div>
-          Loading? {state.loading && <span>Yes</span>}
+          Loading? {globalState.loading}
         </div>
-        <button onClick={() => dispatch(increaseZoom())} aria-label="Zoom in">
-          ZOOM IN!
+        <div>
+          Error: {globalState.errorMessage}
+        </div>
+        <button onClick={() => dispatch(mapperActions.mapZoomChanged(13))} aria-label="Zoom in">
+          Zoom to 13
         </button>
         <br />
         {state.polygons.map(p => <div key={p.polyid}>{p.polyid}</div>)}

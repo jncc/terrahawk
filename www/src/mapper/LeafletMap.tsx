@@ -4,15 +4,13 @@ import 'leaflet/dist/leaflet.css'
 import { MapContainer, Rectangle, TileLayer, GeoJSON, Tooltip } from 'react-leaflet'
 
 import { frameworks } from '../frameworks'
-import { Choropoly } from '../api/types'
+import { Choropoly } from './types'
 import { getCssClassForZScore } from '../utility/choroplethUtility'
 import { roundTo3Decimals } from '../utility/numberUtility'
-import { increaseZoom } from './mapSlice'
 import { useStateSelector } from '../state/hooks'
 import { getPaddedBoundsAroundPoint } from '../utility/geospatialUtility'
 
 export type Props = {
-  choropolys: Choropoly[]
 }
 
 let makePolygonLayers = (ps: Choropoly[]) => {
@@ -69,7 +67,7 @@ export let LeafletMapX = (props: Props) => {
         //attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       <Rectangle bounds={bounds} color='#ff7800' weight={2} fill={false} interactive={false} />
-      {makePolygonLayers(props.choropolys)}
+      {/* {makePolygonLayers(props.choropolys)} */}
     </MapContainer>
   )
 }
@@ -86,8 +84,8 @@ export let LeafletMap = (props: Props) => {
   
   let [map, setMap] = React.useState<L.Map>()
   
-  let zoom =  useStateSelector(s => s.map.zoom)
-  let center =  useStateSelector(s => s.map.center)
+  let zoom =  useStateSelector(s => s.mapper.zoom)
+  let center =  useStateSelector(s => s.mapper.center)
   let box = getPaddedBoundsAroundPoint(center)
   let bounds = L.latLngBounds(box.southWest, box.northEast)
  
