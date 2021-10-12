@@ -25,7 +25,7 @@ let makePolygonLayers = (ps: Choropoly[]) => {
       fill:   true, // a polygon seems to need a fill for mouseover to work properly
       fillOpacity: 0.7,
       // fillColor: getColour(p.max_z_mean_abs),
-      className: getCssClassForZScore(p.max_z_mean_abs)      
+      className: getCssClassForZScore(Math.abs(p.max_z_mean))
     }
 
     let onFeatureCreated = (feature: any, layer: any) => {
@@ -43,7 +43,7 @@ let makePolygonLayers = (ps: Choropoly[]) => {
           <br />
           Polygon {p.polyid}
           <br />
-          <b>{roundTo3Decimals(p.max_z_mean_abs)}</b> maximum Z-score (mean)
+          <b>{roundTo3Decimals(Math.abs(p.max_z_mean))}</b> maximum Z-score (mean)
         </Tooltip>
       </GeoJSON>
     )

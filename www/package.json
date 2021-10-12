@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf ./dist",
+    "tsc": "tsc --noEmit",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "dev:todo:ssr": "ts-node ./server",
     "dev": "vite",

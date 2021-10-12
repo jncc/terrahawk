@@ -116,12 +116,12 @@ resultSql = '''
       c.cf_q1_sd,
       c.cf_q3,
       c.cf_q3_sd,
-      cast(abs((a.mean   - c.cf_mean)   / c.cf_mean_sd)   as float) as z_mean_abs,
-      cast(abs((a.median - c.cf_median) / c.cf_median_sd) as float) as z_median_abs,
-      cast(abs((a.min    - c.cf_min)    / c.cf_min_sd)    as float) as z_min_abs,
-      cast(abs((a.max    - c.cf_max)    / c.cf_max_sd)    as float) as z_max_abs,
-      cast(abs((a.q1     - c.cf_q1)     / c.cf_q1_sd)     as float) as z_q1_abs,
-      cast(abs((a.q3     - c.cf_q3)     / c.cf_q3_sd)     as float) as z_q3_abs,
+      cast((a.mean   - c.cf_mean)   / c.cf_mean_sd   as float) as z_mean,
+      cast((a.median - c.cf_median) / c.cf_median_sd as float) as z_median,
+      cast((a.min    - c.cf_min)    / c.cf_min_sd    as float) as z_min,
+      cast((a.max    - c.cf_max)    / c.cf_max_sd    as float) as z_max,
+      cast((a.q1     - c.cf_q1)     / c.cf_q1_sd     as float) as z_q1,
+      cast((a.q3     - c.cf_q3)     / c.cf_q3_sd     as float) as z_q3,
       p.partition as poly_partition
     from aggregated a
     inner join comparisons c

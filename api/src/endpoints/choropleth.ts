@@ -50,12 +50,12 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
 
     let sql = format(`
         select s.polyid,
-            max(s.z_mean_abs)   as max_z_mean_abs,
-            max(s.z_median_abs) as max_z_median_abs,
-            max(s.z_min_abs)    as max_z_min_abs,
-            max(s.z_max_abs)    as max_z_max_abs,
-            max(s.z_q1_abs)     as max_z_q1_abs,
-            max(s.z_q3_abs)     as max_z_q3_abs
+            max(s.z_mean)   as max_z_mean,
+            max(s.z_median) as max_z_median,
+            max(s.z_min)    as max_z_min,
+            max(s.z_max)    as max_z_max,
+            max(s.z_q1)     as max_z_q1,
+            max(s.z_q3)     as max_z_q3
         from monthly_nearest50 s
         where
             framework=%L
