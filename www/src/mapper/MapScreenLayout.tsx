@@ -4,6 +4,7 @@ import { connect as reduxConnect } from 'react-redux'
 import { Choropoly } from './types'
 import { LeafletMap } from './LeafletMap'
 import { MapControls } from './MapControls'
+import { LibreMap } from './LibreMap'
 
 // import { CollectionTuple, State } from '../../state'
 // import { ProductResult } from '../../catalog/types'
@@ -85,7 +86,8 @@ export const MapScreenLayout = (props: Props) => {
         </Delayed>*/}   
       </div>
       <MapControls />
-      <LeafletMap />
+      {/* <LeafletMap /> */}
+      <LibreMap />
     </div>
   </>
 }
