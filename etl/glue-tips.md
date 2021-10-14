@@ -23,3 +23,15 @@ Data in destination bucket will not be deleted automatically. Empty a bucket:
 
     aws s3 rm s3://jncc-habmon-alpha-stats-raw-sample2 --recursive --profile jncc-habmon-alpha-admin
 
+AWS tips
+--------
+
+- for speed, increase data processing units (seems to be "workers" in the UI)
+
+- for bigger output files, group the (small) input files:
+
+https://aws.amazon.com/blogs/big-data/best-practices-to-scale-apache-spark-jobs-and-partition-data-with-aws-glue/
+https://docs.aws.amazon.com/glue/latest/dg/grouping-input-files.html
+
+    dyf = glueContext.create_dynamic_frame_from_options("s3", {'paths': ["s3://awsexamplebucket/"], 'groupFiles': 'inPartition', 'groupSize': '10485760'}, format="json")
+

@@ -20,7 +20,12 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-raw = glueContext.create_dynamic_frame.from_catalog(database = "statsdb", table_name = "raw_stats", transformation_ctx = "source")
+raw = glueContext.create_dynamic_frame.from_catalog(
+  database = "statsdb",
+  table_name = "raw_stats",
+  # transformation_ctx = "raw",
+  # groupSize = "104857600"
+  )
 
 aggregateSql = '''
     select
@@ -44,9 +49,10 @@ aggregateSql = '''
         avg(q1) as q1,
         avg(q3) as q3
     from raw
+    where year='2020' and month='04'
     group by framework, polyid, indexname, year, month, seasonyear, season, platform, habitat
-
 '''
+
 aggregated = sparkSqlQuery(
   glueContext,
   query = aggregateSql,
@@ -127,7 +133,7 @@ resultSql = '''
     inner join comparisons c
       on a.framework=c.framework and a.indexname=c.indexname and a.polyid=c.polyid and a.year=c.year and a.month=c.month
     inner join partitions p
-      on a.framework = p.framework and a.polyid = p.polyid
+      on a.framework=p.framework and a.polyid=p.polyid
 '''
 
 result = sparkSqlQuery(
