@@ -18,9 +18,6 @@ let slice = createSlice({
     choropolys: [] as Choropoly[],
   },
   reducers: {
-    increaseZoom: (state) => {
-      state.zoom += 1
-    },
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
     },
@@ -35,9 +32,6 @@ let slice = createSlice({
       state.choropolys = a.payload
     },
     fetchChoroplethFailed: () => {},
-    dev1Action: () => {},
-    dev2Action: (state, a: PayloadAction<string>) => {},
-    dev3Action: () => {},
   },
 })
 

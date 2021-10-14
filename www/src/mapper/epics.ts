@@ -12,7 +12,6 @@ import { bboxToWkt, getBboxFromBounds, getPaddedBoundsAroundPoint } from '../uti
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.mapCenterChanged.type),
-  mapTo(globalActions.startLoading()),
   switchMap(() => api('polygons', getPolygonsParams(state$.value.mapper.query)).pipe(
     map(r => mapperActions.fetchPolygonsCompleted(r.response.polygons)),
     catchError(e => of(mapperActions.fetchPolygonsFailed(e.message))),
@@ -21,7 +20,6 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
 
 let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.fetchPolygonsCompleted.type),
-  mapTo(globalActions.startLoading()),
   switchMap(() => api('choropleth', getChoroplethParams(state$.value.mapper)).pipe(
     map(r => mapperActions.fetchChoroplethCompleted(r.response)),
     catchError(e => of(globalActions.showError(e.message))),
