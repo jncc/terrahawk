@@ -1,9 +1,7 @@
 
 import { of } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
-import { map, switchMap, startWith, endWith, catchError, finalize, } from 'rxjs/operators'
-import * as rx from 'rxjs'
-import * as rxo from 'rxjs/operators'
+import { map, switchMap, catchError, mapTo, } from 'rxjs/operators'
 import { combineEpics, ofType, StateObservable } from 'redux-observable'
 
 import { RootState } from '../state/store'
@@ -12,33 +10,56 @@ import { mapperActions  } from './slice'
 import { PolygonsQuery } from './types'
 import { bboxToWkt, getBboxFromBounds, getPaddedBoundsAroundPoint } from '../utility/geospatialUtility'
 
-export let devEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
-  ofType(mapperActions.devAction.type),
-  rxo.tap(console.log),
-  rxo.ignoreElements()
-)
-
-export let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.mapCenterChanged.type),
+  mapTo(globalActions.startLoading()),
   switchMap(() => api('polygons', getPolygonsParams(state$.value.mapper.query)).pipe(
     map(r => mapperActions.fetchPolygonsCompleted(r.response.polygons)),
-    catchError(e => of(globalActions.showError(e.message))),
-    )),
-  startWith(globalActions.startLoading()),
-  endWith(globalActions.stopLoading()),
+    catchError(e => of(mapperActions.fetchPolygonsFailed(e.message))),
+  )),
 )
 
-export let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.fetchPolygonsCompleted.type),
+  mapTo(globalActions.startLoading()),
   switchMap(() => api('choropleth', getChoroplethParams(state$.value.mapper)).pipe(
     map(r => mapperActions.fetchChoroplethCompleted(r.response)),
     catchError(e => of(globalActions.showError(e.message))),
-    startWith(globalActions.startLoading()),
-    endWith(globalActions.stopLoading()),
   ))
 )
 
-export const api = (endpoint: string, params: any) => {
+let startLoadingEpic = (action$: any) => action$.pipe(
+  ofType(
+    mapperActions.mapCenterChanged.type,
+    mapperActions.fetchPolygonsCompleted.type,
+  ),
+  mapTo(globalActions.startLoading()),
+)
+
+let stopLoadingEpic = (action$: any) => action$.pipe(
+  ofType(
+    mapperActions.fetchPolygonsCompleted.type,
+    mapperActions.fetchPolygonsFailed.type,
+    mapperActions.fetchChoroplethCompleted.type,
+    mapperActions.fetchChoroplethFailed.type,
+  ),
+  mapTo(globalActions.stopLoading()),
+)
+
+let showErrorEpic = (action$: any) => action$.pipe(
+  ofType(
+    mapperActions.fetchPolygonsFailed.type,
+    mapperActions.fetchChoroplethFailed.type,
+  ),
+  map((a: any) => globalActions.showError(a.payload))
+)
+
+// let fakeRequest = () => new rx.Observable<string>(
+//   subscriber =>  subscriber.next('Hello')).pipe(
+//   rxo.delay(1000)
+// )
+
+let api = (endpoint: string, params: any) => {
   return ajax.post(
     `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/${endpoint}`,
     params,
@@ -46,15 +67,15 @@ export const api = (endpoint: string, params: any) => {
   )
 }
 
-export let getPolygonsParams = (query: RootState['mapper']['query']): PolygonsQuery => {
-  let bounds = getPaddedBoundsAroundPoint(query.center) // could vary the size of the bbox dynamically here
+let getPolygonsParams = (query: RootState['mapper']['query']): PolygonsQuery => {
+  let bounds = getPaddedBoundsAroundPoint(query.center) // we could vary the size of the bbox dynamically here
   return {
     framework: query.framework,
     bbox:      bboxToWkt(getBboxFromBounds(bounds))
   }
 }
 
-export let getChoroplethParams = (state: RootState['mapper']) => ({
+let getChoroplethParams = (state: RootState['mapper']) => ({
   framework:      state.query.framework,
   indexname:      state.query.indexname,
   polyids:        state.polygons.map(p => p.polyid),
@@ -63,6 +84,8 @@ export let getChoroplethParams = (state: RootState['mapper']) => ({
 
 export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
-  devEpic,
-  // fetchChoroplethEpic,
+  fetchChoroplethEpic,
+  startLoadingEpic,
+  stopLoadingEpic,
+  showErrorEpic,
 )

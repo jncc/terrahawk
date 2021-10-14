@@ -1,9 +1,20 @@
 
-import { timer  } from 'rxjs'
-import { combineEpics, ofType } from 'redux-observable'
-import { mapTo, tap, delay, debounceTime, } from 'rxjs/operators'
+import { timer ,  } from 'rxjs'
+import { combineEpics, ofType, } from 'redux-observable'
+import { mapTo, tap, delay, debounceTime, ignoreElements } from 'rxjs/operators'
 
 import { globalActions } from './slice'
+
+let errorMessageEpic = (action$: any) => action$.pipe(
+  ofType(globalActions.showError.type),
+  delay(5000),
+  mapTo(globalActions.hideError())
+)
+
+let devEpic =  (action$: any) => action$.pipe(
+  tap(console.log),
+  ignoreElements(),
+)
 
 let pingEpic = (action$: any) => action$.pipe(
   // tap(console.log),
@@ -13,13 +24,8 @@ let pingEpic = (action$: any) => action$.pipe(
   mapTo(globalActions.pong()),
 )
 
-let errorMessageEpic = (action$: any) => action$.pipe(
-  ofType(globalActions.showError.type),
-  delay(5000),
-  mapTo(globalActions.hideError())
-)
-
 export let globalEpics: any = combineEpics(
-  pingEpic,
+  devEpic,
   errorMessageEpic,
+  pingEpic,
 )

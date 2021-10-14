@@ -17,9 +17,12 @@ export let MapControls = (props: any) => {
 
       <div className="mr-2">
       
-
-        <button onClick={() => dispatch(mapperActions.devAction())}>
-          dev action
+        <button onClick={() => dispatch(mapperActions.dev1Action())}>
+          dev1 action
+        </button>
+        <br />
+        <button onClick={() => dispatch(mapperActions.dev3Action())}>
+          dev3 action
         </button>
         <br />
         <button onClick={() => dispatch(mapperActions.mapCenterChanged())}>

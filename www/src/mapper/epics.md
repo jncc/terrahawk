@@ -1,0 +1,12 @@
+
+Epics
+=====
+
+Diagram
+-------
+
+    *--*--*--*--*
+
+    filter (mapCenterChanged)
+
+    *--------*--------*

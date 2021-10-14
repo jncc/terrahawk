@@ -30,10 +30,14 @@ let slice = createSlice({
     fetchPolygonsCompleted: (state, a: PayloadAction<Poly[]>) => {
       state.polygons = a.payload
     },
+    fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
     fetchChoroplethCompleted: (state, a: PayloadAction<Choropoly[]>) => {
       state.choropolys = a.payload
     },
-    devAction: () => {}
+    fetchChoroplethFailed: () => {},
+    dev1Action: () => {},
+    dev2Action: (state, a: PayloadAction<string>) => {},
+    dev3Action: () => {},
   },
 })
 
