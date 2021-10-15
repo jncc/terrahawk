@@ -233,42 +233,58 @@ Sprint 15 (to October 1)
   - [x] initial meeting and design discussions
 - [x] 🥳 Recreate (and document) the `framework_liveng0` table on AWS {pm}
 - [x] 🥳 Move two seprarate web requests into to one `/choropleth` API {pm}
-- [ ] 🥳 Further QA of stats results - compare with Dark Peak pilot {ih, pm}
+- [x] 🥳 ~~Further QA of stats results - compare with Dark Peak pilot {ih, pm}~~
 
 Sprint 16 (to October 15)
 -------------------------
 
-- [ ] Initial meeting on QA for index files (assertions in workflow?) {ih, pr, fm, uw}
-- [ ] 🎁 Write metadata for intermediate products on CEDA {ih}
-- [ ] 🎁 Implement React layout panels, data fetching and polygon caching {pm}
-- [ ] 🎁 Re-run all S2 data {ih}
+- [x] 🎁 Further QA, chart of stats results - compare with Dark Peak pilot {ih}
+- [x] Initial meeting on QA for index files (assertions in workflow?) {ih, pr, fm, uw}
+  - agreed to build in some testing in the next phase, outcomes with {ih}
+- [x] 🎁 Write metadata for intermediate products on CEDA {ih}
+- [ ] 🎁 Implement ~~React layout panels~~, data fetching ~~and polygon caching~~ {pm}
+- [x] 🎁 Re-run all S2 data {ih}
+- [ ] ~~Find an OS grey base map service~~ {jp, pr}
+- [x] NCEA data science meeting {pm, fm}
+- [ ] ~~Double-check that there's no shift problem for S2~~ {pl, lh}
+- [x] 🥳 Meeting with AWS consultant about Parquet file size / grouping {pm}
+
+Sprint 17 (to October 29)
+---------------------------
+
+- [ ] 🎁 Get S2 index files into CEDA archive {ih}
+  - [ ] Requires some manual QA first
+  - [ ] Get metadata to CEDA
+  - [ ] Document this process (data engineering wiki?)
+- [ ] 🎁 Run all S2 data through Glue {pm}
+- [ ] Investigate slight apparent difference between polygon stats in Dark Peak pilot {ih, fm}
+- [ ] 🎁 Implement React layout panels and polygon caching {pm}
+- [ ] 🎁 (stretch) Parameterise on Index, Statistic, Date {pm}
+- [ ] Double-check that there's no shift problem for S2 {pl, lh}
 - [ ] Find an OS grey base map service {jp, pr}
-- [ ] NCEA data science meeting {pm, fm}
-- [ ] Double-check that there's no shift problem for S2 {uw}
 
 Upcoming sprints
 ----------------
 
 Stats data workstream:
 
-- [ ] Write index files to CEDA archive
+- [ ] Basic automated QA checks/assertions {fm, ih}
 - [ ] 🎁 Run all stats all the way through {}
 - [ ] Solve S1 shift problem {}
 - [ ] QA the final stats {ih}
 
 App services workstream:
 
-- [ ] Gazetteer {cj}
-  - Design & implement backend DB with several datasets
-  - API
-
 - [ ] 🎁 Field data API prototype {cj}
   - research & design 
   - get some data into Postgres
 
+- [ ] Gazetteer {cj}
+  - Design & implement backend DB with several datasets
+  - API
+
 UI workstream:
 
-- [ ] 🎁 Parameterise on Index, Statistic, Date
 - [ ] 🎁 Implement thumbnails
 - [ ] 🎁 Charts for selected polygon
 - [ ] 🎁 Field data
@@ -340,6 +356,8 @@ Backlog
 - [ ] Use national character areas to improve habitat means
 
 - [ ] Static website hosting on S3 / Cloudfront {pm}
+
+- [ ] Idea to remove Athena to horizontally scale for many concurrent users
 
 Workstreams
 -----------
