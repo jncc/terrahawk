@@ -2,13 +2,19 @@
 General Glue tips
 =================
 
-Job properties to set for new jobs:
+Job properties to set for new jobs
+----------------------------------
 
 - role
 - Job bookmark - DISABLE for dev (or the job won't run unless source data changes)
 - retries: 0 (default is 3 retries)
 - timeout: (60 minutes, to avoid accidentally spending $$$)
 - tags (if necessary)
+
+Glue catalog tables need to have new partitions loaded manually
+---------------------------------------------------------------
+
+When new data is added, if it is in a new partition (which it will be for new dates in `raw_stats`), you have to run the `MSCK REPAIR TABLE` command (can be done in Athena).
 
 Parquet pain-points in Glue
 ---------------------------
@@ -19,9 +25,17 @@ Parquet pain-points in Glue
 Useful S3 commands for working with Glue jobs 
 ---------------------------------------------
 
-Data in destination bucket will not be deleted automatically. Empty a bucket:
+To reset a bookmark:
 
-    aws s3 rm s3://jncc-habmon-alpha-stats-raw-sample2 --recursive --profile jncc-habmon-alpha-admin
+    aws glue reset-job-bookmark --job-name monthly-nearest50 --region eu-west-2 --profile jncc-habmon-alpha-admin
+
+Empty a bucket (perhaps to delete data in destination bucket).
+
+    aws s3 rm s3://jncc-habmon-alpha-jasmin-csv-sample --recursive --profile jncc-habmon-alpha-admin
+
+To delete a bucket, empty a bucket first (see above ^^^), then delete:
+
+    aws s3 rb s3://jncc-habmon-alpha-jasmin-csv-sample --profile jncc-habmon-alpha-admin
 
 AWS tips
 --------

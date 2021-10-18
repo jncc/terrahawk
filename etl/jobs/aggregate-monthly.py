@@ -20,20 +20,23 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-# NOTE: this script is out-of-date
+raw = glueContext.create_dynamic_frame.from_catalog(
+  database = "statsdb",
+  table_name = "raw_stats",
+  transformation_ctx = "raw"
+  )
 
-source = glueContext.create_dynamic_frame.from_catalog(database = "statsdb", table_name = "stats_raw", transformation_ctx = "source")
-
-sql = '''
+aggregateSql = '''
     select
         count(*) as count,
         framework,
         indexname,
+        year,
+        month,
         polyid,
         seasonyear,
         season,
         collect_list(date) as date,
-        collect_list(gridsquare) as gridsquare,
         collect_list(frame) as frame,
         platform,
         habitat,
@@ -44,23 +47,29 @@ sql = '''
         max(max) as max,
         avg(q1) as q1,
         avg(q3) as q3
-    from input
-    group by framework, polyid, indexname, seasonyear, season, platform, habitat
-
+    from raw
+    --where year='2020' and month='04'
+    group by framework, polyid, indexname, year, month, seasonyear, season, platform, habitat
 '''
-transform = sparkSqlQuery(glueContext, query = sql, mapping = {"input": source}, transformation_ctx = "transform")
+
+aggregated = sparkSqlQuery(
+  glueContext,
+  query = aggregateSql,
+  mapping = {"raw": raw},
+  transformation_ctx = "aggregated")
+
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/aggregated-seasonally/parquet/",
+    path = "s3://jncc-habmon-alpha-stats-data/aggregated-monthly/",
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
-    partitionKeys = ["framework","seasonyear","season"],
+    partitionKeys = ["framework", "year", "month"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "stats_aggregated_seasonally")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "aggregated_monthly")
 sink.setFormat("glueparquet")
-sink.writeFrame(transform)
+sink.writeFrame(aggregated)
 
 job.commit()
