@@ -53,7 +53,7 @@ Framework `liveng0` (Living England, Yorkshire subset)
 
 - Rename the table to `framework_{framework-identifier}`, e.g. `framework_liveng0`.
 
-- Rename the column.
+- Rename the geometry column.
 
         ALTER TABLE framework_liveng0
         RENAME COLUMN wkb_geometry TO geometry;
