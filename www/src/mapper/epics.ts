@@ -8,7 +8,8 @@ import { RootState } from '../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
 import { PolygonsQuery } from './types'
-import { bboxToWkt, getBboxFromBounds, getPaddedBoundsAroundPoint } from '../utility/geospatialUtility'
+import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
+import { getBoundsOfBbox } from './bbox'
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.mapCenterChanged.type),
@@ -66,7 +67,7 @@ let api = (endpoint: string, params: any) => {
 }
 
 let getPolygonsParams = (query: RootState['mapper']['query']): PolygonsQuery => {
-  let bounds = getPaddedBoundsAroundPoint(query.center) // we could vary the size of the bbox dynamically here
+  let bounds = getBoundsOfBbox(query.center)
   return {
     framework: query.framework,
     bbox:      bboxToWkt(getBboxFromBounds(bounds))

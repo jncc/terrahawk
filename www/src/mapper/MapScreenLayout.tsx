@@ -86,8 +86,8 @@ export const MapScreenLayout = (props: Props) => {
         </Delayed>*/}   
       </div>
       <MapControls />
-      {/* <LeafletMap /> */}
-      <LibreMap />
+      <LeafletMap />
+      {/* <LibreMap /> */}
     </div>
   </>
 }

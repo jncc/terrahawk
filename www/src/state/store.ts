@@ -13,7 +13,7 @@ let epics = combineEpics(
   mapperEpics,
 )
 
-let epicMiddleware: any = createEpicMiddleware();
+let epicMiddleware: any = createEpicMiddleware()
 
 export const store = configureStore({
   reducer: {

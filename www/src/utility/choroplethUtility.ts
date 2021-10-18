@@ -9,12 +9,12 @@ export function getCssClassForZScore(z: number) {
                      'choropleth-0';
 }
 
-// export function getColour(z: number) {
-//     return z > 3.0 ? '#880e4f' :
-//            z > 2.5 ? '#ad1457' :
-//            z > 2.0 ? '#c2185b' :
-//            z > 1.7 ? '#f48fb1' :
-//            z > 1.4 ? '#fff59d' :
-//            z > 1.0 ? '#fff9c4' :
-//                      'white';
-// }
+export function getColour(z: number) {
+    return z > 3.0 ? '#880e4f' :
+           z > 2.5 ? '#ad1457' :
+           z > 2.0 ? '#c2185b' :
+           z > 1.7 ? '#f48fb1' :
+           z > 1.4 ? '#fff59d' :
+           z > 1.0 ? '#fff9c4' :
+                     'white';
+}

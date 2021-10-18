@@ -23,7 +23,7 @@ job.init(args['JOB_NAME'], args)
 aggregated = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
   table_name = "aggregated_monthly",
-  transformation_ctx = "raw")
+  transformation_ctx = "aggregated")
 
 neighbours = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",

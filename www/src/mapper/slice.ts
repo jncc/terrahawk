@@ -7,8 +7,6 @@ import { frameworks } from '../frameworks'
 let slice = createSlice({
   name: 'mapper',
   initialState: {
-    center:     frameworks.liveng0.defaultCenter,
-    zoom:       frameworks.liveng0.defaultZoom,
     query: {
       framework: 'liveng0',
       center:    frameworks.liveng0.defaultCenter,
@@ -18,13 +16,11 @@ let slice = createSlice({
     choropolys: [] as Choropoly[],
   },
   reducers: {
-    mapZoomChanged: (state, a: PayloadAction<number>) => {
-      state.zoom = a.payload
-    },
-    mapCenterChanged: () => {
-      // state.query.center = payload
+    mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
+      state.query.center = a.payload
     },
     fetchPolygonsCompleted: (state, a: PayloadAction<Poly[]>) => {
+      // todo: cache
       state.polygons = a.payload
     },
     fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},

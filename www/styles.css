@@ -9,3 +9,5 @@
 .choropleth-4 { fill: #c2185b; }
 .choropleth-5 { fill: #ad1457; }
 .choropleth-6 { fill: #880e4f; }
+
+#libremap { position:absolute; top:0; bottom:0; width:100%; }

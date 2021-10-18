@@ -1,19 +1,101 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { MapContainer, Rectangle, TileLayer, GeoJSON, Tooltip } from 'react-leaflet'
 
 import { frameworks } from '../frameworks'
-import { Choropoly } from './types'
-import { getCssClassForZScore } from '../utility/choroplethUtility'
+import { Choropoly, Poly } from './types'
+import { getColour, getCssClassForZScore } from '../utility/choroplethUtility'
 import { roundTo3Decimals } from '../utility/numberUtility'
-import { useStateSelector } from '../state/hooks'
-import { getPaddedBoundsAroundPoint } from '../utility/geospatialUtility'
+import { useStateDispatcher, useStateSelector } from '../state/hooks'
+import { mapperActions } from './slice'
+import { getBoundsOfBbox } from './bbox'
 
-export type Props = {
+let map: L.Map
+let bboxRectangle: L.Rectangle
+let polyLayerGroup: L.LayerGroup
+let polylayers: { poly: Poly, layer: L.GeoJSON<any> }[]
+
+export let LeafletMap = () => {
+
+  let state = useStateSelector(s => s.mapper)
+  let dispatch = useStateDispatcher()
+  
+  React.useEffect(() => {
+    
+    map = L.map('leaflet-map', {
+      minZoom: 2,
+      // maxZoom: config.maximumZoom,
+    })
+
+    // attribution
+    // L.control.attribution({ position: 'bottomleft', prefix: '' }).addTo(map)
+
+
+    // footprint and collection layers
+    // productFootprintLayerGroup = L.layerGroup([]).addTo(map)
+
+    // base layer
+    L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
+      // attribution: config.attribution,
+    }).addTo(map)
+  
+    map.on('moveend', () => {
+      // console.log('moveend')
+      // console.log(map.getCenter())
+      dispatch(mapperActions.mapCenterChanged(map.getCenter()))
+    })
+
+    polyLayerGroup = L.layerGroup([]).addTo(map)
+
+    // initial 
+    // dispatch(mapperActions.mapCenterChanged(map.getCenter()))
+    map.setView(state.query.center, frameworks.liveng0.defaultZoom)
+
+  }, [])
+
+  React.useEffect(() => {
+
+    // bbox
+    if (bboxRectangle) {
+      bboxRectangle.remove()
+    }
+    let bounds = getBoundsOfBbox(state.query.center)
+    bboxRectangle = L.rectangle(
+      L.latLngBounds(bounds.southWest, bounds.northEast),
+      { color: '#ff7800', weight: 1, fill: false, interactive: false }
+    )
+    bboxRectangle.addTo(map)
+
+  }, [state.query.center])  
+
+  React.useEffect(() => {
+
+    // polys
+    if (polyLayerGroup || (polylayers && polylayers.length > 0)) {
+      polylayers = []
+      polyLayerGroup.clearLayers()  
+    }
+    polylayers = makePolylayers(state.polygons)
+    polylayers.forEach(p => p.layer.addTo(polyLayerGroup))
+
+  }, [state.polygons.map(p => p.polyid).join(',')])  
+
+  React.useEffect(() => {
+
+    // choropleth
+    state.choropolys.forEach(c => {
+      let maybePolylayer = polylayers.find(x => x.poly.polyid === c.polyid)
+      maybePolylayer?.layer.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
+    })
+
+  }, [state.choropolys.map(p => p.polyid).join(',')])  
+
+  return <div id="leaflet-map" className="absolute inset-0"></div>
 }
 
-let makePolygonLayers = (ps: Choropoly[]) => {
+
+
+let makePolylayers = (ps: Poly[]) => {
 
   return ps.map(p => {
 
@@ -24,136 +106,28 @@ let makePolygonLayers = (ps: Choropoly[]) => {
       ...loStyle,
       fill:   true, // a polygon seems to need a fill for mouseover to work properly
       fillOpacity: 0.7,
+      fillColor: 'transparent',
       // fillColor: getColour(p.max_z_mean_abs),
-      className: getCssClassForZScore(Math.abs(p.max_z_mean))
+      // className: getCssClassForZScore(Math.abs(p.max_z_mean))
     }
 
-    let onFeatureCreated = (feature: any, layer: any) => {
-      layer.on({
-        mouseover: (e: any) => { e.target.setStyle(hiStyle) },
-        mouseout:  (e: any) => { e.target.setStyle(loStyle) }
-        // click:  (e: any) => POLYGON_SELECTED!
-      });
-    }    
+    // return (
+    //   <GeoJSON key={p.polyid} data={p.geojson} style={style} onEachFeature={onFeatureCreated}  >
+    //     <Tooltip offset={[40, 0]}>
+    //       <b>{p.habitat}</b>
+    //       <br />
+    //       Polygon {p.polyid}
+    //       <br />
+    //       <b>{roundTo3Decimals(Math.abs(p.max_z_mean))}</b> maximum Z-score (mean)
+    //     </Tooltip>
+    //   </GeoJSON>
+    // )
 
-    return (
-      <GeoJSON key={p.polyid} data={p.geojson} style={style} onEachFeature={onFeatureCreated}  >
-        <Tooltip offset={[40, 0]}>
-          <b>{p.habitat}</b>
-          <br />
-          Polygon {p.polyid}
-          <br />
-          <b>{roundTo3Decimals(Math.abs(p.max_z_mean))}</b> maximum Z-score (mean)
-        </Tooltip>
-      </GeoJSON>
-    )
+    let layer = L.geoJSON(p.geojson, { style } )
+    layer.on('mouseover', (e: any) => { e.target.setStyle(hiStyle) })
+    layer.on('mouseout',  (e: any) => { e.target.setStyle(loStyle) })
+    // click:  (e: any) => POLYGON_SELECTED!
+
+    return { poly: p, layer: layer }
   })
-}
-
-export let LeafletMapX = (props: Props) => {
-
-  let [center, setCenter] = React.useState(frameworks.liveng0.defaultCenter)
-
-  let [latPad, lngPad] = [0.03, 0.06]
-  let bounds = L.latLngBounds([center.lat - latPad, center.lng - lngPad], [center.lat + latPad, center.lng + lngPad])
-
-  return (
-    <MapContainer
-      className="absolute inset-0"
-      center={center}
-      zoom={frameworks.liveng0.defaultZoom}>
-      <TileLayer
-        url="https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe"
-        //attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Rectangle bounds={bounds} color='#ff7800' weight={2} fill={false} interactive={false} />
-      {/* {makePolygonLayers(props.choropolys)} */}
-    </MapContainer>
-  )
-}
-
-
-
-
-
-
-const defaultCenter = { lat: 51.505, lng: -0.09 }
-const defaultZoom = 13
-
-export let LeafletMap = (props: Props) => {
-  
-  let [map, setMap] = React.useState<L.Map>()
-  
-  let zoom =  useStateSelector(s => s.mapper.zoom)
-  let center =  useStateSelector(s => s.mapper.center)
-  let box = getPaddedBoundsAroundPoint(center)
-  let bounds = L.latLngBounds(box.southWest, box.northEast)
- 
-  return (
-    <>
-      {map ? <DisplayPosition map={map} /> : null}
-      {map ? <EventListeners map={map} /> : null}
-      {/* {makeLeafletMap} */}
-      <MapContainer
-        className="absolute inset-0 left-48" // 
-        center={center}
-        zoom={zoom}
-        whenCreated={setMap}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Rectangle bounds={bounds} color='#ff7800' weight={2} fill={false} interactive={false} />
-
-      </MapContainer>
-    </>
-  )
-}
-
-let EventListeners = ({ map }: { map: L.Map }) => {
-
-  // let [position, setPosition] = useState(map.getCenter())
-
-  let reset = useCallback(() => {
-    map.setView(defaultCenter, defaultZoom)
-  }, [map])
-
-  let getPosition = useCallback(() => {
-    // setPosition(map.getCenter())
-
-  }, [map])
-
-  return null
-}
-
-let DisplayPosition = (props: any ) => {
-  let map = props.map
-  
-  const [position, setPosition] = useState(map.getCenter())
-
-  const reset = useCallback(() => {
-    map.setView(defaultCenter, defaultZoom)
-  }, [map])
-
-  const onMove = useCallback(() => {
-    setPosition(map.getCenter())
-  }, [map])
-
-  useEffect(() => {
-    map.on('move', onMove)
-    return () => {
-      map.off('move', onMove)
-    }
-  }, [map, onMove])
-
-  return (
-    <>
-    <div>
-      latitude: {position.lat.toFixed(4)}, longitude: {position.lng.toFixed(4)}{' '}
-    </div>
-    <div>
-      <button onClick={reset}>reset</button>
-    </div>
-    </>
-  )
 }
