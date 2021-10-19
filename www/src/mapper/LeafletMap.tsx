@@ -3,12 +3,12 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
 import { frameworks } from '../frameworks'
-import { Choropoly, Poly } from './types'
+import { Poly } from './types'
 import { getColour, getCssClassForZScore } from '../utility/choroplethUtility'
 import { roundTo3Decimals } from '../utility/numberUtility'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
-import { getBoundsOfBbox } from './bbox'
+import { getBoundsOfMapperBbox } from './bbox'
 
 let map: L.Map
 let bboxRectangle: L.Rectangle
@@ -59,7 +59,7 @@ export let LeafletMap = () => {
     if (bboxRectangle) {
       bboxRectangle.remove()
     }
-    let bounds = getBoundsOfBbox(state.query.center)
+    let bounds = getBoundsOfMapperBbox(state.query.center)
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
       { color: '#ff7800', weight: 1, fill: false, interactive: false }

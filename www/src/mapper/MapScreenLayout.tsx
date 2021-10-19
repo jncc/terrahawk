@@ -1,7 +1,7 @@
 
 import * as React from 'react'
 import { connect as reduxConnect } from 'react-redux'
-import { Choropoly } from './types'
+import { ChoroplethItem } from './types'
 import { LeafletMap } from './LeafletMap'
 import { MapControls } from './MapControls'
 import { LibreMap } from './LibreMap'

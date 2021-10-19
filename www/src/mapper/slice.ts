@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, Choropoly } from './types'
+import { Poly, ChoroplethItem } from './types'
 import { frameworks } from '../frameworks'
 
 let slice = createSlice({
@@ -13,18 +13,17 @@ let slice = createSlice({
       indexname: frameworks.liveng0.defaultIndexname,
     },
     polygons:   [] as Poly[],
-    choropolys: [] as Choropoly[],
+    choropolys: [] as ChoroplethItem[],
   },
   reducers: {
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
     },
     fetchPolygonsCompleted: (state, a: PayloadAction<Poly[]>) => {
-      // todo: cache
       state.polygons = a.payload
     },
     fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
-    fetchChoroplethCompleted: (state, a: PayloadAction<Choropoly[]>) => {
+    fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethItem[]>) => {
       state.choropolys = a.payload
     },
     fetchChoroplethFailed: () => {},

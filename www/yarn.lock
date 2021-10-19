@@ -5185,6 +5185,11 @@ quick-lru@^5.1.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
+quick-lru@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-6.0.1.tgz#3a3fabc74960d663222d04957634766d3447c562"
+  integrity sha512-IE0DNgU7LWaVHB3KqPwWwZ9QiBK9HqZ1Au1uOcLkoosOzehlhOq/v1LA3TUUSzjA98CCOfhug74rWb0L7sGwdw==
+
 quickselect@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-2.0.0.tgz#f19680a486a5eefb581303e023e98faaf25dd018"

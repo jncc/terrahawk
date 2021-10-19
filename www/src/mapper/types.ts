@@ -17,10 +17,10 @@ export type ChoroplethQuery = {
   bbox: string
 }
 
-export type Choropoly = {
+export type ChoroplethItem = {
   polyid: string
-  habitat: string
-  geojson: any
+  // habitat: string
+  // geojson: any
   max_z_mean: number
   max_z_median: number
   max_z_min: number
