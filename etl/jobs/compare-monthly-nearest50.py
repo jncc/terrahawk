@@ -23,12 +23,19 @@ job.init(args['JOB_NAME'], args)
 aggregated = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
   table_name = "aggregated_monthly",
-  transformation_ctx = "aggregated")
+  transformation_ctx = "aggregated"
+)
+
+# aggregated = glueContext.create_dynamic_frame_from_options(
+#   "s3",
+#   { 'paths': ["s3://jncc-habmon-alpha-stats-data/aggregated-monthly/"], 'groupFiles': 'inPartition', 'groupSize': '10485760' },
+#   format="glueparquet"
+# )
 
 neighbours = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "neighbours_nearest50",
-  transformation_ctx = "neighbours")
+  table_name = "neighbours_nearest50"
+)
 
 # 'cf' ≈ 'compare'
 comparisonsSql = '''
@@ -51,6 +58,7 @@ comparisonsSql = '''
       on a.framework=n.framework and a.polyid=n.polyid
     inner join aggregated b
       on n.neighbour=b.polyid and a.framework=b.framework and a.indexname=b.indexname and a.year=b.year and a.month=b.month
+    --where a.year='2020'
     group by a.framework, a.indexname, a.polyid, a.year, a.month
     order by a.framework, a.indexname, a.polyid, a.year, a.month
 '''
@@ -59,12 +67,13 @@ comparisons = sparkSqlQuery(
   glueContext,
   query = comparisonsSql,
   mapping = {"aggregated": aggregated, "neighbours": neighbours},
-  transformation_ctx = "comparisons")
+  transformation_ctx = "comparisons"
+)
 
 partitions = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "partitions",
-  transformation_ctx = "partitions")
+  table_name = "partitions"
+)
 
 # to avoid having to group by every single row in the aggregated table,
 # which makes things even harder to understand, join again
@@ -106,19 +115,25 @@ result = sparkSqlQuery(
   glueContext,
   query = resultSql,
   mapping = {"aggregated": aggregated, "comparisons": comparisons, "partitions": partitions},
-  transformation_ctx = "result")
+  transformation_ctx = "result"
+)
+
+
+# https://github.com/aws-samples/aws-glue-samples/blob/master/FAQ_and_How_to.md#1-how-do-i-repartition-or-coalesce-my-output-into-more-or-fewer-files
+repartitioned_dataframe = result.toDF().repartition(1)
+repartitioned = DynamicFrame.fromDF(repartitioned_dataframe, glueContext, "repartitioned_dataframe")
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/monthly-nearest50/parquet/",
+    path = "s3://jncc-habmon-alpha-stats-data/monthly-nearest50-5/parquet/",
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "indexname", "poly_partition"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_5")
 sink.setFormat("glueparquet")
-sink.writeFrame(result)
+sink.writeFrame(repartitioned)
 
 job.commit()

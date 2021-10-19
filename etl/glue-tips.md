@@ -29,13 +29,17 @@ To reset a bookmark:
 
     aws glue reset-job-bookmark --job-name monthly-nearest50 --region eu-west-2 --profile jncc-habmon-alpha-admin
 
-Empty a bucket (perhaps to delete data in destination bucket).
+Empty a bucket or folder (perhaps to delete data in destination bucket).
 
     aws s3 rm s3://jncc-habmon-alpha-jasmin-csv-sample --recursive --profile jncc-habmon-alpha-admin
 
 To delete a bucket, empty a bucket first (see above ^^^), then delete:
 
     aws s3 rb s3://jncc-habmon-alpha-jasmin-csv-sample --profile jncc-habmon-alpha-admin
+
+To move a folder:
+
+    aws s3 mv s3://jncc-habmon-alpha-stats-data/monthly-nearest50-2/ s3://jncc-habmon-alpha-stats-data/monthly-nearest50/ --recursive --profile jncc-habmon-alpha-admin
 
 AWS tips
 --------
@@ -49,3 +53,4 @@ https://docs.aws.amazon.com/glue/latest/dg/grouping-input-files.html
 
     dyf = glueContext.create_dynamic_frame_from_options("s3", {'paths': ["s3://awsexamplebucket/"], 'groupFiles': 'inPartition', 'groupSize': '10485760'}, format="json")
 
+    
