@@ -13,7 +13,7 @@ let slice = createSlice({
       indexname: frameworks.liveng0.defaultIndexname,
     },
     polygons:   [] as Poly[],
-    choropolys: [] as ChoroplethItem[],
+    choropleth: [] as ChoroplethItem[],
   },
   reducers: {
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
@@ -24,7 +24,7 @@ let slice = createSlice({
     },
     fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethItem[]>) => {
-      state.choropolys = a.payload
+      state.choropleth = a.payload
     },
     fetchChoroplethFailed: () => {},
   },
@@ -32,4 +32,3 @@ let slice = createSlice({
 
 export let mapperReducer = slice.reducer
 export let mapperActions = slice.actions
-

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import * as _ from 'lodash'
 
 import { frameworks } from '../frameworks'
 import { Poly } from './types'
@@ -24,36 +25,28 @@ export let LeafletMap = () => {
     
     map = L.map('leaflet-map', {
       minZoom: 2,
-      // maxZoom: config.maximumZoom,
+      zoomControl: false,
     })
-
-    // attribution
-    // L.control.attribution({ position: 'bottomleft', prefix: '' }).addTo(map)
-
-
-    // footprint and collection layers
-    // productFootprintLayerGroup = L.layerGroup([]).addTo(map)
 
     // base layer
     L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
       // attribution: config.attribution,
     }).addTo(map)
   
+    polyLayerGroup = L.layerGroup([]).addTo(map)
+
     map.on('moveend', () => {
-      // console.log('moveend')
-      // console.log(map.getCenter())
       dispatch(mapperActions.mapCenterChanged(map.getCenter()))
     })
 
-    polyLayerGroup = L.layerGroup([]).addTo(map)
-
-    // initial 
-    // dispatch(mapperActions.mapCenterChanged(map.getCenter()))
+    // setView handily raises the 'moveend' event we've wired up above,
+    // so data gets fetched initially without needing the map to be moved
     map.setView(state.query.center, frameworks.liveng0.defaultZoom)
 
   }, [])
 
-  React.useEffect(() => {
+  // react to change of `query.center`
+  useEffect(() => {
 
     // bbox
     if (bboxRectangle) {
@@ -68,7 +61,8 @@ export let LeafletMap = () => {
 
   }, [state.query.center])  
 
-  React.useEffect(() => {
+  // react to change of `polygons`
+  useEffect(() => {
 
     // polys
     if (polyLayerGroup || (polylayers && polylayers.length > 0)) {
@@ -76,19 +70,24 @@ export let LeafletMap = () => {
       polyLayerGroup.clearLayers()  
     }
     polylayers = makePolylayers(state.polygons)
-    polylayers.forEach(p => p.layer.addTo(polyLayerGroup))
+    _(polylayers).shuffle().chunk(100).forEach((chunk, i) => {
+      setTimeout(() => {
+        chunk.forEach( p => p.layer.addTo(polyLayerGroup) )
+      }, i * 50)
+    })
+    // polylayers.forEach(p => p.layer.addTo(polyLayerGroup))
 
   }, [state.polygons.map(p => p.polyid).join(',')])  
 
-  React.useEffect(() => {
+  // react to change of `choropleth`
+  useEffect(() => {
 
-    // choropleth
-    state.choropolys.forEach(c => {
+    state.choropleth.forEach(c => {
       let maybePolylayer = polylayers.find(x => x.poly.polyid === c.polyid)
       maybePolylayer?.layer.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
     })
 
-  }, [state.choropolys.map(p => p.polyid).join(',')])  
+  }, [state.choropleth.map(p => p.polyid).join(',')])  
 
   return <div id="leaflet-map" className="absolute inset-0"></div>
 }

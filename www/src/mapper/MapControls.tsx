@@ -4,6 +4,7 @@ import React from 'react'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { globalActions } from '../global/slice'
 import { mapperActions } from './slice'
+import { Panel } from './Panel'
 
 export let MapControls = (props: any) => {
 
@@ -12,12 +13,17 @@ export let MapControls = (props: any) => {
   let globalState = useStateSelector(s => s.global)
 
   return (
-    //   <Delayed delayInMilliseconds={800}>
-    <div className="bottom-left-controls">
+    <div className="z-abovemap absolute top-6 right-6 animate-delayedfadein ">
 
-      <div className="mr-2">
-      
-        <button onClick={() => dispatch(mapperActions.mapCenterChanged())}>
+      <div className="bg-white rounded-xl overflow-hidden shadow-xl p-5">
+
+      </div>
+
+    </div>
+  )
+}
+
+        {/* <button onClick={() => dispatch(mapperActions.mapCenterChanged())}>
           fetchPolygons
         </button>
         <br />
@@ -35,25 +41,4 @@ export let MapControls = (props: any) => {
           Zoom to 13
         </button>
         <br />
-        {state.polygons.map(p => <div key={p.polyid}>{p.polyid}</div>)}
-
-      </div>
-      {/* <div className="little-control-container mr-2">
-              <Form.Check
-                checked={props.visualise}
-                type="switch"
-                id="visualised-checkbox"
-                label="Visualise"
-                onChange={() => props.dispatch(AppActions.toggleVisualise())}
-              />
-            </div>
-            <div>
-              <Button onClick={() => props.dispatch(AppActions.resetToCenter())} variant="light">
-                <i className="fas fa-crosshairs mr-2" aria-hidden="true" />
-                Reset
-              </Button>
-            </div> */}
-    </div>
-    //   </Delayed>
-  )
-}
+        {state.polygons.map(p => <div key={p.polyid}>{p.polyid}</div>)} */}

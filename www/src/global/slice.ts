@@ -1,20 +1,23 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import _ from 'lodash'
 
 let slice = createSlice({
   name: 'global',
   initialState: {
-    loading: 0,
+    loading: [] as string[],
     errorMessage: '',
     isPinging: false,
     isPonging: false,
   },
   reducers: {
-    startLoading: (state) => {
-      state.loading++
+    startLoading: (state, a: PayloadAction<string>) => {
+      console.log('++' + a.payload)
+      state.loading = _.concat(state.loading, a.payload)
     },
-    stopLoading: (state) => {
-      state.loading--
+    stopLoading: (state, a: PayloadAction<string>) => {
+      console.log('--' + a.payload)
+      state.loading = _.without(state.loading, a.payload)
     },
     showError: (state, a: PayloadAction<string>) => {
       state.errorMessage = a.payload

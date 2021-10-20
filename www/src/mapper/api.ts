@@ -32,7 +32,9 @@ export let fetchPolygons = (query: RootState['mapper']['query']) => {
       polyid
       monthly/seasonally
     }
-    if i had a key-value fixed-length searchable queue
+    if i had a key-value fixed-length searchable queue...
+
+    foreach poly in state, tryget out of the cache 
     
     */
     // let cache = new QuickLRU({maxSize: 10000})
