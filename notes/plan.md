@@ -248,6 +248,7 @@ Sprint 16 (to October 15)
 - [x] NCEA data science meeting {pm, fm}
 - [ ] ~~Double-check that there's no shift problem for S2~~ {pl, lh}
 - [x] 🥳 Meeting with AWS consultant about Parquet file size / grouping {pm}
+- ⏱ We are at least 3 weeks behind calendar schedule. Lost a week of {pm} due to other commitments
 
 Sprint 17 (to October 29)
 ---------------------------
@@ -294,6 +295,10 @@ UI workstream:
 
 Backlog
 -------
+
+- [ ] Check OS base map licence and attribution statement
+
+- [ ] Glue / Spark optimisation https://aws.amazon.com/blogs/big-data/optimize-memory-management-in-aws-glue/ 
 
 - [ ] Questions for AWS or Bytes glue expert
   - *Parquet file size*
@@ -355,9 +360,9 @@ Backlog
 
 - [ ] Use national character areas to improve habitat means
 
-- [ ] Static website hosting on S3 / Cloudfront {pm}
+- [ ] Static website hosting on S3 / Cloudfront
 
-- [ ] Idea to remove Athena to horizontally scale for many concurrent users
+- [ ] Idea to remove Athena to horizontally scale for many concurrent users and reduce latency
 
 Workstreams
 -----------

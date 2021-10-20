@@ -56,7 +56,7 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
             max(s.z_max)    as max_z_max,
             max(s.z_q1)     as max_z_q1,
             max(s.z_q3)     as max_z_q3
-        from monthly_nearest50 s
+        from monthly_nearest50_5 s
         where
             framework=%L
             and indexname=%L

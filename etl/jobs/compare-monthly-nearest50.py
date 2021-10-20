@@ -118,7 +118,6 @@ result = sparkSqlQuery(
   transformation_ctx = "result"
 )
 
-
 # https://github.com/aws-samples/aws-glue-samples/blob/master/FAQ_and_How_to.md#1-how-do-i-repartition-or-coalesce-my-output-into-more-or-fewer-files
 repartitioned_dataframe = result.toDF().repartition(1)
 repartitioned = DynamicFrame.fromDF(repartitioned_dataframe, glueContext, "repartitioned_dataframe")
