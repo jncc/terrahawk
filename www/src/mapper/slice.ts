@@ -20,7 +20,7 @@ let slice = createSlice({
       state.query.center = a.payload
     },
     fetchPolygonsCompleted: (state, a: PayloadAction<Poly[]>) => {
-      state.polygons = a.payload
+      state.polygons = a.payload //.slice(0, 5)
     },
     fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethItem[]>) => {

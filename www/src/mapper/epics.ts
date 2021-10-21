@@ -1,6 +1,6 @@
 
 import { of, concat } from 'rxjs'
-import { map, switchMap, catchError, mapTo, delay, } from 'rxjs/operators'
+import { map, switchMap, catchError, delay, delayWhen } from 'rxjs/operators'
 import { combineEpics, ofType, StateObservable } from 'redux-observable'
 
 import { RootState } from '../state/store'
@@ -13,11 +13,11 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
   ofType(mapperActions.mapCenterChanged.type),
   switchMap(() =>
     concat(
-      of(globalActions.startLoading('fetchPolygons')),
+      of(globalActions.startLoading('polygons')),
       fetchPolygons(state$.value.mapper.query).pipe(
         map(r => mapperActions.fetchPolygonsCompleted(r.response.polygons)),
         catchError(e => of(mapperActions.fetchPolygonsFailed(e.message)))),
-      of(globalActions.stopLoading('fetchPolygons')),
+      of(globalActions.stopLoading('polygons')),
     )
   )
 )
@@ -26,12 +26,12 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
   ofType(mapperActions.fetchPolygonsCompleted.type),
   switchMap(() =>
     concat(
-      of(globalActions.startLoading('fetchChoropleth')),
+      of(globalActions.startLoading('choropleth')),
       fetchChoropleth(state$.value.mapper).pipe(
         map(r => mapperActions.fetchChoroplethCompleted(r.response)),
         catchError(e => of(globalActions.showError(e.message))),
       ),
-      of(globalActions.stopLoading('fetchChoropleth')),
+      of(globalActions.stopLoading('choropleth')),
     )
   )
 )

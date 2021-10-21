@@ -18,10 +18,13 @@ module.exports = {
         rose: colors.rose,
       },
       fontFamily: {
-        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        // sans: ['Poppins', ...defaultTheme.fontFamily.sans],
       },      
       zIndex: {
         'abovemap': 1001
+      },
+      height: {
+        'loader': '4px'
       },
       animation: {
         'delayedfadein': 'delayedFadeIn 1s ease-in-out',

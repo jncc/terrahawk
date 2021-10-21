@@ -1,12 +1,9 @@
 
 import * as React from 'react'
-import { connect as reduxConnect } from 'react-redux'
-import { ChoroplethItem } from './types'
 import { LeafletMap } from './LeafletMap'
 import { MapControls } from './MapControls'
-import { LibreMap } from './LibreMap'
-import { Loader } from './Loader'
 import { QueryPanel } from './QueryPanel'
+import { FrameworkPanel } from './FrameworkPanel'
 
 let rightPanelAnimationVariants = {
   open: { x: 0 },
@@ -26,13 +23,18 @@ export let MapScreenLayout = () => {
     {makeScreenreaderNotice()}
     {makeSmallScreenWarning()}
     <div className="hidden lg:block"> {/* hide the whole map unless large screen */} 
-      <Loader />
-      <QueryPanel />
+      {/* <QueryPanel /> */}
+      <FrameworkPanel />
       {/* <MapControls /> */}
       <LeafletMap />
     </div>
   </>
 }
+
+let makeScreenreaderNotice = () =>
+  <div className="sr-only">
+    This map-based application is not accessible by screenreader.
+  </div>
 
 let makeSmallScreenWarning = () =>
   <div className="lg:hidden flex h-screen">
@@ -45,9 +47,4 @@ let makeSmallScreenWarning = () =>
         <li>change your browser <b>zoom level</b>.</li>
       </ul>
     </div>
-  </div>
-
-let makeScreenreaderNotice = () =>
-  <div className="sr-only">
-    This interactive map application is not operable by screenreader.
   </div>

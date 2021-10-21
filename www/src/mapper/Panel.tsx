@@ -4,6 +4,7 @@ import React from 'react'
 export let Panel = (props: { children: React.ReactNode }) => {
 
   return (
+    
     <div className="z-abovemap absolute left-5 bottom-5 animate-delayedfadein">
 
 <div className="selection:bg-jncc selection:text-white">
