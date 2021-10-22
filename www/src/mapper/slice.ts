@@ -11,6 +11,7 @@ let slice = createSlice({
       framework: 'liveng0',
       center:    frameworks.liveng0.defaultCenter,
       indexname: frameworks.liveng0.defaultIndexname,
+      statistic: frameworks.liveng0.defaultStatistic,
     },
     polygons:   [] as Poly[],
     choropleth: [] as ChoroplethItem[],

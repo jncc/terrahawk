@@ -1,4 +1,7 @@
 
+export type Indexname = 'EVI' | 'NBR' | 'NDMI' | 'NDVI' | 'NDWI'
+export type Statistic = 'mean' | 'median' | 'min' | 'max' | 'Q1' | 'Q3'
+
 export type PolygonsQuery = {
   framework: string
   bbox: string

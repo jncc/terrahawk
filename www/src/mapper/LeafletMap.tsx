@@ -4,12 +4,13 @@ import 'leaflet/dist/leaflet.css'
 import * as _ from 'lodash'
 
 import { frameworks } from '../frameworks'
-import { Poly } from './types'
-import { getColour, getCssClassForZScore } from '../utility/choroplethUtility'
+import { ChoroplethItem, Poly, Statistic } from './types'
+import { getChoroplethMaxZValue, getColour, getCssClassForZScore } from './choroplethHelpers'
 import { roundTo3Decimals } from '../utility/numberUtility'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
-import { getBoundsOfMapperBbox } from './bbox'
+import { getBoundsOfMapperBbox } from './bboxHelpers'
+import { makePolygonTooltipHtml } from './PolygonTooltip'
 
 let map: L.Map
 let bboxRectangle: L.Rectangle
@@ -85,6 +86,13 @@ export let LeafletMap = () => {
     state.choropleth.forEach(c => {
       let maybePolylayer = polylayers.find(x => x.poly.polyid === c.polyid)
       maybePolylayer?.layer.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
+      maybePolylayer?.layer.bindTooltip(
+        makePolygonTooltipHtml(
+          maybePolylayer.poly,
+          getChoroplethMaxZValue(state.query.statistic, c),
+          state.query.statistic),
+        { offset: [80, 0] }
+      )
     })
 
   }, [state.choropleth.map(p => p.polyid).join(',')])  
@@ -99,28 +107,16 @@ let makePolylayers = (ps: Poly[]) => {
   return ps.map(p => {
 
     let loStyle = { weight: 1, color: '#222', opacity: 0.6 }
-    let hiStyle = { weight: 1, color: '#000', opacity: 1.0 }
+    let hiStyle = { weight: 2, color: '#000', opacity: 0.6 }
 
     let style = {
       ...loStyle,
       fill:   true, // a polygon seems to need a fill for mouseover to work properly
-      fillOpacity: 0.7,
-      fillColor: 'transparent',
+      fillOpacity: 0,
+      fillColor: 'white',
       // fillColor: getColour(p.max_z_mean_abs),
       // className: getCssClassForZScore(Math.abs(p.max_z_mean))
     }
-
-    // return (
-    //   <GeoJSON key={p.polyid} data={p.geojson} style={style} onEachFeature={onFeatureCreated}  >
-    //     <Tooltip offset={[40, 0]}>
-    //       <b>{p.habitat}</b>
-    //       <br />
-    //       Polygon {p.polyid}
-    //       <br />
-    //       <b>{roundTo3Decimals(Math.abs(p.max_z_mean))}</b> maximum Z-score (mean)
-    //     </Tooltip>
-    //   </GeoJSON>
-    // )
 
     let layer = L.geoJSON(p.geojson, { style } )
     layer.on('mouseover', (e: any) => { e.target.setStyle(hiStyle) })

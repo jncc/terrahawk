@@ -5,6 +5,7 @@ import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { globalActions } from '../global/slice'
 import { mapperActions } from './slice'
 import { Panel } from './Panel'
+import { PolygonTooltipForDev } from './PolygonTooltip'
 
 export let QueryPanel = () => {
 
@@ -17,7 +18,6 @@ export let QueryPanel = () => {
 
       <div className="bg-white rounded-xl overflow-hidden shadow-xl p-5">
 
-        <h1 className="text-2xl font-semibold text-gray-900">Welcome back!</h1>
         {/* <form className="mt-12" action="" method="POST">
           <div className="relative">
             <input id="email" name="email" type="text" className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-jncc" placeholder="john@doe.com" />
