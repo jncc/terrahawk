@@ -1,4 +1,4 @@
-import { ChoroplethItem, Statistic } from './types'
+import { ChoroplethItem, Statistic } from '../types'
 
 export function getCssClassForZScore(z: number) {
   // return z > 3.0 ? 'choropleth-6' :

@@ -6,12 +6,12 @@ import QuickLRU from 'quick-lru'
 import { RootState } from '../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
 import { PolygonsQuery } from './types'
-import { getBoundsOfMapperBbox } from './bboxHelpers'
+import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 export let fetchPolygons = (query: RootState['mapper']['query']) => {
 
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
-    let bounds = getBoundsOfMapperBbox(query.center)
+    let bounds = getBoundsOfBboxRectangle(query.center)
     return {
       framework: query.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds))

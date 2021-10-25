@@ -1,4 +1,8 @@
+
 import { Indexname, Statistic } from "./mapper/types"
+
+// could dynamically load framework boundaries in the future to avoid packaging them
+import liveng0Boundary from './assets/frameworks/liveng0-boundary.json'
 
 export const frameworks: { [index: string]: Framework } = {
   liveng0: {
@@ -7,6 +11,7 @@ export const frameworks: { [index: string]: Framework } = {
     defaultZoom: 13,
     defaultIndexname: 'NDVI',
     defaultStatistic: 'mean',
+    boundary: liveng0Boundary,
   }
 }
 
@@ -16,4 +21,5 @@ export type Framework = {
   defaultZoom: number
   defaultIndexname: Indexname
   defaultStatistic: Statistic
+  boundary: any
 }

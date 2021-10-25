@@ -5,12 +5,13 @@ import * as _ from 'lodash'
 
 import { frameworks } from '../frameworks'
 import { ChoroplethItem, Poly, Statistic } from './types'
-import { getChoroplethMaxZValue, getColour, getCssClassForZScore } from './choroplethHelpers'
+import { getChoroplethMaxZValue, getColour, getCssClassForZScore } from './helpers/choroplethHelpers'
 import { roundTo3Decimals } from '../utility/numberUtility'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
-import { getBoundsOfMapperBbox } from './bboxHelpers'
+import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
+import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
 
 let map: L.Map
 let bboxRectangle: L.Rectangle
@@ -40,27 +41,27 @@ export let LeafletMap = () => {
       dispatch(mapperActions.mapCenterChanged(map.getCenter()))
     })
 
+    // framework boundary
+    L.geoJSON(frameworks[state.query.framework].boundary, { style: frameworkBoundaryStyle }).addTo(map)
+
     // setView handily raises the 'moveend' event we've wired up above,
     // so data gets fetched initially without needing the map to be moved
-    map.setView(state.query.center, frameworks.liveng0.defaultZoom)
+    map.setView(state.query.center, frameworks[state.query.framework].defaultZoom)
 
   }, [])
 
   // react to change of `query.center`
   useEffect(() => {
 
-    // bbox
     if (bboxRectangle) {
       bboxRectangle.remove()
     }
-    let bounds = getBoundsOfMapperBbox(state.query.center)
+    let bounds = getBoundsOfBboxRectangle(state.query.center)
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
-      { color: '#ff7800', weight: 1, fill: false, interactive: false }
-    )
-    bboxRectangle.addTo(map)
-
-  }, [state.query.center])  
+      bboxRectangleStyle).addTo(map)
+      
+  }, [state.query.center])
 
   // react to change of `polygons`
   useEffect(() => {

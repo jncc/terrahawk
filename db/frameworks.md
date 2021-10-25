@@ -122,3 +122,10 @@ Framework `liveng0` (Living England, Yorkshire subset)
 
     - It might be useful to add an index on partition. Not necessary for the app, though.
     
+- Create a framework boundary
+
+    - This isn't currently stored in the database, but a framework has a boundary to display on the mapper.
+    - Used the QGIS Disolve function to genereate a boundary of all the polygons
+    - Exported as Geojson
+    - Used https://mapshaper.org/ to reduce size for web
+    - Added to www/src/assets/frameworks with a naming convention.
