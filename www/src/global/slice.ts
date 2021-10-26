@@ -24,8 +24,6 @@ let slice = createSlice({
     hideError: (state) => {
       state.errorMessage = ''
     },
-    ping: () => {},
-    pong: () => {},
   },
 })
 

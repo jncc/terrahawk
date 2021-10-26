@@ -12,6 +12,7 @@ import { mapperActions } from './slice'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
+import { globalActions } from '../global/slice'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
@@ -126,11 +127,12 @@ export let LeafletMap = () => {
       // showing ~1000 polygons causes a noticeable lag in the React UI, so add a short delay
       setTimeout(() => polyLayerGroup.addTo(map), 50)
     else
-      polyLayerGroup.remove()
+      setTimeout(() => polyLayerGroup.remove(), 50)
     
   }, [state.showPolygons])
 
   useHotkeys('space', () => { dispatch(mapperActions.togglePolygons()) })
+  useHotkeys('e', () => { dispatch(globalActions.errorOccurred('Bah humbug')) })
 
   // react has nothing to do with the leaflet map;
   // map manipulation is done via side-effects (useEffect)

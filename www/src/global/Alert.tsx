@@ -14,7 +14,7 @@ export let Alert = () => {
     return (
       <div className="z-abovemap absolute top-4 w-full">
         <div className="flex justify-center">
-          <div className="flex gap-1 items-center bg-red-600 text-white text-sm px-8 py-1 rounded-xl shadow-xl">
+          <div className="flex gap-1 items-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white text-sm px-8 py-1 rounded-xl shadow-xl">
             <ExclamationIcon className="h-7 w-7"/>
             <div className="">
               {friendlierErrorMessage}

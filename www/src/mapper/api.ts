@@ -1,7 +1,7 @@
 
 import { of, merge } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
-import { tap, map,  } from 'rxjs/operators'
+import { map  } from 'rxjs/operators'
 import QuickLRU from 'quick-lru'
 
 import { RootState } from '../state/store'
@@ -49,7 +49,7 @@ export let fetchChoropleth = (state: RootState['mapper']) => {
   }
 
   // an observable of an API call result, or of an empty array (if we need nothing)
-  let fetchIfNecessary = needed.length ?
+  let apiResultIfNeeded = needed.length ?
     api('choropleth', params).pipe(
       map(r => {
         let items = r.response
@@ -62,7 +62,7 @@ export let fetchChoropleth = (state: RootState['mapper']) => {
     ) :
     of([])
 
-  return merge(of(alreadyGot), fetchIfNecessary)
+  return merge(of(alreadyGot), apiResultIfNeeded)
 }
 
 let api = (endpoint: string, params: any) => {

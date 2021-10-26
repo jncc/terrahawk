@@ -1,12 +1,12 @@
 
 import { of, concat } from 'rxjs'
-import { map, switchMap, catchError, delay, delayWhen, tap, } from 'rxjs/operators'
+import { map, switchMap, catchError, } from 'rxjs/operators'
 import { combineEpics, ofType, StateObservable } from 'redux-observable'
 
 import { RootState } from '../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
-import { fetchChoropleth, fetchPolygons } from './api'
+import { fetchPolygons, fetchChoropleth } from './api'
 
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
@@ -28,6 +28,7 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
     concat(
       of(globalActions.startLoading('choropleth')),
       fetchChoropleth(state$.value.mapper).pipe(
+        // concatMap(items),
         map(items => mapperActions.fetchChoroplethCompleted(items)),
         catchError(e => of(globalActions.errorOccurred(e.message))),
       ),
