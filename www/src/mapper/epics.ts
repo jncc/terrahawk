@@ -28,7 +28,6 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
     concat(
       of(globalActions.startLoading('choropleth')),
       fetchChoropleth(state$.value.mapper).pipe(
-        // concatMap(items),
         map(items => mapperActions.fetchChoroplethCompleted(items)),
         catchError(e => of(globalActions.errorOccurred(e.message))),
       ),

@@ -13,6 +13,7 @@ import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
 import { globalActions } from '../global/slice'
+import { chunk, shuffle } from 'lodash'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
@@ -85,18 +86,15 @@ export let LeafletMap = () => {
       })
       
     // add layers for polygons in state.polygons not already on the map
-    state.polygons
-      .filter(p => !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid))
-      .forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
-
-    
-
-    // _(polylayers).shuffle().chunk(100).forEach((chunk, i) => {
-    //   setTimeout(() => {
-    //     chunk.forEach( p => p.layer.addTo(polyLayerGroup) )
-    //   }, i * 50)
-    // })
-
+    let toAdd = state.polygons.filter(p =>
+      !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
+    )
+    // but add them in chunks for a nicer visual effect
+    chunk(shuffle(toAdd), toAdd.length / 8).forEach((chunk, i) => {
+      setTimeout(() => {
+        chunk .forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
+      }, i * 50)
+    })
   }, [state.polygons.map(p => p.polyid).join(',')])  
 
   // react to change of `choropleth`

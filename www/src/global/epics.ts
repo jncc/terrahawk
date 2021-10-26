@@ -7,9 +7,9 @@ import { globalActions } from './slice'
 
 let errorMessageEpic = (action$: any) => action$.pipe(
   ofType(globalActions.errorOccurred.type),
-  concatMap((a: any, index: number) =>
+  concatMap((a: any) =>
     concat(
-      of(globalActions.showError(`${a.payload} (${index})`)),
+      of(globalActions.showError(a.payload)),
       of(globalActions.hideError()).pipe(delay(5000))
     )
   ),

@@ -8,7 +8,7 @@ export let Alert = () => {
 
   let errorMessage = useStateSelector(s => s.global.errorMessage)
 
-  let friendlierErrorMessage = errorMessage === 'ajax error' ? 'network error' : errorMessage
+  let friendlierErrorMessage = errorMessage === 'ajax error' ? 'Network error' : errorMessage
 
   if (errorMessage) {
     return (
