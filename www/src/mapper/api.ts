@@ -1,5 +1,5 @@
 
-import { of, concat, merge } from 'rxjs'
+import { of, merge } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
 import { tap, map,  } from 'rxjs/operators'
 import QuickLRU from 'quick-lru'
@@ -19,69 +19,50 @@ export let fetchPolygons = (query: RootState['mapper']['query']) => {
     }
   }
 
-  // todo: only ask the api for polygons we don't already have?
-  return api('polygons', getParamsForFetchPolygons(query))
+  // todo: we could also cache the polygons...
+  return api('polygons', getParamsForFetchPolygons(query)).pipe(
+    map(r => r.response.polygons)
+  )
 }
-
-// type CacheKey = {
-//   framework: string
-//   indexname: string
-//   polyid: string
-//   // date-range
-//   // monthly/seasonally
-// }
 
 let cache = new QuickLRU<string, ChoroplethItem>({ maxSize: 10000 })
 
 export let fetchChoropleth = (state: RootState['mapper']) => {
 
-  let makeCacheKey = (polyid: string): string => (JSON.stringify({
-    framework: state.query.framework,
-    indexname: state.query.indexname,
-    polyid:    polyid,
-    // date range
-    // monthly/seasonally
-  }))
+  let makeCacheKey = (polyid: string): string => 
+    `${state.query.framework}::${state.query.indexname}::${polyid}`
+    // todo: date range, monthly/seasonally
 
-  let choroplethItemsWeAlreadyHave = state.polygons
+  let alreadyGot = state.polygons
     .map(p => cache.get(makeCacheKey(p.polyid)))
     .filter(item => item !== undefined) as ChoroplethItem[]
 
-  // console.log('choroplethItemsWeAlreadyHave')
-  // console.log(choroplethItemsWeAlreadyHave)
-  console.log('cachesize')
-  console.log(cache.size)
-
-  let polysWeNeedChoroplethItemFor = state.polygons.filter(
-    p => !choroplethItemsWeAlreadyHave.find(c => c.polyid === p.polyid)
+  let needed = state.polygons.filter(
+    p => !alreadyGot.find(c => c.polyid === p.polyid)
   )
-  console.log('polysWeNeedChoroplethItemFor')
-  console.log(polysWeNeedChoroplethItemFor.length)
 
   let params = {
     framework: state.query.framework,
     indexname: state.query.indexname,
-    polyids: polysWeNeedChoroplethItemFor.map(p => p.polyid),
-    polyPartitions: [...new Set(polysWeNeedChoroplethItemFor.map(p => p.partition))] // distinct partitions
+    polyids: needed.map(p => p.polyid),
+    polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct partitions
   }
 
-  if (params.polyids.length) {
-
-    return merge(
-      of(choroplethItemsWeAlreadyHave),
-      api('choropleth', params).pipe(
-        map(x => {
-          let vals = x.response
-          vals.forEach((c: ChoroplethItem) => {
-            cache.set(makeCacheKey(c.polyid), c)
-          })
-          return vals
+  // an observable of an API call result, or of an empty array (if we need nothing)
+  let fetchIfNecessary = needed.length ?
+    api('choropleth', params).pipe(
+      map(r => {
+        let items = r.response
+        // store the items in the cache before we return them
+        items.forEach((c: ChoroplethItem) => {
+          cache.set(makeCacheKey(c.polyid), c)
         })
-      )
-    )
-  } else {
-    return of(choroplethItemsWeAlreadyHave)
-  }
+        return items
+      })
+    ) :
+    of([])
+
+  return merge(of(alreadyGot), fetchIfNecessary)
 }
 
 let api = (endpoint: string, params: any) => {

@@ -15,8 +15,8 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
     concat(
       of(globalActions.startLoading('polygons')),
       fetchPolygons(state$.value.mapper.query).pipe(
-        map(r => mapperActions.fetchPolygonsCompleted(r.response.polygons)),
-        catchError(e => of(mapperActions.fetchPolygonsFailed(e.message)))),
+        map(polys => mapperActions.fetchPolygonsCompleted(polys)),
+        catchError(e => of(globalActions.errorOccurred(e.message)))),
       of(globalActions.stopLoading('polygons')),
     )
   )
@@ -28,26 +28,15 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
     concat(
       of(globalActions.startLoading('choropleth')),
       fetchChoropleth(state$.value.mapper).pipe(
-        tap(x => {console.log('a'); console.log(x);}),
-        map(r => mapperActions.fetchChoroplethCompleted(r)),
-        catchError(e => of(globalActions.showError(e.message))),
+        map(items => mapperActions.fetchChoroplethCompleted(items)),
+        catchError(e => of(globalActions.errorOccurred(e.message))),
       ),
       of(globalActions.stopLoading('choropleth')),
     )
   )
 )
 
-// replace with global error action
-let showErrorEpic = (action$: any) => action$.pipe(
-  ofType(
-    mapperActions.fetchPolygonsFailed.type,
-    mapperActions.fetchChoroplethFailed.type,
-  ),
-  map((a: any) => globalActions.showError(a.payload))
-)
-
 export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
   fetchChoroplethEpic,
-  showErrorEpic,
 )

@@ -1,14 +1,15 @@
 
 import { timer ,  } from 'rxjs'
 import { combineEpics, ofType, } from 'redux-observable'
-import { mapTo, tap, delay, debounceTime, ignoreElements } from 'rxjs/operators'
+import { mapTo, tap, delay, debounceTime, ignoreElements, map, } from 'rxjs/operators'
 
 import { globalActions } from './slice'
 
 let errorMessageEpic = (action$: any) => action$.pipe(
-  ofType(globalActions.showError.type),
-  delay(5000),
-  mapTo(globalActions.hideError())
+  ofType(globalActions.errorOccurred.type),
+  map((a: any) => globalActions.showError(a.payload)),
+  // delay(5000),
+  // mapTo(globalActions.hideError())
 )
 
 let devEpic =  (action$: any) => action$.pipe(

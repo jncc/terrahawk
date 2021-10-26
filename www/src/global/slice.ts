@@ -17,6 +17,7 @@ let slice = createSlice({
     stopLoading: (state, a: PayloadAction<string>) => {
       state.loading = _.without(state.loading, a.payload)
     },
+    errorOccurred: (state, a: PayloadAction<string>) => {},
     showError: (state, a: PayloadAction<string>) => {
       state.errorMessage = a.payload
     },
