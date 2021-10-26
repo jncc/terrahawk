@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import * as _ from 'lodash'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { frameworks } from '../frameworks'
 import { ChoroplethItem, Poly, Statistic } from './types'
@@ -28,13 +28,16 @@ export let LeafletMap = () => {
   useEffect(() => {
     
     map = L.map('leaflet-map', {
-      minZoom: 5,
+      minZoom: 7,
       zoomControl: false,
     })
 
+    // attribution
+    L.control.attribution({ position: 'bottomleft', prefix: '' }).addTo(map)
+
     // base layer
     L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Light_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
-      // attribution: config.attribution,
+      attribution: `Contains OS data © Crown copyright and database rights 2021`,
     }).addTo(map)
   
     // framework boundary
@@ -64,10 +67,6 @@ export let LeafletMap = () => {
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
       bboxRectangleStyle).addTo(map)
-    
-    // tooltips don't appear to be removed if open when layers are removed, unfortunately
-    // so just get rid of them all whenever the position of the map changes
-    polyLayerGroup.getLayers().forEach(l => l.unbindTooltip())
 
   }, [state.query.center])
 
@@ -79,8 +78,9 @@ export let LeafletMap = () => {
     polyLayerGroup.getLayers()
       .filter((l: any) => !state.polygons.find(p => p.polyid === l.polyid))
       .forEach(l => {
+        l.getTooltip()?.remove()
         polyLayerGroup.removeLayer(l)
-        l.remove() // explictly remove the layer from the map to encourage garbage collection
+        l.remove() // explictly remove the layer from the map to encourage garbage collection    
       })
       
     // add layers for polygons in state.polygons not already on the map
@@ -107,14 +107,16 @@ export let LeafletMap = () => {
       // so we can't assume that there will still be a polygon layer for any choropleth item
       let maybeLayer = (polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === c.polyid)
       maybeLayer?.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
-      maybeLayer?.bindTooltip(
-        makePolygonTooltipHtml(
-          maybeLayer.polyid,
-          maybeLayer.habitat,
-          getChoroplethMaxZValue(state.query.statistic, c),
-          state.query.statistic),
-        { offset: [80, 0] }
-      )
+      if (!maybeLayer?.getTooltip()) {
+        maybeLayer?.bindTooltip(
+          makePolygonTooltipHtml(
+            maybeLayer.polyid,
+            maybeLayer.habitat,
+            getChoroplethMaxZValue(state.query.statistic, c),
+            state.query.statistic),
+          { offset: [80, 0] }
+        )
+      }
     })
   }, [state.choropleth.map(p => p.polyid).join(',')])  
 
@@ -128,8 +130,10 @@ export let LeafletMap = () => {
     
   }, [state.showPolygons])
 
+  useHotkeys('space', () => { dispatch(mapperActions.togglePolygons()) })
+
   // react has nothing to do with the leaflet map;
-  // map manipulation is done via side-effects (useEffect)  
+  // map manipulation is done via side-effects (useEffect)
   return <div id="leaflet-map" className="absolute inset-0"></div>
 }
 

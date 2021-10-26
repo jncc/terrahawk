@@ -18,8 +18,8 @@ export let ControlsPanel = () => {
         {/* https://medium.com/front-end-weekly/build-a-css-only-toggle-switch-using-tailwindcss-d2739882934         */}
         <label className="cursor-pointer text-sm relative flex justify-between items-center group p-2">
           Polygons
-          <input type="checkbox" checked={state.showPolygons} onClick={() => dispatch(mapperActions.togglePolygons())} className="cursor-pointer absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md" />
-          <span className="cursor-pointer w-8 h-5 flex items-center flex-shrink-0 ml-2 p-0.5 bg-gray-300 rounded-full duration-100 ease-in-out peer-checked:bg-green-400 after:w-4 after:h-4 after:bg-white after:rounded-full after:shadow-md after:duration-100 peer-checked:after:translate-x-3"></span>
+          <input type="checkbox" checked={state.showPolygons} onChange={() => dispatch(mapperActions.togglePolygons())} className="cursor-pointer absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md" />
+          <span className="cursor-pointer w-8 h-5 flex items-center flex-shrink-0 ml-2 p-0.5 bg-gray-300 rounded-full duration-100 ease-in-out peer-checked:bg-gray-400 after:w-4 after:h-4 after:bg-white after:rounded-full after:shadow-md after:duration-100 peer-checked:after:translate-x-3"></span>
         </label>
 
       </div>

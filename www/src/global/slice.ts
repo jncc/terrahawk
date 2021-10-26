@@ -12,11 +12,9 @@ let slice = createSlice({
   },
   reducers: {
     startLoading: (state, a: PayloadAction<string>) => {
-      console.log('++' + a.payload)
       state.loading = _.concat(state.loading, a.payload)
     },
     stopLoading: (state, a: PayloadAction<string>) => {
-      console.log('--' + a.payload)
       state.loading = _.without(state.loading, a.payload)
     },
     showError: (state, a: PayloadAction<string>) => {
