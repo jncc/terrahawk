@@ -36,6 +36,7 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
   )
 )
 
+// replace with global error action
 let showErrorEpic = (action$: any) => action$.pipe(
   ofType(
     mapperActions.fetchPolygonsFailed.type,

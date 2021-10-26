@@ -13,44 +13,48 @@ import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
 
+type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
+
 let map: L.Map
 let bboxRectangle: L.Rectangle
-let polyLayerGroup: L.LayerGroup
-let polylayers: { poly: Poly, layer: L.GeoJSON<any> }[]
+let polyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 
 export let LeafletMap = () => {
 
   let state = useStateSelector(s => s.mapper)
   let dispatch = useStateDispatcher()
   
-  React.useEffect(() => {
+  // initialize the Leaflet map
+  useEffect(() => {
     
     map = L.map('leaflet-map', {
-      minZoom: 2,
+      minZoom: 5,
       zoomControl: false,
     })
 
     // base layer
-    L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
+    L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Light_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
       // attribution: config.attribution,
     }).addTo(map)
   
-    polyLayerGroup = L.layerGroup([]).addTo(map)
+    // framework boundary
+    L.geoJSON(frameworks[state.query.framework].boundary, { style: frameworkBoundaryStyle }).addTo(map)
 
+    // polygon layer group
+    polyLayerGroup = L.layerGroup([])
+
+    // listen for position changes
     map.on('moveend', () => {
       dispatch(mapperActions.mapCenterChanged(map.getCenter()))
     })
 
-    // framework boundary
-    L.geoJSON(frameworks[state.query.framework].boundary, { style: frameworkBoundaryStyle }).addTo(map)
-
     // setView handily raises the 'moveend' event we've wired up above,
-    // so data gets fetched initially without needing the map to be moved
+    // so no need to raise an initial event artifically
     map.setView(state.query.center, frameworks[state.query.framework].defaultZoom)
 
   }, [])
 
-  // react to change of `query.center`
+  // react to change of `query.center` (position change)
   useEffect(() => {
 
     if (bboxRectangle) {
@@ -60,70 +64,101 @@ export let LeafletMap = () => {
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
       bboxRectangleStyle).addTo(map)
-      
+    
+    // tooltips don't appear to be removed if open when layers are removed, unfortunately
+    // so just get rid of them all whenever the position of the map changes
+    polyLayerGroup.getLayers().forEach(l => l.unbindTooltip())
+
   }, [state.query.center])
 
   // react to change of `polygons`
+  // (sync the polygons on the leaflet map with the polygons in state)
   useEffect(() => {
 
-    // polys
-    if (polyLayerGroup || (polylayers && polylayers.length > 0)) {
-      polylayers = []
-      polyLayerGroup.clearLayers()  
-    }
-    polylayers = makePolylayers(state.polygons)
-    _(polylayers).shuffle().chunk(100).forEach((chunk, i) => {
-      setTimeout(() => {
-        chunk.forEach( p => p.layer.addTo(polyLayerGroup) )
-      }, i * 50)
-    })
-    // polylayers.forEach(p => p.layer.addTo(polyLayerGroup))
+    // remove layers for polygons that aren't in state.polygons
+    polyLayerGroup.getLayers()
+      .filter((l: any) => !state.polygons.find(p => p.polyid === l.polyid))
+      .forEach(l => {
+        polyLayerGroup.removeLayer(l)
+        l.remove() // explictly remove the layer from the map to encourage garbage collection
+      })
+      
+    // add layers for polygons in state.polygons not already on the map
+    state.polygons
+      .filter(p => !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid))
+      .forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
+
+    
+
+    // _(polylayers).shuffle().chunk(100).forEach((chunk, i) => {
+    //   setTimeout(() => {
+    //     chunk.forEach( p => p.layer.addTo(polyLayerGroup) )
+    //   }, i * 50)
+    // })
 
   }, [state.polygons.map(p => p.polyid).join(',')])  
 
   // react to change of `choropleth`
+  // (sync the polygons layers on the leaflet map with the choropleth items in state)
   useEffect(() => {
 
     state.choropleth.forEach(c => {
-      let maybePolylayer = polylayers.find(x => x.poly.polyid === c.polyid)
-      maybePolylayer?.layer.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
-      maybePolylayer?.layer.bindTooltip(
+      // we could well have changed position since the choropleth request was made,
+      // so we can't assume that there will still be a polygon layer for any choropleth item
+      let maybeLayer = (polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === c.polyid)
+      maybeLayer?.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
+      maybeLayer?.bindTooltip(
         makePolygonTooltipHtml(
-          maybePolylayer.poly,
+          maybeLayer.polyid,
+          maybeLayer.habitat,
           getChoroplethMaxZValue(state.query.statistic, c),
           state.query.statistic),
         { offset: [80, 0] }
       )
     })
-
   }, [state.choropleth.map(p => p.polyid).join(',')])  
 
+  // react to changes of `showPolygons`
+  useEffect(() => {
+    if (state.showPolygons)
+      // showing ~1000 polygons causes a noticeable lag in the React UI, so add a short delay
+      setTimeout(() => polyLayerGroup.addTo(map), 50)
+    else
+      polyLayerGroup.remove()
+    
+  }, [state.showPolygons])
+
+  // react has nothing to do with the leaflet map;
+  // map manipulation is done via side-effects (useEffect)  
   return <div id="leaflet-map" className="absolute inset-0"></div>
 }
 
 
 
-let makePolylayers = (ps: Poly[]) => {
+let makePolygonLayer = (p: Poly) => {
+  let loStyle: L.PathOptions = { weight: 1, color: '#222', opacity: 0.6, }
+  let hiStyle: L.PathOptions = { weight: 4, color: '#000', opacity: 0.6, }
+  // let loStyle: L.PathOptions = { fill: true }
+  // let hiStyle: L.PathOptions = { fill: false, }
 
-  return ps.map(p => {
+  let style = {
+    ...loStyle,
+    // fill: true, // a polygon seems to need a fill for mouseover to work properly
+    // fillOpacity: 0,
+    fillColor: 'white',
+  }
 
-    let loStyle = { weight: 1, color: '#222', opacity: 0.6 }
-    let hiStyle = { weight: 2, color: '#000', opacity: 0.6 }
+  let layer = L.geoJSON(p.geojson, { style })
+  let fillColor;
+  layer.on('mouseover', (e: any) => { e.target.setStyle(hiStyle) })
+  layer.on('mouseout',  (e: any) => { e.target.setStyle(loStyle) })
+  // layer.on('mouseover', (e: any) => { console.log('mouseover') })
+  // layer.on('mouseout',  (e: any) => { console.log('mouseout') })
+  // click:  (e: any) => POLYGON_SELECTED!
 
-    let style = {
-      ...loStyle,
-      fill:   true, // a polygon seems to need a fill for mouseover to work properly
-      fillOpacity: 0,
-      fillColor: 'white',
-      // fillColor: getColour(p.max_z_mean_abs),
-      // className: getCssClassForZScore(Math.abs(p.max_z_mean))
-    }
-
-    let layer = L.geoJSON(p.geojson, { style } )
-    layer.on('mouseover', (e: any) => { e.target.setStyle(hiStyle) })
-    layer.on('mouseout',  (e: any) => { e.target.setStyle(loStyle) })
-    // click:  (e: any) => POLYGON_SELECTED!
-
-    return { poly: p, layer: layer }
-  })
+  // save some custom properties so we can easily find and use the layer later
+  ;(layer as CustomPolygonLayer).polyid = p.polyid
+  ;(layer as CustomPolygonLayer).habitat = p.habitat
+  
+  return layer
 }

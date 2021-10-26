@@ -1,7 +1,7 @@
 
 import * as React from 'react'
 import { LeafletMap } from './LeafletMap'
-import { MapControls } from './MapControls'
+import { ControlsPanel } from './ControlsPanel'
 import { QueryPanel } from './QueryPanel'
 import { FrameworkPanel } from './FrameworkPanel'
 
@@ -25,7 +25,7 @@ export let MapScreenLayout = () => {
     <div className="hidden lg:block"> {/* hide the whole map unless large screen */} 
       {/* <QueryPanel /> */}
       <FrameworkPanel />
-      {/* <MapControls /> */}
+      <ControlsPanel />
       <LeafletMap />
     </div>
   </>

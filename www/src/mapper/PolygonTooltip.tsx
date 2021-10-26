@@ -5,7 +5,7 @@ import { Poly } from './types'
 import { roundTo3Decimals } from '../utility/numberUtility'
 
 /// Makes raw HTML for Leaflet tooltip content
-export let makePolygonTooltipHtml = (p: Poly, maxZ: number, stat: string) => `
+export let makePolygonTooltipHtml = (polyid: string, habitat: string, maxZ: number, stat: string) => `
   <div class="font-sans px-1 pb-1">
     <div class="flex items-center space-x-1.5">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -13,8 +13,8 @@ export let makePolygonTooltipHtml = (p: Poly, maxZ: number, stat: string) => `
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
       <div class="leading-tight">
-        <div class="text-base -mb-0.5">${p.habitat}</div>
-        <div class="text-gray-400 text-sm font-semibold">Polygon ${p.polyid} </div>
+        <div class="text-base -mb-0.5">${habitat}</div>
+        <div class="text-gray-400 text-sm font-semibold">Polygon ${polyid} </div>
       </div>
     </div>
     <hr class="my-2" />
@@ -29,12 +29,8 @@ export let makePolygonTooltipHtml = (p: Poly, maxZ: number, stat: string) => `
 
 export let PolygonTooltipForDev = () => {
   let html = makePolygonTooltipHtml(
-    {
-      habitat: `Trees, shrubs and stuff`,
-      polyid: `7654321`,
-      geojson: {},
-      partition: ``,
-    },
+    `7654321`,
+    `Trees, shrubs and stuff`,
     0.534752,
     `mean`
   )

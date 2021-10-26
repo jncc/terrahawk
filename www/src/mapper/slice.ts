@@ -13,6 +13,7 @@ let slice = createSlice({
       indexname: frameworks.liveng0.defaultIndexname,
       statistic: frameworks.liveng0.defaultStatistic,
     },
+    showPolygons: true,
     polygons:   [] as Poly[],
     choropleth: [] as ChoroplethItem[],
   },
@@ -20,8 +21,11 @@ let slice = createSlice({
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
     },
+    togglePolygons: (state) => {
+      state.showPolygons = !state.showPolygons
+    },
     fetchPolygonsCompleted: (state, a: PayloadAction<Poly[]>) => {
-      state.polygons = a.payload //.slice(0, 5)
+      state.polygons = a.payload
     },
     fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethItem[]>) => {
