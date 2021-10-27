@@ -4,16 +4,14 @@ import 'leaflet/dist/leaflet.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { frameworks } from '../frameworks'
-import { ChoroplethItem, Poly, Statistic } from './types'
-import { getChoroplethMaxZValue, getColour, getCssClassForZScore } from './helpers/choroplethHelpers'
-import { roundTo3Decimals } from '../utility/numberUtility'
+import { Poly } from './types'
+import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
 import { globalActions } from '../global/slice'
-import { chunk, shuffle } from 'lodash'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
@@ -88,13 +86,14 @@ export let LeafletMap = () => {
     // add layers for polygons in state.polygons not already on the map
     let toAdd = state.polygons.filter(p =>
       !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
-    )
+    ).forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
     // but add them in chunks for a nicer visual effect
-    chunk(shuffle(toAdd), toAdd.length / 8).forEach((chunk, i) => {
-      setTimeout(() => {
-        chunk .forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
-      }, i * 50)
-    })
+    // todo: but this causes a race-condition
+    // chunk(shuffle(toAdd), toAdd.length / 8).forEach((chunk, i) => {
+    //   setTimeout(() => {
+    //     chunk.forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
+    //   }, i * 50)
+    // })
   }, [state.polygons.map(p => p.polyid).join(',')])  
 
   // react to change of `choropleth`
@@ -112,7 +111,8 @@ export let LeafletMap = () => {
             maybeLayer.polyid,
             maybeLayer.habitat,
             getChoroplethMaxZValue(state.query.statistic, c),
-            state.query.statistic),
+            state.query.statistic
+          ),
           { offset: [80, 0] }
         )
       }
@@ -140,16 +140,17 @@ export let LeafletMap = () => {
 
 
 let makePolygonLayer = (p: Poly) => {
-  let loStyle: L.PathOptions = { weight: 1, color: '#222', opacity: 0.6, }
-  let hiStyle: L.PathOptions = { weight: 4, color: '#000', opacity: 0.6, }
-  // let loStyle: L.PathOptions = { fill: true }
-  // let hiStyle: L.PathOptions = { fill: false, }
+  let loStyle: L.PathOptions = { weight: 1, color: '#000', opacity: 0.3, }
+  let hiStyle: L.PathOptions = { weight: 3, color: '#000', opacity: 0.6, }
 
-  let style = {
+  let style: L.PathOptions = {
     ...loStyle,
     // fill: true, // a polygon seems to need a fill for mouseover to work properly
     // fillOpacity: 0,
     fillColor: 'white',
+    // opacity: 0,
+    fill: false,
+    
   }
 
   let layer = L.geoJSON(p.geojson, { style })

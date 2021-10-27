@@ -10,7 +10,7 @@ export let frameworkBoundaryStyle = {
 
 export let bboxRectangleStyle = {
   interactive: false,
-  color: '#ff7800',
+  color: '#667EEA',
   fill: false,
   weight: 1,
 }

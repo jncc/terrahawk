@@ -3,6 +3,10 @@ import React from 'react'
 
 import { Poly } from './types'
 import { roundTo3Decimals } from '../utility/numberUtility'
+import { getColour } from './helpers/choroplethHelpers'
+
+// replace the 'white' (no change) color with default text-gray-400
+let getBackgroundColour = (maxZ: number) => getColour(maxZ).replace('white', 'rgba(75, 85, 99')
 
 /// Makes raw HTML for Leaflet tooltip content
 export let makePolygonTooltipHtml = (polyid: string, habitat: string, maxZ: number, stat: string) => `
@@ -18,8 +22,8 @@ export let makePolygonTooltipHtml = (polyid: string, habitat: string, maxZ: numb
       </div>
     </div>
     <hr class="my-2" />
-    <div class="text-xs">
-      <span class="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-white bg-gray-600 rounded-full">
+    <div class="flex gap-1.5 items-center text-xs ">
+      <span class="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-white bg-gray-600 rounded-full" style="background-color:${getBackgroundColour(maxZ)};">
         ${roundTo3Decimals(maxZ)}
       </span>
       max standard deviations from habitat ${stat}
