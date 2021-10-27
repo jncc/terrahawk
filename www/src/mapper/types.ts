@@ -31,3 +31,6 @@ export type ChoroplethItem = {
   max_z_q1: number
   max_z_q3: number
 }
+
+// util
+export type Bounds = { southWest: { lat: number, lng: number }, northEast: { lat: number, lng: number }}

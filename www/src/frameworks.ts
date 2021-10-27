@@ -1,5 +1,5 @@
 
-import { Indexname, Statistic } from "./mapper/types"
+import { Bounds, Indexname, Statistic } from "./mapper/types"
 
 // could dynamically load framework boundaries in the future to avoid packaging them
 import liveng0Boundary from './assets/frameworks/liveng0-boundary.json'
@@ -12,6 +12,7 @@ export const frameworks: { [index: string]: Framework } = {
     defaultIndexname: 'NDVI',
     defaultStatistic: 'mean',
     boundary: liveng0Boundary,
+    maxBounds: { northEast: { lat: 60, lng: 3 }, southWest: { lat: 48, lng: -11 }}
   }
 }
 
@@ -22,4 +23,5 @@ export type Framework = {
   defaultIndexname: Indexname
   defaultStatistic: Statistic
   boundary: any
+  maxBounds: Bounds
 }

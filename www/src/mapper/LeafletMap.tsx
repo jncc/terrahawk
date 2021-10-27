@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import L from 'leaflet'
+import L, { LatLngBounds } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
 import { frameworks } from '../frameworks'
@@ -22,6 +22,8 @@ export let LeafletMap = () => {
   let state = useStateSelector(s => s.mapper)
   let dispatch = useStateDispatcher()
   
+  let framework = frameworks[state.query.framework]
+
   // initialize the Leaflet map
   useEffect(() => {
     
@@ -29,6 +31,7 @@ export let LeafletMap = () => {
       minZoom: 7,
       zoomControl: false,
       attributionControl: false,
+      maxBounds: new LatLngBounds(framework.maxBounds.southWest, framework.maxBounds.northEast)
     })
 
     // attribution
@@ -40,7 +43,7 @@ export let LeafletMap = () => {
     }).addTo(map)
   
     // framework boundary
-    L.geoJSON(frameworks[state.query.framework].boundary, { style: frameworkBoundaryStyle }).addTo(map)
+    L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
 
     // polygon layer group
     polyLayerGroup = L.layerGroup([])
@@ -52,7 +55,7 @@ export let LeafletMap = () => {
 
     // setView handily raises the 'moveend' event we've wired up above,
     // so no need to raise an initial event artifically
-    map.setView(state.query.center, frameworks[state.query.framework].defaultZoom)
+    map.setView(state.query.center, framework.defaultZoom)
 
   }, [])
 
