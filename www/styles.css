@@ -12,3 +12,9 @@
 .choropleth-4 { fill: #c2185b; }
 .choropleth-5 { fill: #ad1457; }
 .choropleth-6 { fill: #880e4f; }
+
+@layer components {
+  .custom-ring {
+      @apply focus:outline-none focus-visible:ring focus-visible:ring-pink-500
+  }
+}

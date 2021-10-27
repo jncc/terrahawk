@@ -34,7 +34,7 @@ export let MapScreenLayout = () => {
     {makeScreenreaderNotice()}
     {makeSmallScreenWarning()}
     <div className="hidden lg:block"> {/* hide the whole map unless large screen */} 
-      <QueryPanel />
+      {/* <QueryPanel /> */}
       <FrameworkPanel />
       <ControlsPanel />
       <LeafletMap />
