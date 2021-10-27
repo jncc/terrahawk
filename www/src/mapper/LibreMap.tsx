@@ -29,7 +29,7 @@ export const LibreMap = () => {
           [ -10.76418, 49.528423 ],
           [ 1.9134116, 61.331151 ]
       ],
-      center: state.center,
+      center: state.query.center,
       zoom: 9,
       transformRequest: url => {
           if(! /[?&]key=/.test(url) ) url += '?key=' + apiKey

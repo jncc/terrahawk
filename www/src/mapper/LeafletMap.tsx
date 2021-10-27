@@ -149,8 +149,6 @@ let makePolygonLayer = (p: Poly) => {
     // fillOpacity: 0,
     fillColor: 'white',
     // opacity: 0,
-    fill: false,
-    
   }
 
   let layer = L.geoJSON(p.geojson, { style })
