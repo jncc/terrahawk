@@ -11,7 +11,7 @@ export let FrameworkPanel = () => {
   let framework = frameworks[query.framework]
 
   return (
-    <button className="z-abovemap absolute bottom-6 left-6 animate-delayedfadein text-left" >
+    <a className="z-abovemap absolute bottom-6 left-6 animate-delayedfadein text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2" >
 
         <div className="flex items-center space-x-3">
@@ -28,6 +28,6 @@ export let FrameworkPanel = () => {
         </div>
 
       </div>
-    </button>
+    </a>
   )
 }

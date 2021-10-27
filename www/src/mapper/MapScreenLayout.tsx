@@ -1,9 +1,15 @@
 
 import * as React from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
+
 import { LeafletMap } from './LeafletMap'
 import { ControlsPanel } from './ControlsPanel'
 import { QueryPanel } from './QueryPanel'
 import { FrameworkPanel } from './FrameworkPanel'
+import { globalActions } from '../global/slice'
+import { useStateDispatcher } from '../state/hooks'
+import { mapperActions } from './slice'
+
 
 let rightPanelAnimationVariants = {
   open: { x: 0 },
@@ -16,14 +22,19 @@ let leftPanelAnimationVariants = {
 
 export let MapScreenLayout = () => {
 
+  let dispatch = useStateDispatcher()
+
   let [rightPanelOpen, setRightPanelOpen] = React.useState(true)
   let [leftPanelOpen, setLeftPanelOpen] = React.useState(true)
+
+  useHotkeys('space', () => { dispatch(mapperActions.togglePolygons()) })
+  useHotkeys('e', () => { dispatch(globalActions.errorOccurred('You pressed `e`')) })
   
   return <>
     {makeScreenreaderNotice()}
     {makeSmallScreenWarning()}
     <div className="hidden lg:block"> {/* hide the whole map unless large screen */} 
-      {/* <QueryPanel /> */}
+      <QueryPanel />
       <FrameworkPanel />
       <ControlsPanel />
       <LeafletMap />

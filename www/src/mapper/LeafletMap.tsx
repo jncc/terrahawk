@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useHotkeys } from 'react-hotkeys-hook'
 
 import { frameworks } from '../frameworks'
 import { Poly } from './types'
@@ -11,7 +10,6 @@ import { mapperActions } from './slice'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
-import { globalActions } from '../global/slice'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
@@ -30,6 +28,7 @@ export let LeafletMap = () => {
     map = L.map('leaflet-map', {
       minZoom: 7,
       zoomControl: false,
+      attributionControl: false,
     })
 
     // attribution
@@ -128,9 +127,6 @@ export let LeafletMap = () => {
       setTimeout(() => polyLayerGroup.remove(), 50)
     
   }, [state.showPolygons])
-
-  useHotkeys('space', () => { dispatch(mapperActions.togglePolygons()) })
-  useHotkeys('e', () => { dispatch(globalActions.errorOccurred('Bah humbug')) })
 
   // react has nothing to do with the leaflet map;
   // map manipulation is done via side-effects (useEffect)

@@ -292,6 +292,7 @@ UI workstream:
 - [ ] 🎁 Base map
   - Europa, like gov.scot
   - Use vector tiles https://labs.os.uk/public/os-data-hub-examples/os-vector-tile-api/vts-example-custom-style
+  - Display the choropleth *behind* the map.
 
 Backlog
 -------
