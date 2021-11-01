@@ -253,16 +253,56 @@ Sprint 16 (to October 15)
 Sprint 17 (to October 29)
 ---------------------------
 
-- [ ] 🎁 Get S2 index files into CEDA archive {ih}
+- [ ] ~~🎁 Get S2 index files into CEDA archive {ih}~~
   - [ ] Requires some manual QA first
   - [ ] Get metadata to CEDA
   - [ ] Document this process (data engineering wiki?)
-- [ ] 🎁 Run all S2 data through Glue {pm}
-- [ ] Investigate slight apparent difference between polygon stats in Dark Peak pilot {ih, fm}
-- [ ] 🎁 Implement React layout panels and polygon caching {pm}
-- [ ] 🎁 (stretch) Parameterise on Index, Statistic, Date {pm}
-- [ ] Double-check that there's no shift problem for S2 {pl, lh}
-- [ ] Find an OS grey base map service {jp, pr}
+- [x] 🎁 Run all S2 data through Glue {pm}
+- [x] Investigate slight apparent difference between polygon stats in Dark Peak pilot {ih, fm}
+- [x] 🎁 Implement React layout panels and polygon caching {pm}
+- [x] Double-check that there's no shift problem for S2 {pl, lh}
+- [ ] ~~Find an OS grey base map service {jp, pr}~~
+
+Where are we for alpha? 
+-----------------------
+
+- 😎 We have a working, production upscaled engineering solution. 
+- ⏱ There is a lot to do and we have a more realistic view of velocity.
+- *'Home straight to alpha' detailed plan follows...*
+
+Sprint 18 (to October 12)
+-------------------------
+
+- [ ] 🎁 Get S2 index files into CEDA archive {ih, uw}
+  - [ ] Requires some manual QA first
+  - [ ] Get metadata to CEDA
+  - [ ] Document this process (data engineering wiki?)
+- [ ] 🎁 Find an OS grey base map service {mb, pr}
+- [ ] 🎁 Parameterise on Index, Statistic, Date {pm}
+
+Sprint 19 (to October 26)
+-------------------------
+
+- [ ] 🎁 Show charts/graphs and related stats for selected polygon {pm}
+- [ ] 🎁 Implement suitable base map for *alpha*
+- [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
+  - research & design 
+  - get some data into Postgres
+
+Sprint 20 (to December 10; *alpha* release)
+--------------------------------------------
+
+- [ ] 🎁 Implement thumbnails {pm, cj}
+  - there is a working prototype made by {cj}...
+  - graft and integrate into the React app {pm}
+
+Sprint 21 (to January 4)
+------------------------
+
+- [ ] Process S1 stats {ih, pm, fm}
+- [ ] Process seasonal stats {pm, fm}
+- [ ] Respond to go-live issues {pm}
+- [ ] 🎁 Field data in UI {pm}
 
 Upcoming sprints
 ----------------
@@ -270,34 +310,25 @@ Upcoming sprints
 Stats data workstream:
 
 - [ ] Basic automated QA checks/assertions {fm, ih}
-- [ ] 🎁 Run all stats all the way through {}
+- [ ] 🎁 Run all stats all the way through
 - [ ] Solve S1 shift problem {}
 - [ ] QA the final stats {ih}
 
 App services workstream:
 
-- [ ] 🎁 Field data API prototype {cj}
-  - research & design 
-  - get some data into Postgres
-
 - [ ] Gazetteer {cj}
   - Design & implement backend DB with several datasets
   - API
-
-UI workstream:
-
-- [ ] 🎁 Implement thumbnails
-- [ ] 🎁 Charts for selected polygon
-- [ ] 🎁 Field data
-- [ ] 🎁 Base map
-  - Europa, like gov.scot
-  - Use vector tiles https://labs.os.uk/public/os-data-hub-examples/os-vector-tile-api/vts-example-custom-style
-  - Display the choropleth *behind* the map.
 
 Backlog
 -------
 
 - [ ] Check OS base map licence and attribution statement
+  - Europa, like gov.scot
+  - Use vector tiles https://labs.os.uk/public/os-data-hub-examples/os-vector-tile-api/vts-example-custom-style
+  - Display the choropleth *behind* the map.
+
+- [ ] Download stats as CSV/text file
 
 - [ ] Glue / Spark optimisation https://aws.amazon.com/blogs/big-data/optimize-memory-management-in-aws-glue/ 
 
@@ -364,6 +395,8 @@ Backlog
 - [ ] Static website hosting on S3 / Cloudfront
 
 - [ ] Idea to remove Athena to horizontally scale for many concurrent users and reduce latency
+
+- [ ] Idea to put polygons behind the map detail for more usable choropleth
 
 Workstreams
 -----------
