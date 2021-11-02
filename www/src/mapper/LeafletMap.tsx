@@ -112,7 +112,8 @@ export let LeafletMap = () => {
         maybeLayer?.setStyle({ fillColor:  getColour(Math.abs(maxZ)) })
       }
 
-      // maybeLayer?.setStyle({ fillColor:  'red' })
+      let currentlyOpen = maybeLayer && maybeLayer.getTooltip() && maybeLayer.isTooltipOpen()
+
       maybeLayer?.unbindTooltip()
       maybeLayer?.bindTooltip(
         makePolygonTooltipHtml(
@@ -124,6 +125,10 @@ export let LeafletMap = () => {
         ),
         { offset: [80, 0] }
       )
+
+      // reopen the currently open tooltip for a much better experience
+      if (currentlyOpen)
+          maybeLayer?.openTooltip()
     })
 
   }, [Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(','), state.query.statistic])
