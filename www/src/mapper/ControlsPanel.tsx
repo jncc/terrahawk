@@ -28,23 +28,3 @@ export let ControlsPanel = () => {
     </div>
   )
 }
-
-        {/* <button onClick={() => dispatch(mapperActions.mapCenterChanged())}>
-          fetchPolygons
-        </button>
-        <br />
-        <button onClick={() => dispatch(globalActions.ping())}>
-          PING
-        </button>
-        <br />
-        <div>
-          Loading? {globalState.loading}
-        </div>
-        <div>
-          Error: {globalState.errorMessage}
-        </div>
-        <button onClick={() => dispatch(mapperActions.mapZoomChanged(13))} aria-label="Zoom in">
-          Zoom to 13
-        </button>
-        <br />
-        {state.polygons.map(p => <div key={p.polyid}>{p.polyid}</div>)} */}

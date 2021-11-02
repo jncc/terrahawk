@@ -2,7 +2,7 @@
 import { Observable, of, merge, EMPTY } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
 import { map  } from 'rxjs/operators'
-import QuickLRU from 'quick-lru'
+import LRUCache from 'lru-cache'
 
 import { RootState } from '../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
@@ -27,7 +27,8 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
   )
 }
 
-let cache = new QuickLRU<string, ChoroplethItem | NoDataChoroplethItem>({ maxSize: 10000 })
+// let cache = new QuickLRU<string, ChoroplethItem | NoDataChoroplethItem>({ maxSize: 10000 })
+let cache = new LRUCache<string, ChoroplethItem | NoDataChoroplethItem>({ max: 10000 })
 
 let makeCacheKey = (framework: string, indexname: string, polyid: string): string => 
 `${framework}::${indexname}::${polyid}`
@@ -66,6 +67,9 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   )
 
   let alreadyGot$ = alreadyGot.length ? of({ items: alreadyGot, params: keyParams }) : EMPTY
+
+  let dump = cache.dump()
+  console.log(dump)
 
   return merge(alreadyGot$, needed.length ? api$ : EMPTY)
 }

@@ -830,6 +830,11 @@
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.1.tgz#459c65fa1867dafe6a8f322c4c51695663cc55e9"
   integrity sha512-5tXH6Bx/kNGd3MgffdmP4dy2Z+G4eaXw0SE81Tq3BNadtnMR5/ySMzX4SLEzHJzSmPNn4HIdpQsBvXMUykr58w==
 
+"@types/lru-cache@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@types/lru-cache/-/lru-cache-5.1.1.tgz#c48c2e27b65d2a153b19bfc1a317e30872e01eef"
+  integrity sha512-ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==
+
 "@types/markdown-it@^12.2.1":
   version "12.2.1"
   resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-12.2.1.tgz#ca36e1edce6f15a770f3e99e68622d1d2e2f0c65"
@@ -5199,11 +5204,6 @@ quick-lru@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
-
-quick-lru@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-6.0.1.tgz#3a3fabc74960d663222d04957634766d3447c562"
-  integrity sha512-IE0DNgU7LWaVHB3KqPwWwZ9QiBK9HqZ1Au1uOcLkoosOzehlhOq/v1LA3TUUSzjA98CCOfhug74rWb0L7sGwdw==
 
 quickselect@^2.0.0:
   version "2.0.0"

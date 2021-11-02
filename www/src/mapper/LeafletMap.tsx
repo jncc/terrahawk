@@ -131,7 +131,10 @@ export let LeafletMap = () => {
           maybeLayer?.openTooltip()
     })
 
-  }, [Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(','), state.query.statistic])
+  }, [
+    Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(','),
+    state.query.statistic // statistic values are all in the same choropleth item object - simply redraw when this changes 
+  ])
 
   // react to changes of `showPolygons`
   useEffect(() => {
