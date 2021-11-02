@@ -330,6 +330,8 @@ Backlog
 
 - [ ] Download stats as CSV/text file
 
+- [ ] Why are there polygons with no data for choropleth? Investigate.
+
 - [ ] Glue / Spark optimisation https://aws.amazon.com/blogs/big-data/optimize-memory-management-in-aws-glue/ 
 
 - [ ] Questions for AWS or Bytes glue expert

@@ -15,7 +15,7 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
     concat(
       of(globalActions.startLoading('polygons')),
       fetchPolygons(state$.value.mapper.query).pipe(
-        map(polys => mapperActions.fetchPolygonsCompleted(polys)),
+        map(result => mapperActions.fetchPolygonsCompleted(result)),
         catchError(e => of(globalActions.errorOccurred(e.message)))),
       of(globalActions.stopLoading('polygons')),
     )
@@ -23,12 +23,12 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
 )
 
 let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
-  ofType(mapperActions.fetchPolygonsCompleted.type),
+  ofType(mapperActions.fetchPolygonsCompleted.type, mapperActions.alterQueryIndexname.type),
   switchMap(() =>
     concat(
       of(globalActions.startLoading('choropleth')),
       fetchChoropleth(state$.value.mapper).pipe(
-        map(items => mapperActions.fetchChoroplethCompleted(items)),
+        map(result => mapperActions.fetchChoroplethCompleted(result)),
         catchError(e => of(globalActions.errorOccurred(e.message))),
       ),
       of(globalActions.stopLoading('choropleth')),

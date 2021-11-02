@@ -60,6 +60,7 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
         where
             framework=%L
             and indexname=%L
+            and year='2020' and month='04'
             and poly_partition in (%L)
             and polyid in (%L)
         group by polyid

@@ -3,7 +3,7 @@ import L, { LatLngBounds } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
 import { frameworks } from '../frameworks'
-import { Poly } from './types'
+import { isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
@@ -78,7 +78,7 @@ export let LeafletMap = () => {
 
     // remove layers for polygons that aren't in state.polygons
     polyLayerGroup.getLayers()
-      .filter((l: any) => !state.polygons.find(p => p.polyid === l.polyid))
+      .filter((l: any) => !state.polygons.polys.find(p => p.polyid === l.polyid))
       .forEach(l => {
         l.getTooltip()?.remove()
         polyLayerGroup.removeLayer(l)
@@ -86,7 +86,7 @@ export let LeafletMap = () => {
       })
       
     // add layers for polygons in state.polygons not already on the map
-    let toAdd = state.polygons.filter(p =>
+    let toAdd = state.polygons.polys.filter(p =>
       !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
     ).forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
     // but add them in chunks for a nicer visual effect
@@ -96,30 +96,35 @@ export let LeafletMap = () => {
     //     chunk.forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
     //   }, i * 50)
     // })
-  }, [state.polygons.map(p => p.polyid).join(',')])  
+  }, [Object.values(state.polygons.params).join(':') + '|' + state.polygons.polys.map(p => p.polyid).join(',')])  
 
   // react to change of `choropleth`
   // (sync the polygons layers on the leaflet map with the choropleth items in state)
   useEffect(() => {
 
-    state.choropleth.forEach(c => {
+    state.choropleth.items.forEach(c => {
       // we could well have changed position since the choropleth request was made,
       // so we can't assume that there will still be a polygon layer for any choropleth item
       let maybeLayer = (polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === c.polyid)
-      maybeLayer?.setStyle({ fillColor: getColour(Math.abs(c.max_z_mean)) })
-      if (!maybeLayer?.getTooltip()) {
-        maybeLayer?.bindTooltip(
-          makePolygonTooltipHtml(
-            maybeLayer.polyid,
-            maybeLayer.habitat,
-            getChoroplethMaxZValue(state.query.statistic, c),
-            state.query.statistic
-          ),
-          { offset: [80, 0] }
-        )
-      }
+      
+      if (isChoroplethItem(c))
+        maybeLayer?.setStyle({ fillColor:  getColour(Math.abs(c.max_z_mean)) })
+      
+      // maybeLayer?.setStyle({ fillColor:  'red' })
+      maybeLayer?.unbindTooltip()
+      maybeLayer?.bindTooltip(
+        makePolygonTooltipHtml(
+          maybeLayer.polyid,
+          maybeLayer.habitat,
+          state.query.statistic,
+          state.query.indexname,
+          c
+        ),
+        { offset: [80, 0] }
+      )
     })
-  }, [state.choropleth.map(p => p.polyid).join(',')])  
+
+  }, [Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(',')])
 
   // react to changes of `showPolygons`
   useEffect(() => {
