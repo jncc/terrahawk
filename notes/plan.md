@@ -428,3 +428,8 @@ Web app - obvious to-dos
   - [ ] SSL / cloudfront (perhaps can still deploy with sls once set up in terraform? https://www.serverless.com/learn/tutorial/creating-aws-cloudfront-distribution)
   - API can still be deployed with sls.
 
+Achievements
+------------
+
+- "keyboard-first" - you can control map entirely with the keyboard
+- accessibility first - accessibility done from the start. 

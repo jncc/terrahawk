@@ -1,5 +1,5 @@
 
-import { of, merge, Observable } from 'rxjs'
+import { Observable, of, merge, EMPTY } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
 import { map  } from 'rxjs/operators'
 import QuickLRU from 'quick-lru'
@@ -64,13 +64,10 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
       return { items: allItems, params: keyParams }
     })
   )
-  let alreadyGot$ = of({ items: alreadyGot, params: keyParams })
 
-  if (needed.length) {
-    return merge(alreadyGot$, api$)
-  } else {
-    return alreadyGot$
-  }
+  let alreadyGot$ = alreadyGot.length ? of({ items: alreadyGot, params: keyParams }) : EMPTY
+
+  return merge(alreadyGot$, needed.length ? api$ : EMPTY)
 }
 
 let api = (endpoint: string, params: any) => {

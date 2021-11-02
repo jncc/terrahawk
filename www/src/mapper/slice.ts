@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonQueryResult, ChoroplethQueryResult, NoDataChoroplethItem } from './types'
+import { Poly, ChoroplethItem, Indexname, PolygonQueryResult, ChoroplethQueryResult, NoDataChoroplethItem, Statistic } from './types'
 import { frameworks } from '../frameworks'
 
 let defaultQuery = {
@@ -37,7 +37,10 @@ let slice = createSlice({
     fetchChoroplethFailed: () => {},
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
-    }
+    },
+    alterQueryStatistic: (state, a: PayloadAction<Statistic>) => {
+      state.query.statistic = a.payload
+    },
   },
 })
 

@@ -107,9 +107,11 @@ export let LeafletMap = () => {
       // so we can't assume that there will still be a polygon layer for any choropleth item
       let maybeLayer = (polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === c.polyid)
       
-      if (isChoroplethItem(c))
-        maybeLayer?.setStyle({ fillColor:  getColour(Math.abs(c.max_z_mean)) })
-      
+      if (isChoroplethItem(c)) {
+        let maxZ = getChoroplethMaxZValue(state.query.statistic, c)
+        maybeLayer?.setStyle({ fillColor:  getColour(Math.abs(maxZ)) })
+      }
+
       // maybeLayer?.setStyle({ fillColor:  'red' })
       maybeLayer?.unbindTooltip()
       maybeLayer?.bindTooltip(
@@ -124,7 +126,7 @@ export let LeafletMap = () => {
       )
     })
 
-  }, [Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(',')])
+  }, [Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(','), state.query.statistic])
 
   // react to changes of `showPolygons`
   useEffect(() => {
