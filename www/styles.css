@@ -17,4 +17,7 @@
   .custom-ring {
       @apply focus:outline-none focus-visible:ring focus-visible:ring-blue-500
   }
+  .black-to-jncc-green {
+    filter: invert(38%) sepia(11%) saturate(3054%) hue-rotate(69deg) brightness(95%) contrast(86%);
+  }
 }

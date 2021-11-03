@@ -9,16 +9,7 @@ import { FrameworkPanel } from './FrameworkPanel'
 import { globalActions } from '../global/slice'
 import { useStateDispatcher } from '../state/hooks'
 import { mapperActions } from './slice'
-
-
-let rightPanelAnimationVariants = {
-  open: { x: 0 },
-  closed: { x: '104%' }, // move right by slightly more than its width
-}
-let leftPanelAnimationVariants = {
-  open: { x: 0 },
-  closed: { x: '-104%' }, // move left by slightly more than its width
-}
+import jnccLogoUrl from '../assets/JNCCLogo_Black-340.png'
 
 export let MapScreenLayout = () => {
 
@@ -29,8 +20,12 @@ export let MapScreenLayout = () => {
   
   return <>
     {makeScreenreaderNotice()}
-    {makeSmallScreenWarning()}
-    <div className="hidden xl:block"> {/* hide the whole map unless large screen */} 
+    {/* hide the small screen warning on large screen */} 
+    <div className="xl:hidden">
+      {makeSmallScreenWarning()}
+    </div>
+    {/* hide the mapper unless on large screen */} 
+    <div className="hidden xl:block">
       <QueryPanel />
       <FrameworkPanel />
       <ControlsPanel />
@@ -45,15 +40,19 @@ let makeScreenreaderNotice = () =>
   </div>
 
 let makeSmallScreenWarning = () =>
-  <div className="xl:hidden flex h-screen">
+  <div className="h-screen flex">
     <div className="m-auto space-y-2 p-5">
+      <div className="opacity-70">
+        <img src={jnccLogoUrl} alt="JNCC logo" width="340" height="127" />
+      </div>
       <h1 className="text-xl">
-      This map is made for large displays. 🦉 
+        This map is made for large displays. 🦉 
       </h1>
       <ul className="list-disc list-inside px-5">
-        <li>increase your <b>screen size</b></li>
+        <li>use a <b>desktop device</b></li>
         <li><b>maximise</b> your browser window</li>
-        <li>change your browser <b>zoom level</b>.</li>
+        <li>reduce your browser <b>zoom level</b></li>
+        <li>increase your <b>screen size</b></li>
       </ul>
     </div>
   </div>

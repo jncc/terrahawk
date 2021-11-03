@@ -1,5 +1,14 @@
 
-import { ensureSomeArgs, parseBbox, parseFramework, parseIndexname, parsePolyids, parsePolyPartitions } from '../validation'
+import { ensureSomeArgs,
+    parseFramework,
+    parseIndexname,
+    parsePolyids,
+    parsePolyPartitions,
+    parseYearFrom,
+    parseMonthFrom,
+    parseYearTo,
+    parseMonthTo,
+} from '../validation'
 
 /**
  * Parses an args input map from Express or Lambda.
@@ -10,6 +19,10 @@ import { ensureSomeArgs, parseBbox, parseFramework, parseIndexname, parsePolyids
 
     let framework = parseFramework(args)
     let indexname = parseIndexname(args)
+    let yearFrom = parseYearFrom(args, 2010)
+    let monthFrom = parseMonthFrom(args, 1)
+    let yearTo = parseYearTo(args, new Date().getFullYear())
+    let monthTo = parseMonthTo(args, new Date().getMonth() + 1)
     let polyPartitions = parsePolyPartitions(args)
     let polyids = parsePolyids(args)
 
@@ -18,5 +31,9 @@ import { ensureSomeArgs, parseBbox, parseFramework, parseIndexname, parsePolyids
         indexname,
         polyPartitions,
         polyids,
+        yearFrom,
+        monthFrom,
+        yearTo,
+        monthTo,
     }
 }

@@ -24,6 +24,10 @@ export const getChoroplethFacade = async (input: any) => {
     let maxZScoresForThesePolygons = await getMaxZScores({
         framework:      args.framework,
         indexname:      args.indexname,
+        yearFrom:       args.yearFrom,
+        monthFrom:      args.monthFrom,
+        yearTo:         args.yearTo,
+        monthTo:        args.monthTo,
         polyids:        polygons.map(p => p.polyid as string),
         polyPartitions: [...new Set(polygons.map(p => p.partition))] // use Set for `distinct`
     })

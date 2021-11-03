@@ -24,6 +24,10 @@ export const getChoropleth = async (input: any) => {
     let maxZScores = await getMaxZScores({
         framework:      args.framework,
         indexname:      args.indexname,
+        yearFrom:       args.yearFrom,
+        monthFrom:      args.monthFrom,
+        yearTo:         args.yearTo,
+        monthTo:        args.monthTo,
         polyPartitions: args.polyPartitions,
         polyids:        args.polyids,
     })
@@ -36,6 +40,10 @@ export const getChoropleth = async (input: any) => {
 type MaxZScoreQuery = {
     framework: string
     indexname: string
+    yearFrom: number
+    monthFrom: number
+    yearTo: number
+    monthTo: number
     polyPartitions: string[]
     polyids: string[]    
 }
@@ -60,13 +68,20 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
         where
             framework=%L
             and indexname=%L
-            and year='2020' and month='04'
+            and cast(year as integer) >= cast(%L as integer)
+            and cast(month as integer) >= cast(%L as integer)
+            and cast(year as integer) <= cast(%L as integer)
+            and cast(month as integer) <= cast(%L as integer)
             and poly_partition in (%L)
             and polyid in (%L)
         group by polyid
         `,
         q.framework,
         q.indexname,
+        q.yearFrom,
+        q.monthFrom,
+        q.yearTo,
+        q.monthTo,
         q.polyPartitions,
         q.polyids
     )

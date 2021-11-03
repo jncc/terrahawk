@@ -6,8 +6,11 @@ import LRUCache from 'lru-cache'
 
 import { RootState } from '../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
-import { ChoroplethItem, ChoroplethQueryResult, NoDataChoroplethItem, PolygonQueryResult, PolygonsQuery } from './types'
+import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonQueryResult, PolygonsQuery, Query } from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
+
+// polygons
+// --------
 
 export let fetchPolygons = (query: RootState['mapper']['query']): Observable<PolygonQueryResult> => {
 
@@ -27,51 +30,55 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
   )
 }
 
-// let cache = new QuickLRU<string, ChoroplethItem | NoDataChoroplethItem>({ maxSize: 10000 })
-let cache = new LRUCache<string, ChoroplethItem | NoDataChoroplethItem>({ max: 10000 })
+// choropleth
+// ----------
 
-let makeCacheKey = (framework: string, indexname: string, polyid: string): string => 
-`${framework}::${indexname}::${polyid}`
-// todo: date range, monthly/seasonally
+let cache = new LRUCache<string, ChoroplethItem | ChoroplethNone>({ max: 10000 })
+
+let getKeyParams = (params: ChoroplethKeyParams): ChoroplethKeyParams => (({ framework, indexname, yearFrom, monthFrom, yearTo, monthTo }) =>
+({ framework, indexname, yearFrom, monthFrom, yearTo, monthTo }))(params)
+
+let makeCacheKey = (polyid: string, keyParams: ChoroplethKeyParams) => `${Object.values(keyParams).join(':')}::${polyid}`
 
 export let fetchChoropleth = (state: RootState['mapper']): Observable<ChoroplethQueryResult> => {
 
-  let alreadyGot = state.polygons.polys
-    .map(p => cache.get(makeCacheKey(state.query.framework, state.query.indexname, p.polyid)))
-    .filter(item => item !== undefined) as ChoroplethItem[]
+  let cached = state.polygons.polys
+    .map(p => {
+      let key = makeCacheKey(p.polyid, getKeyParams(state.query))
+      return cache.get(key)
+    })
+    .filter(item => item !== undefined) as (ChoroplethItem | ChoroplethNone)[]
 
   let needed = state.polygons.polys.filter(
-    p => !alreadyGot.find(c => c.polyid === p.polyid)
+    p => !cached.find(c => c.polyid === p.polyid)
   )
 
-  let params = {
-    framework: state.query.framework,
-    indexname: state.query.indexname,
-    polyids: needed.map(p => p.polyid),
-    polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct partitions
+  let params: ChoroplethParams = {
+    ...state.query, // actually some properties (e.g. center) are not needed for this request, but...
+    polyids:        needed.map(p => p.polyid),
+    polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct
   }
 
-  let keyParams = { framework: params.framework, indexname: params.indexname }
+  let keyParams = getKeyParams(params)
 
   let api$ = api('choropleth', params).pipe(
     map(r => {
-      let items = r.response as ChoroplethItem[]
-      let noValueItems = params.polyids.filter(polyid => !items.find(c => c.polyid === polyid)).map(polyid => ({ polyid } as NoDataChoroplethItem))
-      let allItems: (ChoroplethItem | NoDataChoroplethItem)[] = [...items, ...noValueItems]
-      // store the items in the cache before we return them
-      allItems.forEach((c: ChoroplethItem | NoDataChoroplethItem) => {
-        cache.set(makeCacheKey(params.framework, params.indexname, c.polyid), c)
+      // todo: this "no data" impl. is a bit gnarly
+      let dataItems = r.response as ChoroplethItem[]
+      let noneItems = params.polyids.filter(polyid => !dataItems.find(c => c.polyid === polyid)).map(polyid => ({ polyid } as ChoroplethNone))
+      let allItems: (ChoroplethItem | ChoroplethNone)[] = [...dataItems, ...noneItems]
+      // cache the items
+      allItems.forEach(c => {
+        let k = makeCacheKey(c.polyid, keyParams)
+        cache.set(k, c)
       })
       return { items: allItems, params: keyParams }
     })
   )
 
-  let alreadyGot$ = alreadyGot.length ? of({ items: alreadyGot, params: keyParams }) : EMPTY
+  let cached$ = cached.length ? of({ items: cached, params: keyParams }) : EMPTY
 
-  let dump = cache.dump()
-  console.log(dump)
-
-  return merge(alreadyGot$, needed.length ? api$ : EMPTY)
+  return merge(cached$, needed.length ? api$ : EMPTY)
 }
 
 let api = (endpoint: string, params: any) => {

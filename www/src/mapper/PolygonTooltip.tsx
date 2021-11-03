@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-import { ChoroplethItem, isChoroplethItem, NoDataChoroplethItem, Poly, Statistic } from './types'
+import { ChoroplethItem, isChoroplethItem, ChoroplethNone, Poly, Statistic } from './types'
 import { roundTo3Decimals } from '../utility/numberUtility'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 
@@ -9,7 +9,7 @@ import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 let getBackgroundColour = (maxZ: number) => getColour(maxZ).replace('white', 'rgba(75, 85, 99')
 
 /// Makes raw HTML for Leaflet tooltip content
-export let makePolygonTooltipHtml = (polyid: string, habitat: string, stat: Statistic, indexname: string, c: (ChoroplethItem|NoDataChoroplethItem)) => { 
+export let makePolygonTooltipHtml = (polyid: string, habitat: string, stat: Statistic, indexname: string, c: (ChoroplethItem|ChoroplethNone)) => { 
   
   if (isChoroplethItem(c)) {
 

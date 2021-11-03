@@ -47,6 +47,46 @@ export function parseBbox(args: Args) {
     return args.bbox
 }
 
+export function parseYearFrom(args: Args, defaultYear: number) {
+    if (!args.yearFrom) {
+        return defaultYear
+    }
+    if (!Number.isInteger(args.yearFrom)) {
+        throw `Expected 'yearFrom' to be an integer.`
+    }
+    return args.yearFrom as number
+}
+
+export function parseMonthFrom(args: Args, defaultMonth: number) {
+    if (!args.monthFrom) {
+        return defaultMonth
+    }
+    if (!Number.isInteger(args.monthFrom)) {
+        throw `Expected 'monthFrom' to be an integer.`
+    }
+    return args.monthFrom as number
+}
+
+export function parseYearTo(args: Args, defaultYear: number) {
+    if (!args.yearTo) {
+        return defaultYear
+    }
+    if (!Number.isInteger(args.yearTo)) {
+        throw `Expected 'yearTo' to be an integer.`
+    }
+    return args.yearTo as number
+}
+
+export function parseMonthTo(args: Args, defaultMonth: number) {
+    if (!args.monthTo) {
+        return defaultMonth
+    }
+    if (!Number.isInteger(args.monthTo)) {
+        throw `Expected 'monthTo' to be an integer.`
+    }
+    return args.monthTo as number
+}
+
 export function parsePolyids(args: Args) {
 
     if (!args.polyids) {

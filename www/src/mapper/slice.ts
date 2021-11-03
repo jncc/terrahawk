@@ -1,15 +1,10 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonQueryResult, ChoroplethQueryResult, NoDataChoroplethItem, Statistic } from './types'
+import { Poly, ChoroplethItem, Indexname, PolygonQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic } from './types'
 import { frameworks } from '../frameworks'
 
-let defaultQuery = {
-  framework: 'liveng0',
-  center:    frameworks.liveng0.defaultCenter,
-  indexname: frameworks.liveng0.defaultIndexname,
-  statistic: frameworks.liveng0.defaultStatistic,
-}
+let defaultQuery = frameworks['liveng0'].defaultQuery
 
 let slice = createSlice({
   name: 'mapper',
@@ -17,7 +12,7 @@ let slice = createSlice({
     showPolygons: true,
     query: defaultQuery,
     polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
-    choropleth: { items: [] as (ChoroplethItem | NoDataChoroplethItem)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } }
+    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } }
   },
   reducers: {
     togglePolygons: (state) => {
@@ -31,7 +26,6 @@ let slice = createSlice({
     },
     fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethQueryResult>) => {
-      // console.log(a.payload)
       state.choropleth = a.payload
     },
     fetchChoroplethFailed: () => {},
@@ -40,6 +34,18 @@ let slice = createSlice({
     },
     alterQueryStatistic: (state, a: PayloadAction<Statistic>) => {
       state.query.statistic = a.payload
+    },
+    alterQueryYearFrom: (state, a: PayloadAction<number>) => {
+      state.query.yearFrom = a.payload
+    },
+    alterQueryMonthFrom: (state, a: PayloadAction<number>) => {
+      state.query.monthFrom = a.payload
+    },
+    alterQueryYearTo: (state, a: PayloadAction<number>) => {
+      state.query.yearTo = a.payload
+    },
+    alterQueryMonthTo: (state, a: PayloadAction<number>) => {
+      state.query.monthTo = a.payload
     },
   },
 })

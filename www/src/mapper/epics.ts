@@ -23,7 +23,14 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
 )
 
 let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
-  ofType(mapperActions.fetchPolygonsCompleted.type, mapperActions.alterQueryIndexname.type),
+  ofType(
+    mapperActions.fetchPolygonsCompleted.type,
+    mapperActions.alterQueryIndexname.type,
+    mapperActions.alterQueryYearFrom.type,
+    mapperActions.alterQueryMonthFrom.type,
+    mapperActions.alterQueryYearTo.type,
+    mapperActions.alterQueryMonthTo.type,
+  ),
   switchMap(() =>
     concat(
       of(globalActions.startLoading('choropleth')),

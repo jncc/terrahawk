@@ -433,3 +433,5 @@ Achievements
 
 - "keyboard-first" - you can control map entirely with the keyboard
 - accessibility first - accessibility done from the start. 
+- multiple habitat maps (frameworks) supported throughout backend and frontend at the engineering level - could have been deferred but felt important
+  - reltively easy to add new habitat maps and new versions of
