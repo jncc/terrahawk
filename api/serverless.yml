@@ -104,6 +104,12 @@ functions:
       - httpApi:
           path: /polygons
           method: POST
+  polygon:
+    handler: built/host/aws.polygonHandler
+    events:
+      - httpApi:
+          path: /polygon
+          method: POST
   lookups:
     handler: built/host/aws.lookupsHandler
     events:

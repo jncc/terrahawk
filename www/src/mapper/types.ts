@@ -35,7 +35,7 @@ export type Poly = {
   partition: string
 }
 
-export type PolygonQueryResult = {
+export type PolygonsQueryResult = {
   polys:  Poly[]
   params: { framework: string }
 }

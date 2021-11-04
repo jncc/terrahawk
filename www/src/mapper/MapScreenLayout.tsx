@@ -10,6 +10,7 @@ import { globalActions } from '../global/slice'
 import { useStateDispatcher } from '../state/hooks'
 import { mapperActions } from './slice'
 import jnccLogoUrl from '../assets/JNCCLogo_Black-340.png'
+import { PolygonPanel } from './PolygonPanel'
 
 export let MapScreenLayout = () => {
 
@@ -28,6 +29,7 @@ export let MapScreenLayout = () => {
     <div className="hidden xl:block">
       <QueryPanel />
       <FrameworkPanel />
+      <PolygonPanel />
       <ControlsPanel />
       <LeafletMap />
     </div>

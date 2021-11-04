@@ -10,6 +10,7 @@ import { mapperActions } from './slice'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
+import { AnyAction, Dispatch } from '@reduxjs/toolkit'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
@@ -88,7 +89,7 @@ export let LeafletMap = () => {
     // add layers for polygons in state.polygons not already on the map
     let toAdd = state.polygons.polys.filter(p =>
       !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
-    ).forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
+    ).forEach(p => makePolygonLayer(p, dispatch).addTo(polyLayerGroup))
     // but add them in chunks for a nicer visual effect
     // todo: but this causes a race-condition
     // chunk(shuffle(toAdd), toAdd.length / 8).forEach((chunk, i) => {
@@ -155,7 +156,7 @@ export let LeafletMap = () => {
 
 
 
-let makePolygonLayer = (p: Poly) => {
+let makePolygonLayer = (p: Poly, dispatch: Dispatch<AnyAction>) => {
   let loStyle: L.PathOptions = { weight: 1, color: '#000', opacity: 0.3, }
   let hiStyle: L.PathOptions = { weight: 3, color: '#000', opacity: 0.6, }
 
@@ -165,11 +166,9 @@ let makePolygonLayer = (p: Poly) => {
   }
 
   let layer = L.geoJSON(p.geojson, { style })
-  layer.on('mouseover', (e: any) => { e.target.setStyle(hiStyle) })
-  layer.on('mouseout',  (e: any) => { e.target.setStyle(loStyle) })
-  // layer.on('mouseover', (e: any) => { console.log('mouseover') })
-  // layer.on('mouseout',  (e: any) => { console.log('mouseout') })
-  // click:  (e: any) => POLYGON_SELECTED!
+  layer.on('mouseover', (e: any) => {e.target.setStyle(hiStyle)})
+  layer.on('mouseout',  (e: any) => {e.target.setStyle(loStyle)})
+  layer.on('click', () => {dispatch(mapperActions.selectPolygon(p))})
 
   // save some custom properties so we can easily find and use the layer later
   ;(layer as CustomPolygonLayer).polyid = p.polyid

@@ -279,9 +279,9 @@ Sprint 18 (to October 12)
   - [ ] Document this process (data engineering wiki?)
 - [ ] 🎁 Find an OS grey base map service {mb, pr}
 - [ ] 🎁 Parameterise on Index, Statistic, Date {pm}
+- ⚠️ the Shiny app appears to allow date ranges like "all years, August" - is this real and is it valid?
 - ⚠️ drop seasonal temporal framework from immediate alpha
-- ⚠️ S1 at risk
-- ⚠️ thumbnails at risk
+- ⚠️ thumbnails at risk unless {cj} is available
 - ⚠️ filter polygons by habitat
 - ⚠️ download data as CSV or shapefile
 - ⚠️ user help / info

@@ -10,6 +10,7 @@ import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
 import { getChoropleth } from '../endpoints/choropleth'
 import { getChoroplethFacade } from '../endpoints/choroplethFacade'
+import { getPolygon } from '../endpoints/polygon'
 
 export let helloHandler: APIGatewayProxyHandler = async (event) => {
 
@@ -44,6 +45,11 @@ export let choroplethFacadeHandler: APIGatewayProxyHandler = async (event) => {
 export let polygonsHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
   return success(await getPolygons(body))
+}
+
+export let polygonHandler: APIGatewayProxyHandler = async (event) => {
+  let body = JSON.parse(event.body ?? "{}")
+  return success(await getPolygon(body))
 }
 
 export let lookupsHandler: APIGatewayProxyHandler = async (event) => {

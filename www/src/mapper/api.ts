@@ -6,13 +6,13 @@ import LRUCache from 'lru-cache'
 
 import { RootState } from '../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
-import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonQueryResult, PolygonsQuery, Query } from './types'
+import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery, Query } from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 // polygons
 // --------
 
-export let fetchPolygons = (query: RootState['mapper']['query']): Observable<PolygonQueryResult> => {
+export let fetchPolygons = (query: RootState['mapper']['query']): Observable<PolygonsQueryResult> => {
 
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
     let bounds = getBoundsOfBboxRectangle(query.center)
@@ -80,6 +80,27 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   let cached$ = cached.length ? of({ items: cached, params: pickKeyParams(params) }) : EMPTY
 
   return merge(cached$, needed.length ? api$ : EMPTY)
+}
+
+
+// polygon
+// -------
+
+export let fetchPolygon = (state: RootState['mapper']): Observable<any> => {
+
+  if (!state.selectedPolygon)
+    throw 'No polygon selected'
+
+  let params = {
+    framework:     state.query.framework,
+    indexname:     state.query.indexname,
+    polyid:        state.selectedPolygon.polyid,
+    polyPartition: state.selectedPolygon.partition,
+  }
+  
+  return api('polygon', params).pipe(
+    map(r =>( r.response))
+  )
 }
 
 let api = (endpoint: string, params: any) => {

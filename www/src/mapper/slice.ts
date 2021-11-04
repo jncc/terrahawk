@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic } from './types'
+import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic } from './types'
 import { frameworks } from '../frameworks'
 
 let defaultQuery = frameworks['liveng0'].defaultQuery
@@ -12,23 +12,29 @@ let slice = createSlice({
     showPolygons: true,
     query: defaultQuery,
     polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
-    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } }
+    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
+    selectedPolygon: undefined as Poly | undefined,
+    selectedPolygonData: undefined as any,
   },
   reducers: {
     togglePolygons: (state) => {
       state.showPolygons = !state.showPolygons
     },
+    selectPolygon: (state, a: PayloadAction<Poly>) => {
+      state.selectedPolygon = a.payload
+    },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
     },
-    fetchPolygonsCompleted: (state, a: PayloadAction<PolygonQueryResult>) => {
+    fetchPolygonsCompleted: (state, a: PayloadAction<PolygonsQueryResult>) => {
       state.polygons = a.payload
     },
-    fetchPolygonsFailed: (state, a: PayloadAction<string>) => {},
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethQueryResult>) => {
       state.choropleth = a.payload
     },
-    fetchChoroplethFailed: () => {},
+    fetchPolygonCompleted: (state, a: PayloadAction<any>) => {
+      state.selectedPolygonData = a.payload
+    },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
     },

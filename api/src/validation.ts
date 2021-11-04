@@ -87,6 +87,18 @@ export function parseMonthTo(args: Args, defaultMonth: number) {
     return args.monthTo as number
 }
 
+export function parsePolyid(args: Args) {
+
+    if (!args.polyid) {
+        throw `Expected 'polyid'.`
+    }
+    if (typeof args.polyid !== 'string') {
+        throw `Expected 'polyid' to be a string.`
+    }
+    // todo use validations in parsePolyids
+    return args.polyid
+}
+
 export function parsePolyids(args: Args) {
 
     if (!args.polyids) {
@@ -110,6 +122,18 @@ export function parsePolyids(args: Args) {
         }
         return s
     })
+}
+
+export function parsePolyPartition(args: Args) {
+
+    if (!args.polyPartition) {
+        throw `Expected 'polyPartition'.`
+    }
+    if (typeof args.polyPartition !== 'string') {
+        throw `Expected 'polyPartition' to be a string.`
+    }
+    // todo use validations in parsePolyPartitions
+    return args.polyPartition
 }
 
 export function parsePolyPartitions(args: Args) {
