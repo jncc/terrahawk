@@ -47,6 +47,14 @@ let slice = createSlice({
     alterQueryMonthTo: (state, a: PayloadAction<number>) => {
       state.query.monthTo = a.payload
     },
+    incrementQueryPeriodByOneMonth: (state) => {
+      state.query.monthFrom = state.query.monthFrom + 1
+      state.query.monthTo = state.query.monthTo + 1
+    },
+    decrementQueryPeriodByOneMonth: (state) => {
+      state.query.monthFrom = state.query.monthFrom - 1
+      state.query.monthTo = state.query.monthTo - 1
+    },
   },
 })
 

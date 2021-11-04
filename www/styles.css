@@ -15,9 +15,15 @@
 
 @layer components {
   .custom-ring {
-      @apply focus:outline-none focus-visible:ring focus-visible:ring-blue-500
+    @apply focus:outline-none focus-visible:ring focus-visible:ring-blue-500
   }
-  .black-to-jncc-green {
+  .little-label-text {
+    @apply text-gray-400 text-sm font-semibold
+  }
+  .arrow-button {
+    @apply custom-ring px-1 py-1 text-gray-400 rounded-lg hover:bg-gray-200 hover:text-gray-500 active:bg-gray-400 active:text-white
+  }
+  .filter-black-to-jncc-green {
     filter: invert(38%) sepia(11%) saturate(3054%) hue-rotate(69deg) brightness(95%) contrast(86%);
   }
 }

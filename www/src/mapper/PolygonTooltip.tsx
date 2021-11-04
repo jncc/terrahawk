@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { ChoroplethItem, isChoroplethItem, ChoroplethNone, Poly, Statistic } from './types'
-import { roundTo3Decimals } from '../utility/numberUtility'
+import { roundTo1Decimal } from '../utility/numberUtility'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 
 // replace the 'white' (no change) color with default text-gray-400
@@ -25,13 +25,13 @@ export let makePolygonTooltipHtml = (polyid: string, habitat: string, stat: Stat
           </svg>
           <div class="leading-tight">
             <div class="text-base -mb-0.5">${habitat}</div>
-            <div class="text-gray-400 text-sm font-semibold">Polygon ${polyid} </div>
+            <div class="little-label-text ">Polygon ${polyid} </div>
           </div>
         </div>
         <hr class="my-2" />
         <div class="flex gap-1.5 items-center text-xs ">
           <span class="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-white bg-gray-600 rounded-full" style="background-color:${getBackgroundColour(maxZ)};">
-            ${roundTo3Decimals(maxZ)}
+            ${roundTo1Decimal(maxZ)}
           </span>
           max standard deviations from habitat ${stat} ${indexname}
         </div>
@@ -47,7 +47,7 @@ export let makePolygonTooltipHtml = (polyid: string, habitat: string, stat: Stat
           </svg>
           <div class="leading-tight">
             <div class="text-base -mb-0.5">${habitat}</div>
-            <div class="text-gray-400 text-sm font-semibold">Polygon ${polyid} </div>
+            <div class="little-label-text ">Polygon ${polyid} </div>
           </div>
         </div>
         <hr class="my-2" />

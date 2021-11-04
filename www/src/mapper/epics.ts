@@ -30,6 +30,8 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
     mapperActions.alterQueryMonthFrom.type,
     mapperActions.alterQueryYearTo.type,
     mapperActions.alterQueryMonthTo.type,
+    mapperActions.incrementQueryPeriodByOneMonth.type,
+    mapperActions.decrementQueryPeriodByOneMonth.type,
   ),
   switchMap(() =>
     concat(

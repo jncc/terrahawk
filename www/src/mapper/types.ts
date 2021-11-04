@@ -17,6 +17,7 @@ export type Framework = {
     yearTo: number
     monthTo: number
   }
+  availableDates: {from: {year: number, month: number}, to: {year: number, month: number}}
 }
 
 export type Query = Framework['defaultQuery']

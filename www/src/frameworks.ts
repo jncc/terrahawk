@@ -20,5 +20,6 @@ export const frameworks: {[index: string]: Framework} = {
       yearTo: 2020,
       monthTo: 4,
     },
+    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}}
   }
 }

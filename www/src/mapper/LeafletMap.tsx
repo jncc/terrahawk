@@ -109,7 +109,9 @@ export let LeafletMap = () => {
       
       if (isChoroplethItem(c)) {
         let maxZ = getChoroplethMaxZValue(state.query.statistic, c)
-        maybeLayer?.setStyle({ fillColor:  getColour(Math.abs(maxZ)) })
+        maybeLayer?.setStyle({ fillColor: getColour(Math.abs(maxZ)) })
+      } else {
+        maybeLayer?.setStyle({ fillColor: 'white' }) // no data
       }
 
       let currentlyOpen = maybeLayer && maybeLayer.getTooltip() && maybeLayer.isTooltipOpen()
@@ -128,7 +130,7 @@ export let LeafletMap = () => {
 
       // reopen the currently open tooltip for a much better experience
       if (currentlyOpen)
-          maybeLayer?.openTooltip()
+        maybeLayer?.openTooltip()
     })
 
   }, [
@@ -159,14 +161,10 @@ let makePolygonLayer = (p: Poly) => {
 
   let style: L.PathOptions = {
     ...loStyle,
-    // fill: true, // a polygon seems to need a fill for mouseover to work properly
-    // fillOpacity: 0,
     fillColor: 'white',
-    // opacity: 0,
   }
 
   let layer = L.geoJSON(p.geojson, { style })
-  let fillColor;
   layer.on('mouseover', (e: any) => { e.target.setStyle(hiStyle) })
   layer.on('mouseout',  (e: any) => { e.target.setStyle(loStyle) })
   // layer.on('mouseover', (e: any) => { console.log('mouseover') })

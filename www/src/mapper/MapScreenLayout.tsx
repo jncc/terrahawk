@@ -15,7 +15,7 @@ export let MapScreenLayout = () => {
 
   let dispatch = useStateDispatcher()
 
-  useHotkeys('space', () => { dispatch(mapperActions.togglePolygons()) })
+  useHotkeys('p', () => { dispatch(mapperActions.togglePolygons()) })
   useHotkeys('e', () => { dispatch(globalActions.errorOccurred('You pressed `e`')) })
   
   return <>

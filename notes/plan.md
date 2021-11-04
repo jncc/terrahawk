@@ -279,6 +279,13 @@ Sprint 18 (to October 12)
   - [ ] Document this process (data engineering wiki?)
 - [ ] 🎁 Find an OS grey base map service {mb, pr}
 - [ ] 🎁 Parameterise on Index, Statistic, Date {pm}
+- ⚠️ drop seasonal temporal framework from immediate alpha
+- ⚠️ S1 at risk
+- ⚠️ thumbnails at risk
+- ⚠️ filter polygons by habitat
+- ⚠️ download data as CSV or shapefile
+- ⚠️ user help / info
+- ⚠️ multipage
 
 Sprint 19 (to October 26)
 -------------------------
@@ -421,12 +428,28 @@ Workstreams
 - Additional habitat maps (Scotland, etc)
 - ~~Vector tiles investigation~~
 
-Web app - obvious to-dos
---------------------------
+Outstanding / debt
+------------------
 
-- Terraform
-  - [ ] SSL / cloudfront (perhaps can still deploy with sls once set up in terraform? https://www.serverless.com/learn/tutorial/creating-aws-cloudfront-distribution)
-  - API can still be deployed with sls.
+- Seasonal temporal framework
+- Multipage (ideally SSR)
+- Infrastructure!
+  - Terraform
+    - [ ] SSL / cloudfront (perhaps can still deploy with sls once set up in terraform? https://www.serverless.com/learn/tutorial/creating-aws-cloudfront-distribution)
+    - API can still be deployed with sls.
+- Testing!
+  - Unit tests
+    - cache
+    - date logic
+  - UI test
+  - faking the Athena API
+
+Automation
+------------
+
+- Glue checkpointing
+- Schedule job
+- Available dates - API call (without slowing app startup!)
 
 Achievements
 ------------

@@ -35,31 +35,32 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
 
 let cache = new LRUCache<string, ChoroplethItem | ChoroplethNone>({ max: 10000 })
 
-let getKeyParams = (params: ChoroplethKeyParams): ChoroplethKeyParams => (({ framework, indexname, yearFrom, monthFrom, yearTo, monthTo }) =>
-({ framework, indexname, yearFrom, monthFrom, yearTo, monthTo }))(params)
+/// Get *only* the key params (from a potentially wider object!)
+let pickKeyParams = (params: ChoroplethKeyParams): ChoroplethKeyParams =>
+  (({ framework, indexname, yearFrom, monthFrom, yearTo, monthTo }) =>
+    ({ framework, indexname, yearFrom, monthFrom, yearTo, monthTo }))(params)
 
-let makeCacheKey = (polyid: string, keyParams: ChoroplethKeyParams) => `${Object.values(keyParams).join(':')}::${polyid}`
+let makeCacheKey = (polyid: string, params: ChoroplethKeyParams) => {
+  let keyParams = pickKeyParams(params)
+  return `${Object.values(keyParams).join(':')}::${polyid}`
+}
 
 export let fetchChoropleth = (state: RootState['mapper']): Observable<ChoroplethQueryResult> => {
 
   let cached = state.polygons.polys
     .map(p => {
-      let key = makeCacheKey(p.polyid, getKeyParams(state.query))
+      let key = makeCacheKey(p.polyid, state.query)
       return cache.get(key)
     })
     .filter(item => item !== undefined) as (ChoroplethItem | ChoroplethNone)[]
 
-  let needed = state.polygons.polys.filter(
-    p => !cached.find(c => c.polyid === p.polyid)
-  )
+  let needed = state.polygons.polys.filter(p => !cached.find(c => c.polyid === p.polyid))
 
   let params: ChoroplethParams = {
     ...state.query, // actually some properties (e.g. center) are not needed for this request, but...
     polyids:        needed.map(p => p.polyid),
     polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct
   }
-
-  let keyParams = getKeyParams(params)
 
   let api$ = api('choropleth', params).pipe(
     map(r => {
@@ -69,14 +70,14 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
       let allItems: (ChoroplethItem | ChoroplethNone)[] = [...dataItems, ...noneItems]
       // cache the items
       allItems.forEach(c => {
-        let k = makeCacheKey(c.polyid, keyParams)
-        cache.set(k, c)
+        let key = makeCacheKey(c.polyid, params)
+        cache.set(key, c)
       })
-      return { items: allItems, params: keyParams }
+      return { items: allItems, params: pickKeyParams(params) }
     })
   )
 
-  let cached$ = cached.length ? of({ items: cached, params: keyParams }) : EMPTY
+  let cached$ = cached.length ? of({ items: cached, params: pickKeyParams(params) }) : EMPTY
 
   return merge(cached$, needed.length ? api$ : EMPTY)
 }
