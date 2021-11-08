@@ -81,6 +81,47 @@ export type ChoroplethQueryResult = {
   }
 }
 
+export type MonthStats = {
+  count: string
+  polyid: string
+  seasonyear: number
+  season: string
+  date: string
+  frame: string
+  platform: string
+  habitat: string
+  mean: number
+  sd: number
+  median: number
+  min: number
+  max: number
+  q1: number
+  q3: number
+  year: string
+  month: string
+  cf_count: string
+  cf_mean: number
+  cf_mean_sd: number
+  cf_median: number
+  cf_median_sd: number
+  cf_min: number
+  cf_min_sd: number
+  cf_max: number
+  cf_max_sd: number
+  cf_q1: number
+  cf_q1_sd: number
+  cf_q3: number
+  cf_q3_sd: number
+  z_mean: number
+  z_median: number
+  z_min: number
+  z_max: number
+  z_q1: number
+  z_q3: number
+  framework: string
+  indexname: string
+  poly_partition: string
+}
 
 // util
 export type Bounds = { southWest: { lat: number, lng: number }, northEast: { lat: number, lng: number }}

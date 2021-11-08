@@ -12,13 +12,13 @@ export const frameworks: {[index: string]: Framework} = {
     defaultZoom: 13,
     defaultQuery: {
       framework: 'liveng0',
-      center: {lat: 54.067, lng: -2.280},
+      center: {lat: 54.155, lng: -2.446},
       indexname: 'NDVI',
       statistic: 'mean',
       yearFrom: 2020,
-      monthFrom: 3,
+      monthFrom: 1,
       yearTo: 2020,
-      monthTo: 4,
+      monthTo: 12,
     },
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}}
   }

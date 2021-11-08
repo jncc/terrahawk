@@ -34,6 +34,7 @@ export const getPolygon = async (input: any) => {
             and indexname=%L
             and poly_partition=%L
             and polyid=%L
+        order by year, month
         `,
         args.framework,
         args.indexname,
