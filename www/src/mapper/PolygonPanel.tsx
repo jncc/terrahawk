@@ -1,6 +1,7 @@
 
 import React from 'react'
 import { InformationCircleIcon, LocationMarkerIcon } from '@heroicons/react/outline'
+import { ExclamationIcon } from '@heroicons/react/solid'
 
 import { useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
@@ -31,36 +32,44 @@ export let PolygonPanel = () => {
               </div>
               <div className="flex-1"></div>
               <div className="">
-                {makeComparisonSummary(data)}
+                {makeComparatorSummary(data)}
               </div>
             </div>
           </>
         }
 
         {oneYearOfData &&
-          <YearChart data={oneYearOfData} />
+          <YearChart year={2020} data={oneYearOfData} />
         }
       </div>
     </a>
   )
 }
 
-let makeComparisonSummary = (data: MonthStats[] | undefined) => {
+let makeComparatorSummary = (data: MonthStats[] | undefined) => {
   if (!data)
     return null
 
-  let maxCfCount = maxBy(data, d => d.cf_count)?.cf_count
+  let maxCfCount = maxBy(data, d => parseInt(d.cf_count))?.cf_count
 
   if (!maxCfCount)
     return null
 
   return (
     <div className="flex gap-1 items-center p-2 text-sm ">
-      <span className="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-white bg-gray-400 rounded-full" >
-        {maxCfCount}
-      </span>
+      <div className="flex flex-col justify-between">
+        <div className="flex-1 bg-gray-200 p-0.5 px-3"></div>
+        <div className="flex-1 bg-gray-300 p-1"></div>
+        <div className="flex-1 bg-gray-200 p-0.5"></div>
+      </div>
+      { (parseInt(maxCfCount) < 20) && 
+        <ExclamationIcon className="h-6 w-6 text-[orange]"/>
+      }
+      {/* <span className="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-white bg-gray-400 rounded-full" > */}
+        <span>{maxCfCount} </span>
+      {/* </span> */}
       comparators
-      <InformationCircleIcon className="h-5 w-5 text-gray-400"/>
+      {/* <InformationCircleIcon className="h-5 w-5 text-gray-400"/> */}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats } from './types'
+import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../frameworks'
 
 let defaultQuery = frameworks['liveng0'].defaultQuery
@@ -15,6 +15,7 @@ let slice = createSlice({
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
     selectedPolygon: undefined as Poly | undefined,
     selectedPolygonData: undefined as MonthStats[] | undefined,
+    selectedDate: undefined as SimpleDate | undefined,
   },
   reducers: {
     togglePolygons: (state) => {
@@ -25,7 +26,6 @@ let slice = createSlice({
       state.selectedPolygonData = undefined
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
-      console.log(a.payload)
       state.query.center = a.payload
     },
     fetchPolygonsCompleted: (state, a: PayloadAction<PolygonsQueryResult>) => {
@@ -63,6 +63,9 @@ let slice = createSlice({
       state.query.monthFrom = state.query.monthFrom - 1
       state.query.monthTo = state.query.monthTo - 1
     },
+    selectDate: (state, a: PayloadAction<SimpleDate>) => {
+      state.selectedDate = a.payload
+    }
   },
 })
 

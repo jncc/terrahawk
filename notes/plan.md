@@ -270,8 +270,8 @@ Where are we for alpha?
 - ⏱ There is a lot to do and we have a more realistic view of velocity.
 - *'Home straight to alpha' detailed plan follows...*
 
-Sprint 18 (to October 12)
--------------------------
+Sprint 18 (to November 12)
+--------------------------
 
 - [ ] 🎁 Get S2 index files into CEDA archive {ih, uw}
   - [ ] Requires some manual QA first
@@ -279,24 +279,43 @@ Sprint 18 (to October 12)
   - [ ] Document this process (data engineering wiki?)
 - [ ] 🎁 Find an OS grey base map service {mb, pr}
 - [ ] 🎁 Parameterise on Index, Statistic, Date {pm}
-- ⚠️ the Shiny app appears to allow date ranges like "all years, August" - is this real and is it valid?
-- ⚠️ drop seasonal temporal framework from immediate alpha
-- ⚠️ thumbnails at risk unless {cj} is available
-- ⚠️ filter polygons by habitat
-- ⚠️ download data as CSV or shapefile
-- ⚠️ user help / info
-- ⚠️ multipage
+- [ ] 🥳 Project re-planning, rejigging,  {pm}
 
-Sprint 19 (to October 26)
--------------------------
+Pivot to MVP
+------------
 
+- ⚠️ alpha at risk due to
+  - hard deadline
+    - we can't push delivery of first release back beyond a maximum date (~1 January)
+    - so we ~~might not~~ don't have time to do all the alpha features by then
+  - big-data work
+    - Bytes constant failure of availability, non-implementation
+    - AWS Glue Studio being useless
+    - we chose the "ambitious" option - issues/ delays / additional work very much expected
+  - redeployment of {cj}
+  - index files not yet in CEDA archive
+
+- already dropped from alpha:
+  - 🗑️ gazetteer
+  - 🗑️ field data
+  - 🗑️ multipage (supporting / intro web pages etc)
+
+- reduce alpha to MVP:
+  - 😕 filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
+  - 😕 seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
+  - 🗑️ download data (as CSV or shapefile)
+
+Sprint 19 (to November 26)
+--------------------------
+
+- [ ] Onboarding {cj} {pm}
+- [ ] Refamiliarisation with thumbnails {cj}
+  - explore any gotchas with integration
+  - plan for async loading
 - [ ] 🎁 Show charts/graphs and related stats for selected polygon {pm}
-- [ ] 🎁 Implement suitable base map for *alpha*
-- [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
-  - research & design 
-  - get some data into Postgres
+- [ ] 🎁 Implement suitable base map for *MVP* {pm}
 
-Sprint 20 (to December 10; *alpha* release)
+Sprint 20 (to December 10; *MVP* release?)
 --------------------------------------------
 
 - [ ] 🎁 Implement thumbnails {pm, cj}
@@ -309,7 +328,10 @@ Sprint 21 (to January 4)
 - [ ] Process S1 stats {ih, pm, fm}
 - [ ] Process seasonal stats {pm, fm}
 - [ ] Respond to go-live issues {pm}
-- [ ] 🎁 Field data in UI {pm}
+- [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
+  - research & design 
+  - get some data into Postgres
+  
 
 Upcoming sprints
 ----------------
@@ -320,6 +342,9 @@ Stats data workstream:
 - [ ] 🎁 Run all stats all the way through
 - [ ] Solve S1 shift problem {}
 - [ ] QA the final stats {ih}
+
+UI workstream
+  - [ ] 🎁 Field data in UI {pm}
 
 App services workstream:
 

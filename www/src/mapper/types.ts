@@ -125,3 +125,4 @@ export type MonthStats = {
 
 // util
 export type Bounds = { southWest: { lat: number, lng: number }, northEast: { lat: number, lng: number }}
+export type SimpleDate = { year: number, month: number, day: number }
