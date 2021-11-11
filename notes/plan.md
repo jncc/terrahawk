@@ -303,7 +303,7 @@ Pivot to MVP
 - reduce alpha to MVP:
   - 😕 filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
   - 😕 seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
-  - 🗑️ download data (as CSV or shapefile)
+  - 😕 download data (as CSV or shapefile)
 
 Sprint 19 (to November 26)
 --------------------------
@@ -312,6 +312,7 @@ Sprint 19 (to November 26)
 - [ ] Refamiliarisation with thumbnails {cj}
   - explore any gotchas with integration
   - plan for async loading
+  - polygon coords Vs geojson
 - [ ] 🎁 Show charts/graphs and related stats for selected polygon {pm}
 - [ ] 🎁 Implement suitable base map for *MVP* {pm}
 
@@ -325,6 +326,7 @@ Sprint 20 (to December 10; *MVP* release?)
 Sprint 21 (to January 4)
 ------------------------
 
+- [ ] Guidance / help modal {pm, ih}
 - [ ] Process S1 stats {ih, pm, fm}
 - [ ] Process seasonal stats {pm, fm}
 - [ ] Respond to go-live issues {pm}

@@ -18,8 +18,11 @@ export let QueryPanel = () => {
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
 
+  if (!state.zoomedEnoughToShowPolygons)
+    return null
+
   return (
-    <div className="z-abovemap absolute top-6 left-6 w-56 animate-delayedfadein ">
+    <div className="z-abovemap absolute top-6 left-6 w-56 animate-delayedfadein">
       <div className="bg-white rounded-xl overflow-hidden shadow-xl px-4 py-2">
 
         <div className="mb-0.5">
@@ -122,7 +125,7 @@ export let QueryPanel = () => {
               onClick={() => dispatch(mapperActions.decrementQueryPeriodByOneMonth())}>
               <ChevronLeftIcon className="h-5 w-5" />
             </button>
-            <div className="flex-1 text-center text-sm ">
+            <div className="flex-1 text-center little-label-text">
               Period
             </div>
             <button

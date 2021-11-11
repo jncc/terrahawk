@@ -27,7 +27,7 @@ module.exports = {
         'loader': '4px'
       },
       animation: {
-        'delayedfadein': 'delayedFadeIn 1s ease-in-out',
+        'delayedfadein': 'delayedFadeIn 2s ease-in-out',
         'quickfadeout': 'quickFadeOut 1s ease-in-out',
         'increase': 'increase 2s infinite',
         'decrease': 'decrease 2s 0.5s infinite'

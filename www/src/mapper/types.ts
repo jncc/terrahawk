@@ -7,6 +7,7 @@ export type Framework = {
   boundary: any
   maxBounds: Bounds
   defaultZoom: number
+  polygonZoomThreshold: number
   defaultQuery: {
     framework: string
     center: {lat: number, lng: number}

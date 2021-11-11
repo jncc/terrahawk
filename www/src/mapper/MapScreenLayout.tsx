@@ -7,15 +7,18 @@ import { ControlsPanel } from './ControlsPanel'
 import { QueryPanel } from './QueryPanel'
 import { FrameworkPanel } from './FrameworkPanel'
 import { globalActions } from '../global/slice'
-import { useStateDispatcher } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 import jnccLogoUrl from '../assets/JNCCLogo_Black-340.png'
 import { PolygonPanel } from './PolygonPanel'
+import { GazetteerPanel } from './GazetteerPanel'
 
 export let MapScreenLayout = () => {
 
   let dispatch = useStateDispatcher()
+  let state = useStateSelector(s => s.mapper)
 
+  // keyboard shortcuts
   useHotkeys('p', () => { dispatch(mapperActions.togglePolygons()) })
   useHotkeys('e', () => { dispatch(globalActions.errorOccurred('You pressed `e`')) })
   
@@ -27,9 +30,11 @@ export let MapScreenLayout = () => {
     </div>
     {/* hide the mapper unless on large screen */} 
     <div className="hidden xl:block">
+      {!state.zoomedEnoughToShowPolygons && makePleaseZoomInMessage()}
+      <GazetteerPanel />
       <QueryPanel />
       <FrameworkPanel />
-      <PolygonPanel />
+      {/* <PolygonPanel /> */}
       <ControlsPanel />
       <LeafletMap />
     </div>
@@ -56,5 +61,14 @@ let makeSmallScreenWarning = () =>
         <li>reduce your browser <b>zoom level</b></li>
         <li>increase your <b>screen size</b></li>
       </ul>
+    </div>
+  </div>
+
+let makePleaseZoomInMessage = () =>
+  <div className="z-abovemap absolute top-24 w-full animate-delayedfadein">
+    <div className="flex justify-center items-center ">
+      <div className="bg-gray-700 text-white text-lg font-bold px-8 pb-0.5 rounded-xl shadow-xl">
+          Zoom in to your area of interest
+      </div>
     </div>
   </div>

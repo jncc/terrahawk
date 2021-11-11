@@ -7,17 +7,19 @@ import { useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
 import { MonthStats } from './types'
 import { maxBy } from 'lodash'
+import { ThumbnailSlider } from './ThumbnailSlider'
+import { getFramesFromFrameField } from './helpers/frameHelpers'
 
 export let PolygonPanel = () => {
 
   let polygon = useStateSelector(s => s.mapper.selectedPolygon)
-  let data = useStateSelector(s => s.mapper.selectedPolygonData)
+  let data = useStateSelector(s => s.mapper.selectedPolygonStats)
 
   // group by year and pass in one year per chart component
   let oneYearOfData = data ? data.filter((d: any) => d.year === '2020') : undefined
 
   return (
-    <a className="z-abovemap absolute top-6 right-6 bottom-32  animate-delayedfadein text-left" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-32  animate-delayedfadein text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[40rem] h-full" >
 
         {polygon &&
@@ -39,10 +41,15 @@ export let PolygonPanel = () => {
         }
 
         {oneYearOfData &&
+        <>
           <YearChart year={2020} data={oneYearOfData} />
+          <ThumbnailSlider frames={oneYearOfData.flatMap(d => getFramesFromFrameField(d.frame))} />
+        </>
         }
+
+
       </div>
-    </a>
+    </div>
   )
 }
 

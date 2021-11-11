@@ -26,4 +26,9 @@
   .filter-black-to-jncc-green {
     filter: invert(38%) sepia(11%) saturate(3054%) hue-rotate(69deg) brightness(95%) contrast(86%);
   }
+  /* todo this doesn't work */
+  .custom-leaflet-tooltip {
+    background: green;
+    @apply rounded-3xl;
+  }
 }

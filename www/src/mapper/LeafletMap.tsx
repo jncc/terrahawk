@@ -36,7 +36,7 @@ export let LeafletMap = () => {
     })
 
     // attribution
-    L.control.attribution({ position: 'bottomleft', prefix: '' }).addTo(map)
+    L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(map)
 
     // base layer
     L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Light_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
@@ -49,6 +49,11 @@ export let LeafletMap = () => {
     // polygon layer group
     polyLayerGroup = L.layerGroup([])
 
+    // listen for zoom changes
+    map.on('zoomend', () => {
+      dispatch(mapperActions.mapZoomChanged(map.getZoom()))
+    })
+
     // listen for position changes
     map.on('moveend', () => {
       dispatch(mapperActions.mapCenterChanged(map.getCenter()))
@@ -56,7 +61,7 @@ export let LeafletMap = () => {
 
     // setView handily raises the 'moveend' event we've wired up above,
     // so no need to raise an initial event artifically
-    map.setView(state.query.center, framework.defaultZoom)
+    map.setView(state.query.center, state.zoom)
 
   }, [])
 
@@ -126,7 +131,7 @@ export let LeafletMap = () => {
           state.query.indexname,
           c
         ),
-        { offset: [80, 0] }
+        { offset: [80, 0], className:'custom-leaflet-tooltip' }
       )
 
       // reopen the currently open tooltip for a much better experience
@@ -139,22 +144,20 @@ export let LeafletMap = () => {
     state.query.statistic // statistic values are all in the same choropleth item object - simply redraw when this changes 
   ])
 
-  // react to changes of `showPolygons`
+  // react to changes of `showPolygons` and `zoomedEnoughToShowPolygons`
   useEffect(() => {
-    if (state.showPolygons)
+    if (state.showPolygons && state.zoomedEnoughToShowPolygons)
       // showing ~1000 polygons causes a noticeable lag in the React UI, so add a short delay
       setTimeout(() => polyLayerGroup.addTo(map), 50)
     else
       setTimeout(() => polyLayerGroup.remove(), 50)
     
-  }, [state.showPolygons])
+  }, [state.showPolygons, state.zoomedEnoughToShowPolygons])
 
   // react has nothing to do with the leaflet map;
   // map manipulation is done via side-effects (useEffect)
   return <div id="leaflet-map" className="absolute inset-0"></div>
 }
-
-
 
 let makePolygonLayer = (p: Poly, dispatch: Dispatch<AnyAction>) => {
   let loStyle: L.PathOptions = { weight: 1, color: '#000', opacity: 0.3, }

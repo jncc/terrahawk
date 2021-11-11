@@ -14,3 +14,9 @@ export let getDatesFromDateField = (value: string): SimpleDate[] => {
     })
   })
 }
+
+/// Frame field in the stats data is an aggregated string from Spark SQL's collect_list
+/// e.g. `[value1, value2, value3]`
+export let getFramesFromFrameField = (value: string): string[] => {
+  return trimAny(value, ['[', ']']).split(', ')
+}

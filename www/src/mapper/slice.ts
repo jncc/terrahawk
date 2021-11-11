@@ -4,17 +4,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../frameworks'
 
-let defaultQuery = frameworks['liveng0'].defaultQuery
+let defaultFramework = frameworks['liveng0']
+let defaultQuery = defaultFramework.defaultQuery
 
 let slice = createSlice({
   name: 'mapper',
   initialState: {
     showPolygons: true,
+    zoom: defaultFramework.defaultZoom,
+    zoomedEnoughToShowPolygons: false,
     query: defaultQuery,
     polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
     selectedPolygon: undefined as Poly | undefined,
-    selectedPolygonData: undefined as MonthStats[] | undefined,
+    selectedPolygonStats: undefined as MonthStats[] | undefined,
     selectedDate: undefined as SimpleDate | undefined,
   },
   reducers: {
@@ -23,7 +26,11 @@ let slice = createSlice({
     },
     selectPolygon: (state, a: PayloadAction<Poly>) => {
       state.selectedPolygon = a.payload
-      state.selectedPolygonData = undefined
+      state.selectedPolygonStats = undefined
+    },
+    mapZoomChanged: (state, a: PayloadAction<number>) => {
+      state.zoom = a.payload
+      state.zoomedEnoughToShowPolygons = state.zoom >= frameworks[state.query.framework].polygonZoomThreshold
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
@@ -35,7 +42,7 @@ let slice = createSlice({
       state.choropleth = a.payload
     },
     fetchPolygonCompleted: (state, a: PayloadAction<any>) => {
-      state.selectedPolygonData = a.payload
+      state.selectedPolygonStats = a.payload
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
