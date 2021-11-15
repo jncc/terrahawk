@@ -1,7 +1,7 @@
 
 import { configureStore } from '@reduxjs/toolkit'
 import { combineEpics } from 'redux-observable'
-import { createEpicMiddleware } from 'redux-observable';
+import { createEpicMiddleware } from 'redux-observable'
 
 import { globalReducer } from '../global/slice'
 import { globalEpics } from '../global/epics'

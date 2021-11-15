@@ -8,7 +8,6 @@ import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
 import { fetchPolygons, fetchChoropleth, fetchPolygon } from './api'
 
-
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
     mapperActions.mapZoomChanged.type,

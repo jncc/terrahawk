@@ -6,7 +6,7 @@ import LRUCache from 'lru-cache'
 
 import { RootState } from '../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
-import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery, Query } from './types'
+import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery } from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 // polygons
@@ -81,7 +81,6 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
 
   return merge(cached$, needed.length ? api$ : EMPTY)
 }
-
 
 // polygon
 // -------

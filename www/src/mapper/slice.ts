@@ -31,7 +31,6 @@ let slice = createSlice({
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
-      console.log(a.payload)
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload

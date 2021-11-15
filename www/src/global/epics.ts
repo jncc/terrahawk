@@ -16,6 +16,7 @@ let errorMessageEpic = (action$: any) => action$.pipe(
 )
 
 let devEpic =  (action$: any) => action$.pipe(
+  // tslint:disable-next-line
   tap(console.log),
   ignoreElements(),
 )

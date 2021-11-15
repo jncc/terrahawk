@@ -1,5 +1,4 @@
 
-
 export let frameworkBoundaryStyle = {
   interactive: false,
   color: '#ff7800',

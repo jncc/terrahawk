@@ -24,7 +24,7 @@ export type Framework = {
 export type Query = Framework['defaultQuery']
 
 export type PolygonsQuery = Pick<Query,
-  | "framework"
+  | 'framework'
 > & {
   bbox: string
 }
@@ -42,12 +42,12 @@ export type PolygonsQueryResult = {
 }
 
 export type ChoroplethKeyParams = Pick<Query,
-  | "framework"
-  | "indexname"
-  | "yearFrom"
-  | "monthFrom"
-  | "yearTo"
-  | "monthTo"
+  | 'framework'
+  | 'indexname'
+  | 'yearFrom'
+  | 'monthFrom'
+  | 'yearTo'
+  | 'monthTo'
 >
 
 export type ChoroplethParams = ChoroplethKeyParams & {

@@ -36,8 +36,6 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
     }
   })
 
-
-
   return (
     <div className="h-48 border-2 border-gray-300 rounded-xl">
 
@@ -67,7 +65,7 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
         </VictoryStack>
            
         <VictoryLine
-          style={{ data: {stroke: "#666"}}}
+          style={{ data: {stroke: '#666'}}}
           interpolation="cardinal"
           data={polygonLineData}
         />
@@ -78,7 +76,7 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
         />
 
         <VictoryScatter
-          style={{data: {fill: "#666"}}}
+          style={{data: {fill: '#666'}}}
           data={frameScatterData}
           // size={({ datum }) => datum.frameCount}
           // size={6}
@@ -86,8 +84,8 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
           dataComponent={<DateScatterPoint />}          
         />
 
-        <VictoryAxis style={{axis: {stroke: "transparent"}}}   />
-        <VictoryAxis dependentAxis style={{axis: {stroke: "transparent"}}}  />
+        <VictoryAxis style={{axis: {stroke: 'transparent'}}}   />
+        <VictoryAxis dependentAxis style={{axis: {stroke: 'transparent'}}}  />
 
         <VictoryLabel text={props.year} x={300} y={30} textAnchor="middle" style={{fontSize:'15'}} />
 
@@ -111,7 +109,6 @@ let monthlyTicks = [
   {value: '12', label: 'Dec'},
 ]
 
-  
 let getPointStyleForZScore = (zScore: number) => {
   let z = Math.abs(zScore)
   return z > 2 ? {size: 6, color: '#D53F8C'} :
@@ -132,13 +129,11 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
                     hovered ?  'rgb(209, 213, 219)' :
                                'transparent'  
   return (
-
     <circle
       cx={x}
       cy={y}
       // r={hovered || selected ? 12 : 6}
       r={datum.frameCount}
-
       
       stroke={borderColor}
       strokeWidth={3}

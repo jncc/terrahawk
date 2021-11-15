@@ -29,4 +29,3 @@ let slice = createSlice({
 
 export let globalReducer = slice.reducer
 export let globalActions = slice.actions
-

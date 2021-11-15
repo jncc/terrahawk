@@ -6,12 +6,15 @@ import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 import { Indexname, Statistic } from './types'
 
-const indexnames: [Indexname, string, string][] = [['EVI', 'vegetation', '🌿'], ['NBR', 'burn', '🔥'], ['NDMI', 'moisture', '💦'], ['NDVI', 'vegetation', '🌿'], ['NDWI', 'water', '🌊']]
+const indexnames: [Indexname, string, string][] = [
+  ['EVI', 'vegetation', '🌿'], ['NBR', 'burn', '🔥'], ['NDMI', 'moisture', '💦'], ['NDVI', 'vegetation', '🌿'], ['NDWI', 'water', '🌊']
+]
 const statistics: Statistic[] = ['mean' , 'median' , 'min' , 'max' , 'Q1' , 'Q3']
 
 const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021]
-const months = [[1, 'Jan'], [2, 'Feb'], [3, 'Mar'], [4, 'Apr'], [5, 'May'], [6, 'Jun'], [7, 'Jul'], [8, 'Aug'], [9, 'Sep'], [10, 'Oct'], [11, 'Nov'], [12, 'Dec']]
-
+const months = [
+  [1, 'Jan'], [2, 'Feb'], [3, 'Mar'], [4, 'Apr'], [5, 'May'], [6, 'Jun'], [7, 'Jul'], [8, 'Aug'], [9, 'Sep'], [10, 'Oct'], [11, 'Nov'], [12, 'Dec']
+]
 
 export let QueryPanel = () => {
 
@@ -148,4 +151,3 @@ export let QueryPanel = () => {
     </div>
   )
 }
-

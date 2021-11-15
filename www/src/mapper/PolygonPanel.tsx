@@ -57,7 +57,6 @@ export let PolygonPanel = () => {
         </>
         }
 
-
       </div>
     </div>
   )

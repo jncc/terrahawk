@@ -13,7 +13,7 @@ import { ChoroplethItem, Statistic } from '../types'
 export function getColour(z: number) {
   return z > 2.0 ? '#D53F8C' :
          z > 1.0 ? '#D69E2E' :
-                    'white';
+                    'white'
 }
 
 export let getChoroplethMaxZValue = (s: Statistic, c: ChoroplethItem) => {
