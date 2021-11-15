@@ -273,13 +273,13 @@ Where are we for alpha?
 Sprint 18 (to November 12)
 --------------------------
 
-- [ ] 🎁 Get S2 index files into CEDA archive {ih, uw}
+- [ ] 🎁 ~~Get S2 index files into CEDA archive {ih, uw}~~
   - [ ] Requires some manual QA first
   - [ ] Get metadata to CEDA
   - [ ] Document this process (data engineering wiki?)
-- [ ] 🎁 Find an OS grey base map service {mb, pr}
-- [ ] 🎁 Parameterise on Index, Statistic, Date {pm}
-- [ ] 🥳 Project re-planning, rejigging,  {pm}
+- [ ] 🎁 ~~Find an OS grey base map service {mb, pr}~~
+- [x] 🎁 Parameterise on Index, Statistic, Date {pm}
+- [x] 🥳 Project re-planning, rejigging,  {pm}
 
 Pivot to MVP
 ------------
@@ -308,6 +308,11 @@ Pivot to MVP
 Sprint 19 (to November 26)
 --------------------------
 
+- [ ] 🎁 Get S2 index files into CEDA archive {ih, uw}
+  - [ ] Requires some manual QA first
+  - [ ] Get metadata to CEDA
+  - [ ] Document this process (data engineering wiki?)
+- [ ] 🎁 Find a suitable base map service {mb, pr}
 - [ ] Onboarding {cj} {pm}
 - [ ] Refamiliarisation with thumbnails {cj}
   - explore any gotchas with integration
@@ -323,7 +328,7 @@ Sprint 20 (to December 10; *MVP* release?)
   - there is a working prototype made by {cj}...
   - graft and integrate into the React app {pm}
 
-Sprint 21 (to January 4)
+Sprint 21 (to January ?)
 ------------------------
 
 - [ ] Guidance / help modal {pm, ih}

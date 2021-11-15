@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { SearchIcon } from '@heroicons/react/solid'
+import { SearchIcon } from '@heroicons/react/outline'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 

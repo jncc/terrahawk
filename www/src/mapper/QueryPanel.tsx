@@ -51,7 +51,7 @@ export let QueryPanel = () => {
           </select>
         </div>
 
-        <div className="mb-1">
+        <div className="">
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-grow little-label-text  ">From</div>
             <div>

@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
+import jnccLogoUrl from '../assets/JNCCLogo_Black-340.png'
 import { LeafletMap } from './LeafletMap'
 import { ControlsPanel } from './ControlsPanel'
 import { QueryPanel } from './QueryPanel'
@@ -9,11 +10,10 @@ import { FrameworkPanel } from './FrameworkPanel'
 import { globalActions } from '../global/slice'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
-import jnccLogoUrl from '../assets/JNCCLogo_Black-340.png'
 import { PolygonPanel } from './PolygonPanel'
 import { GazetteerPanel } from './GazetteerPanel'
 
-export let MapScreenLayout = () => {
+export let Mapper = () => {
 
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
@@ -28,13 +28,13 @@ export let MapScreenLayout = () => {
     <div className="xl:hidden">
       {makeSmallScreenWarning()}
     </div>
-    {/* hide the mapper unless on large screen */} 
+    {/* hide the mapper components unless on large screen */} 
     <div className="hidden xl:block">
       {!state.zoomedEnoughToShowPolygons && makePleaseZoomInMessage()}
       <GazetteerPanel />
       <QueryPanel />
       <FrameworkPanel />
-      {/* <PolygonPanel /> */}
+      <PolygonPanel />
       <ControlsPanel />
       <LeafletMap />
     </div>

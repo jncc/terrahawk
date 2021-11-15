@@ -2,14 +2,12 @@
 import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
 import { useStateDispatcher } from '../state/hooks'
-import { getDatesFromDateField } from './helpers/frameHelpers'
+import { getDatesFromDateField, getFramesFromFrameField } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
 
 import { MonthStats } from './types'
 
 export let YearChart = (props: {year: number, data: MonthStats[]}) => {
-
-  let dispatch = useStateDispatcher()
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
     let dataForPeriod = props.data.find(d => d.month === value)
@@ -33,32 +31,12 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
     return {
       x: label,
       y: 0,
-      frameCount: dataForPeriod ? getDatesFromDateField(dataForPeriod.date).length : null,
-      firstDate: dataForPeriod ? getDatesFromDateField(dataForPeriod.date)[0] : null,
+      frameCount: dataForPeriod ? getFramesFromFrameField(dataForPeriod.frame).length : null,
+      firstFrame: dataForPeriod ? getFramesFromFrameField(dataForPeriod.frame)[0] : null,
     }
   })
 
-  let DateScatterPoint = ({ x, y, datum }: any) => {
-    const [selected, setSelected] = React.useState(false);
-    const [hovered, setHovered] = React.useState(false);
-  
-    return (
-      <circle
-        cx={x}
-        cy={y}
-        r={hovered || selected ? 12 : 6}
-        stroke={"transparent"} // make it "really" bigger to allow easier selection with mouse
-        strokeWidth={5}
-        // fill={hovered ? "#777" : "#666"}
-        fill="#666"
-        // onClick={() => setSelected(!selected)}
-        onClick={() => dispatch(mapperActions.selectDate(datum.firstDate))}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{cursor: 'pointer'}}
-      />
-    )
-  }
+
 
   return (
     <div className="h-48 border-2 border-gray-300 rounded-xl">
@@ -103,7 +81,7 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
           style={{data: {fill: "#666"}}}
           data={frameScatterData}
           // size={({ datum }) => datum.frameCount}
-          size={6}
+          // size={6}
 
           dataComponent={<DateScatterPoint />}          
         />
@@ -141,3 +119,30 @@ let getPointStyleForZScore = (zScore: number) => {
                  {size: 4, color: '#555'}
 }
 
+let DateScatterPoint = ({ x, y, datum }: any) => {
+
+  let dispatch = useStateDispatcher()
+
+  const [selected, setSelected] = React.useState(false);
+  const [hovered, setHovered] = React.useState(false);
+
+  return (
+    <circle
+      cx={x}
+      cy={y}
+      // r={hovered || selected ? 12 : 6}
+      r={datum.frameCount}
+
+      
+      stroke={"transparent"} // make it "really" bigger to allow easier selection with mouse
+      strokeWidth={5}
+      // fill={hovered ? "#777" : "#666"}
+      fill="#666"
+      // onClick={() => setSelected(!selected)}
+      onClick={() => dispatch(mapperActions.selectFrame(datum.firstFrame))}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{cursor: 'pointer'}}
+    />
+  )
+}

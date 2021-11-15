@@ -92,7 +92,7 @@ export let LeafletMap = () => {
       })
       
     // add layers for polygons in state.polygons not already on the map
-    let toAdd = state.polygons.polys.filter(p =>
+    state.polygons.polys.filter(p =>
       !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
     ).forEach(p => makePolygonLayer(p, dispatch).addTo(polyLayerGroup))
     // but add them in chunks for a nicer visual effect
@@ -102,7 +102,7 @@ export let LeafletMap = () => {
     //     chunk.forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
     //   }, i * 50)
     // })
-  }, [Object.values(state.polygons.params).join(':') + '|' + state.polygons.polys.map(p => p.polyid).join(',')])  
+  }, [Object.values(state.polygons.params).join(':') + '|' + state.polygons.polys.map(p => p.polyid).join(',')])
 
   // react to change of `choropleth`
   // (sync the polygons layers on the leaflet map with the choropleth items in state)
@@ -154,7 +154,7 @@ export let LeafletMap = () => {
     
   }, [state.showPolygons, state.zoomedEnoughToShowPolygons])
 
-  // react has nothing to do with the leaflet map;
+  // react has nothing to do with the leaflet map
   // map manipulation is done via side-effects (useEffect)
   return <div id="leaflet-map" className="absolute inset-0"></div>
 }

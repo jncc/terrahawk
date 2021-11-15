@@ -12,29 +12,35 @@ import { getFramesFromFrameField } from './helpers/frameHelpers'
 
 export let PolygonPanel = () => {
 
-  let polygon = useStateSelector(s => s.mapper.selectedPolygon)
-  let data = useStateSelector(s => s.mapper.selectedPolygonStats)
+  let {selectedPolygon, selectedPolygonStats, selectedFrame} = useStateSelector(s => s.mapper)
+
+  console.log('in PolygonPanel')
+  if (selectedPolygonStats) {
+    console.log('total frames ' + selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame)).length)
+    console.log('total distinct frames ' + new Set(selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame))).size)
+
+  }
 
   // group by year and pass in one year per chart component
-  let oneYearOfData = data ? data.filter((d: any) => d.year === '2020') : undefined
+  let oneYearOfData = selectedPolygonStats ? selectedPolygonStats.filter((d: any) => d.year === '2020') : undefined
 
   return (
-    <div className="z-abovemap absolute top-6 right-6 bottom-32  animate-delayedfadein text-left" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-32 animate-delayedfadein text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[40rem] h-full" >
 
-        {polygon &&
+        {selectedPolygon &&
           <>
             <div className="flex items-center space-x-3 mb-3">
               <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
               <div className="leading-tight">
-                <div>{polygon.habitat}</div>
+                <div>{selectedPolygon.habitat}</div>
                 <div className="flex gap-2 items-center">
-                  <div className="little-label-text ">Polygon {polygon.polyid}</div>
+                  <div className="little-label-text ">Polygon {selectedPolygon.polyid}</div>
                 </div>
               </div>
               <div className="flex-1"></div>
               <div className="">
-                {makeComparatorSummary(data)}
+                {makeComparatorSummary(selectedPolygonStats)}
               </div>
             </div>
           </>
@@ -42,7 +48,12 @@ export let PolygonPanel = () => {
 
         {oneYearOfData &&
         <>
-          <YearChart year={2020} data={oneYearOfData} />
+          <div className="mb-4">
+            <YearChart year={2020} data={oneYearOfData} />
+          </div>
+          <div>
+            {selectedFrame}
+          </div>
           <ThumbnailSlider frames={oneYearOfData.flatMap(d => getFramesFromFrameField(d.frame))} />
         </>
         }

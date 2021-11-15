@@ -1,6 +1,6 @@
 
 import { of, concat } from 'rxjs'
-import { map, switchMap, catchError, } from 'rxjs/operators'
+import { map, filter, switchMap, catchError, } from 'rxjs/operators'
 import { combineEpics, ofType, StateObservable } from 'redux-observable'
 
 import { RootState } from '../state/store'
@@ -10,7 +10,11 @@ import { fetchPolygons, fetchChoropleth, fetchPolygon } from './api'
 
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
-  ofType(mapperActions.mapCenterChanged.type),
+  ofType(
+    mapperActions.mapZoomChanged.type,
+    mapperActions.mapCenterChanged.type,
+  ),
+  filter(() => state$.value.mapper.zoomedEnoughToShowPolygons),
   switchMap(() =>
     concat(
       of(globalActions.startLoading('polygons')),
@@ -45,7 +49,7 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
   )
 )
 
-let fetchPolygonEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.selectPolygon.type),
   switchMap(() =>
     concat(
@@ -61,5 +65,5 @@ let fetchPolygonEpic = (action$: any, state$: StateObservable<RootState>) => act
 export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
   fetchChoroplethEpic,
-  fetchPolygonEpic,
+  fetchPolygonStatsEpic,
 )

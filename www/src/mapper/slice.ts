@@ -18,15 +18,11 @@ let slice = createSlice({
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
     selectedPolygon: undefined as Poly | undefined,
     selectedPolygonStats: undefined as MonthStats[] | undefined,
-    selectedDate: undefined as SimpleDate | undefined,
+    selectedFrame: undefined as string | undefined,
   },
   reducers: {
     togglePolygons: (state) => {
       state.showPolygons = !state.showPolygons
-    },
-    selectPolygon: (state, a: PayloadAction<Poly>) => {
-      state.selectedPolygon = a.payload
-      state.selectedPolygonStats = undefined
     },
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
@@ -34,15 +30,7 @@ let slice = createSlice({
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
-    },
-    fetchPolygonsCompleted: (state, a: PayloadAction<PolygonsQueryResult>) => {
-      state.polygons = a.payload
-    },
-    fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethQueryResult>) => {
-      state.choropleth = a.payload
-    },
-    fetchPolygonCompleted: (state, a: PayloadAction<any>) => {
-      state.selectedPolygonStats = a.payload
+      console.log(a.payload)
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
@@ -70,8 +58,22 @@ let slice = createSlice({
       state.query.monthFrom = state.query.monthFrom - 1
       state.query.monthTo = state.query.monthTo - 1
     },
-    selectDate: (state, a: PayloadAction<SimpleDate>) => {
-      state.selectedDate = a.payload
+    fetchPolygonsCompleted: (state, a: PayloadAction<PolygonsQueryResult>) => {
+      state.polygons = a.payload
+    },
+    fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethQueryResult>) => {
+      state.choropleth = a.payload
+    },
+    selectPolygon: (state, a: PayloadAction<Poly>) => {
+      state.selectedPolygon = a.payload
+      state.selectedPolygonStats = undefined
+      state.selectedFrame = undefined
+    },
+    fetchPolygonCompleted: (state, a: PayloadAction<any>) => {
+      state.selectedPolygonStats = a.payload
+    },
+    selectFrame: (state, a: PayloadAction<string>) => {
+      state.selectedFrame = a.payload
     }
   },
 })

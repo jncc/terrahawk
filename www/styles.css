@@ -22,6 +22,7 @@
   }
   .arrow-button {
     @apply custom-ring px-1 py-1 text-gray-400 rounded-lg hover:bg-gray-200 hover:text-gray-500 active:bg-gray-400 active:text-white
+    /* @apply custom-ring px-2 py-2 rounded-lg bg-gray-100 text-gray-600  hover:bg-gray-200 hover:text-gray-500 active:bg-gray-400 active:text-white */
   }
   .filter-black-to-jncc-green {
     filter: invert(38%) sepia(11%) saturate(3054%) hue-rotate(69deg) brightness(95%) contrast(86%);

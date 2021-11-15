@@ -3,7 +3,7 @@ import React from 'react'
 import { Alert } from './global/Alert'
 import { Loader } from './global/Loader'
 
-import { MapScreenLayout } from './mapper/MapScreenLayout'
+import { Mapper } from './mapper/Mapper'
 import { PolygonTooltipForDev } from './mapper/PolygonTooltip'
 
 export function App() {
@@ -12,7 +12,7 @@ export function App() {
     <>
     <Loader />
     <Alert />
-    <MapScreenLayout />
+    <Mapper />
     {/* <PolygonTooltipForDev /> */}
     </>
   )
