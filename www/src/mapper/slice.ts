@@ -19,6 +19,7 @@ let slice = createSlice({
     selectedPolygon: undefined as Poly | undefined,
     selectedPolygonStats: undefined as MonthStats[] | undefined,
     selectedFrame: undefined as string | undefined,
+    hoveredFrame: undefined as string | undefined,
   },
   reducers: {
     togglePolygons: (state) => {
@@ -72,9 +73,12 @@ let slice = createSlice({
     fetchPolygonCompleted: (state, a: PayloadAction<any>) => {
       state.selectedPolygonStats = a.payload
     },
-    selectFrame: (state, a: PayloadAction<string>) => {
+    selectFrame: (state, a: PayloadAction<string | undefined>) => {
       state.selectedFrame = a.payload
-    }
+    },
+    hoverFrame: (state, a: PayloadAction<string | undefined>) => {
+      state.hoveredFrame = a.payload
+    },
   },
 })
 

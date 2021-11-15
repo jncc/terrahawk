@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
-import { useStateDispatcher } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getDatesFromDateField, getFramesFromFrameField } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
 
@@ -122,11 +122,17 @@ let getPointStyleForZScore = (zScore: number) => {
 let DateScatterPoint = ({ x, y, datum }: any) => {
 
   let dispatch = useStateDispatcher()
+  let { selectedFrame, hoveredFrame } = useStateSelector(s => s.mapper )
 
-  const [selected, setSelected] = React.useState(false);
-  const [hovered, setHovered] = React.useState(false);
+  let frame = datum.firstFrame
 
+  let hovered = frame === hoveredFrame
+  let selected = frame === selectedFrame
+  let borderColor = selected ? 'red' :
+                    hovered ?  'rgb(209, 213, 219)' :
+                               'transparent'  
   return (
+
     <circle
       cx={x}
       cy={y}
@@ -134,14 +140,14 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
       r={datum.frameCount}
 
       
-      stroke={"transparent"} // make it "really" bigger to allow easier selection with mouse
-      strokeWidth={5}
+      stroke={borderColor}
+      strokeWidth={3}
       // fill={hovered ? "#777" : "#666"}
       fill="#666"
       // onClick={() => setSelected(!selected)}
       onClick={() => dispatch(mapperActions.selectFrame(datum.firstFrame))}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => dispatch(mapperActions.hoverFrame(datum.firstFrame))}
+      onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
       style={{cursor: 'pointer'}}
     />
   )

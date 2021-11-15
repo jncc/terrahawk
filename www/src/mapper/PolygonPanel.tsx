@@ -14,12 +14,11 @@ export let PolygonPanel = () => {
 
   let {selectedPolygon, selectedPolygonStats, selectedFrame} = useStateSelector(s => s.mapper)
 
-  console.log('in PolygonPanel')
-  if (selectedPolygonStats) {
-    console.log('total frames ' + selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame)).length)
-    console.log('total distinct frames ' + new Set(selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame))).size)
-
-  }
+  // console.log('in PolygonPanel')
+  // if (selectedPolygonStats) {
+  //   console.log('total frames ' + selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame)).length)
+  //   console.log('total distinct frames ' + new Set(selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame))).size)
+  // }
 
   // group by year and pass in one year per chart component
   let oneYearOfData = selectedPolygonStats ? selectedPolygonStats.filter((d: any) => d.year === '2020') : undefined
@@ -51,8 +50,8 @@ export let PolygonPanel = () => {
           <div className="mb-4">
             <YearChart year={2020} data={oneYearOfData} />
           </div>
-          <div>
-            {selectedFrame}
+          <div className="mb-4">
+            Selected Frame: {selectedFrame}
           </div>
           <ThumbnailSlider frames={oneYearOfData.flatMap(d => getFramesFromFrameField(d.frame))} />
         </>

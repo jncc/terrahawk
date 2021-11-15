@@ -16,7 +16,7 @@ import { GazetteerPanel } from './GazetteerPanel'
 export let Mapper = () => {
 
   let dispatch = useStateDispatcher()
-  let state = useStateSelector(s => s.mapper)
+  let zoomedEnoughToShowPolygons = useStateSelector(s => s.mapper.zoomedEnoughToShowPolygons)
 
   // keyboard shortcuts
   useHotkeys('p', () => { dispatch(mapperActions.togglePolygons()) })
@@ -30,7 +30,7 @@ export let Mapper = () => {
     </div>
     {/* hide the mapper components unless on large screen */} 
     <div className="hidden xl:block">
-      {!state.zoomedEnoughToShowPolygons && makePleaseZoomInMessage()}
+      {!zoomedEnoughToShowPolygons && makePleaseZoomInMessage()}
       <GazetteerPanel />
       <QueryPanel />
       <FrameworkPanel />
