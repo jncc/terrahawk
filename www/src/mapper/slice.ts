@@ -64,7 +64,7 @@ let slice = createSlice({
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethQueryResult>) => {
       state.choropleth = a.payload
     },
-    selectPolygon: (state, a: PayloadAction<Poly>) => {
+    selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
       state.selectedPolygon = a.payload
       state.selectedPolygonStats = undefined
       state.selectedFrame = undefined

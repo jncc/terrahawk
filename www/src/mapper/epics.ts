@@ -7,6 +7,8 @@ import { RootState } from '../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
 import { fetchPolygons, fetchChoropleth, fetchPolygon } from './api'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { Poly } from './types'
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
@@ -50,6 +52,7 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
 
 let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(mapperActions.selectPolygon.type),
+  filter((a: PayloadAction<Poly | undefined>)  => a.payload !== undefined),
   switchMap(() =>
     concat(
       of(globalActions.startLoading('polygon')),

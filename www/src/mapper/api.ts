@@ -88,7 +88,7 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
 export let fetchPolygon = (state: RootState['mapper']): Observable<any> => {
 
   if (!state.selectedPolygon)
-    throw 'No polygon selected'
+    throw 'Shouldn\'t get here - no polygon selected'
 
   let params = {
     framework:     state.query.framework,

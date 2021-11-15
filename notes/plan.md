@@ -369,7 +369,7 @@ Backlog
 
 - [ ] Download stats as CSV/text file
 
-- [ ] Why are there polygons with no data for choropleth? Investigate.
+- XTunable warning thresholds (default Amber=1 and Red=2)
 
 - [ ] Glue / Spark optimisation https://aws.amazon.com/blogs/big-data/optimize-memory-management-in-aws-glue/ 
 
