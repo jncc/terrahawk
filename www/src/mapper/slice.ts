@@ -17,6 +17,7 @@ let slice = createSlice({
     polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
     selectedPolygon: undefined as Poly | undefined,
+    previousSelectedPolygon: undefined as Poly | undefined,
     selectedPolygonStats: undefined as MonthStats[] | undefined,
     selectedFrame: undefined as string | undefined,
     hoveredFrame: undefined as string | undefined,
@@ -65,7 +66,11 @@ let slice = createSlice({
       state.choropleth = a.payload
     },
     selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
+      // store the old value
+      state.previousSelectedPolygon = state.selectedPolygon
+      // store the new value
       state.selectedPolygon = a.payload
+      // reset the dependent values
       state.selectedPolygonStats = undefined
       state.selectedFrame = undefined
     },

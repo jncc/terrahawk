@@ -154,7 +154,16 @@ export let LeafletMap = () => {
     
   }, [state.showPolygons, state.zoomedEnoughToShowPolygons])
 
-  // react has nothing to do with the leaflet map
+  useEffect(() => {
+    let offset = map.getSize().x * 0.14
+    if (!state.previousSelectedPolygon && state.selectedPolygon)
+      map.panBy(new L.Point(offset, 0), {animate: true})
+    if (state.previousSelectedPolygon && !state.selectedPolygon)
+      map.panBy(new L.Point(-offset, 0), {animate: true})
+    
+  }, [state.selectedPolygon, state.previousSelectedPolygon])
+  
+    // react has nothing to do with the leaflet map
   // map manipulation is done via side-effects (useEffect)
   return <div id="leaflet-map" className="absolute inset-0"></div>
 }

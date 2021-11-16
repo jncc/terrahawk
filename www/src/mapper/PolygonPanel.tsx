@@ -1,17 +1,19 @@
 
 import React from 'react'
-import { InformationCircleIcon, LocationMarkerIcon } from '@heroicons/react/outline'
+import { InformationCircleIcon, LocationMarkerIcon, XIcon } from '@heroicons/react/outline'
 import { ExclamationIcon } from '@heroicons/react/solid'
 
-import { useStateSelector } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
 import { MonthStats } from './types'
 import { maxBy } from 'lodash'
 import { ThumbnailSlider } from './ThumbnailSlider'
 import { getFramesFromFrameField } from './helpers/frameHelpers'
+import { mapperActions } from './slice'
 
 export let PolygonPanel = () => {
 
+  let dispatch = useStateDispatcher()
   let {selectedPolygon, selectedPolygonStats, selectedFrame} = useStateSelector(s => s.mapper)
 
   // console.log('in PolygonPanel')
@@ -24,8 +26,8 @@ export let PolygonPanel = () => {
   let oneYearOfData = selectedPolygonStats ? selectedPolygonStats.filter((d: any) => d.year === '2020') : undefined
 
   return (
-    <div className="z-abovemap absolute top-6 right-6 bottom-32 animate-delayedfadein text-left" >
-      <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[40rem] h-full" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-6 animate-delayedfadein text-left" >
+      <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[45rem] h-full" >
 
         {selectedPolygon &&
           <>
@@ -40,6 +42,11 @@ export let PolygonPanel = () => {
               <div className="flex-1"></div>
               <div className="">
                 {makeComparatorSummary(selectedPolygonStats)}
+              </div>
+              <div className="">
+                <button onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
+                  <XIcon className="h-7 w-7 text-gray-400"/>
+                </button>
               </div>
             </div>
           </>
