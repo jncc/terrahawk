@@ -66,6 +66,8 @@ let slice = createSlice({
       state.choropleth = a.payload
     },
     selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
+      // the new value is `undefined` if deselecting
+      // let poly = state.selectedPolygon === state.previousSelectedPolygon ? undefined : a.payload
       // store the old value
       state.previousSelectedPolygon = state.selectedPolygon
       // store the new value

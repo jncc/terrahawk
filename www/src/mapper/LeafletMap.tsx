@@ -18,6 +18,7 @@ type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 let map: L.Map
 let bboxRectangle: L.Rectangle
 let polyLayerGroup: L.LayerGroup<CustomPolygonLayer>
+let selectedPolyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 
 export let LeafletMap = () => {
 
@@ -48,7 +49,8 @@ export let LeafletMap = () => {
     L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
 
     // polygon layer group
-    polyLayerGroup = L.layerGroup([])
+    polyLayerGroup = L.layerGroup()
+    selectedPolyLayerGroup = L.layerGroup().addTo(map)
 
     // listen for zoom changes
     map.on('zoomend', () => {
@@ -157,10 +159,13 @@ export let LeafletMap = () => {
 
   // listen for selection / deselection of polygon
   useEffect(() => {
+    selectedPolyLayerGroup.clearLayers()
     // reduce the active area 
     if (!state.previousSelectedPolygon && state.selectedPolygon) {
       // @ts-expect-error
       map.setActiveArea('leaflet-active-area-when-polygon-selected')
+      let layer = L.geoJSON(state.selectedPolygon.geojson, {style: { weight: 5}})
+      map.panTo(layer.getBounds().getCenter())
     }
     // restore fullscreen active area
     if (state.previousSelectedPolygon && !state.selectedPolygon) {
@@ -168,7 +173,11 @@ export let LeafletMap = () => {
       map.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
     }
     if (state.selectedPolygon) {
-      map.panTo(L.geoJSON(state.selectedPolygon.geojson).getBounds().getCenter())
+      let layer = L.geoJSON(state.selectedPolygon.geojson, {style: { weight: 5}})
+
+      layer.addTo(selectedPolyLayerGroup)
+      // let layer = polyLayerGroup.getLayers().find((l: any) => state.selectedPolygon?.polyid === l.polyid)
+
     }
   }, [state.selectedPolygon, state.previousSelectedPolygon])
   
