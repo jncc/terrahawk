@@ -12,7 +12,7 @@
     "serve:todo:ssr": "yarn vit && cross-env NODE_ENV=production ts-node ./server",
     "build:todo:ssr": "yarn vit && vite-plugin-ssr prerender --no-extra-dir",
     "serve": "vite preview",
-    "build": "yarn clean && tsc && yarn lint && vite build",
+    "build": "yarn clean && yarn tsc && yarn lint && vite build",
     "deploy:alpha": "yarn build && AWS_PROFILE=jncc-habmon-alpha-admin sls client deploy"
   },
   "dependencies": {
@@ -35,6 +35,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "leaflet": "^1.7.1",
+    "leaflet-active-area": "^1.1.1",
     "lodash": "^4.17.21",
     "lru-cache": "^6.0.0",
     "markdown-it": "^12.2.0",

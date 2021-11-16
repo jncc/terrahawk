@@ -11,6 +11,7 @@ import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
 import { AnyAction, Dispatch } from '@reduxjs/toolkit'
+import 'leaflet-active-area'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
@@ -154,13 +155,21 @@ export let LeafletMap = () => {
     
   }, [state.showPolygons, state.zoomedEnoughToShowPolygons])
 
+  // listen for selection / deselection of polygon
   useEffect(() => {
-    let offset = map.getSize().x * 0.14
-    if (!state.previousSelectedPolygon && state.selectedPolygon)
-      map.panBy(new L.Point(offset, 0), {animate: true})
-    if (state.previousSelectedPolygon && !state.selectedPolygon)
-      map.panBy(new L.Point(-offset, 0), {animate: true})
-    
+    // reduce the active area 
+    if (!state.previousSelectedPolygon && state.selectedPolygon) {
+      // @ts-expect-error
+      map.setActiveArea('leaflet-active-area-when-polygon-selected')
+    }
+    // restore fullscreen active area
+    if (state.previousSelectedPolygon && !state.selectedPolygon) {
+      // @ts-expect-error
+      map.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
+    }
+    if (state.selectedPolygon) {
+      map.panTo(L.geoJSON(state.selectedPolygon.geojson).getBounds().getCenter())
+    }
   }, [state.selectedPolygon, state.previousSelectedPolygon])
   
     // react has nothing to do with the leaflet map

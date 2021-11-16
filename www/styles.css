@@ -32,4 +32,16 @@
     background: green;
     @apply rounded-3xl;
   }
+ 
+  .leaflet-active-area-when-polygon-selected {
+    position: absolute;
+    top: 0;
+    bottom: 0;    
+    left: 14rem; /* width of query (left) panel */
+    right: 45rem; /* width of polygon (right) panel */
+  }
+  .leaflet-active-area-when-polygon-not-selected {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+  }
 }
