@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
@@ -22,7 +22,6 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
                     hovered ?  'border-gray-300' :
                                'border-transparent'
 
-                              
   let thumbnailWidth = 100 // in pixels
   let thumbnailHeight = 100
   let polygon: Polygon = {
@@ -30,30 +29,39 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
     coordinates: selectedPolygon!.geojson.coordinates
   }
 
-  console.log(`Polygon coordinates: ${polygon.coordinates}`)
+  // console.log(`Polygon coordinates: ${polygon.coordinates}`)
 
-  let body = document.body
-  let svgOutline = getPolygonSVGDefinition(polygon, thumbnailWidth, thumbnailHeight)
-  body.prepend(svgOutline)
+  let [src, setSrc] = useState('')
 
-  let s2TrueColourDiv = document.getElementById(props.frame)
-  getThumbnail(props.frame, polygon, thumbnailConfig.falseColour).then(thumbnailString => {
-    let thumbnailDiv = document.createElement('div')
-    thumbnailDiv.className = `thumbnail-overlay-${props.frame}`
-    let imageElement = new Image(thumbnailWidth, thumbnailHeight)
-    imageElement.src = thumbnailString
+  useEffect(() => {
 
-    thumbnailDiv.appendChild(imageElement)
+    getThumbnail(props.frame, polygon, thumbnailConfig.falseColour).then((src: string) => setSrc(src))
 
-    let thumbnailLabel = document.createElement('div')
-    let date = props.frame.substring(4, 12)
-    thumbnailLabel.textContent = date
-    thumbnailDiv.appendChild(thumbnailLabel)
+  }, [props.frame, polygon.polygonId, thumbnailConfig.falseColour.text])
 
-    if (s2TrueColourDiv) {
-      s2TrueColourDiv.appendChild(thumbnailDiv)
-    }
-  })
+  // let body = document.body
+  // let svgOutline = getPolygonSVGDefinition(polygon, thumbnailWidth, thumbnailHeight)
+  // body.prepend(svgOutline)
+
+  // let s2TrueColourDiv = document.getElementById(props.frame)
+
+  // .then(thumbnailString => {
+  //   let thumbnailDiv = document.createElement('div')
+  //   thumbnailDiv.className = `thumbnail-overlay-${props.frame}`
+  //   let imageElement = new Image(thumbnailWidth, thumbnailHeight)
+  //   imageElement.src = thumbnailString
+
+  //   thumbnailDiv.appendChild(imageElement)
+
+  //   let thumbnailLabel = document.createElement('div')
+  //   let date = props.frame.substring(4, 12)
+  //   thumbnailLabel.textContent = date
+  //   thumbnailDiv.appendChild(thumbnailLabel)
+
+  //   if (s2TrueColourDiv) {
+  //     s2TrueColourDiv.appendChild(thumbnailDiv)
+  //   }
+  // })
   
 
   return (
@@ -64,9 +72,10 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
       onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
       onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
     >
-      <div className="overflow-hidden" id={props.frame} key={`thumbnail-${props.frame}`}>
+      <img src={src} width={thumbnailWidth} height={thumbnailHeight} />
+      {/* <div className="overflow-hidden" id={props.frame} key={`thumbnail-${props.frame}`}>
         {props.frame}
-      </div>
+      </div> */}
     </div>
   )
 }
