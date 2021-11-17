@@ -242,7 +242,7 @@ function stretchColour(sourceColourScale : number[], targetColourScale : number[
   return stretchedValue
 }
 
-function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixelScale : Scale) {
+export function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixelScale : Scale) {
   let osgbXRange = osgbScale.xMax - osgbScale.xMin
   let osgbYRange = osgbScale.yMax - osgbScale.yMin
   let pixelXRange = pixelScale.xMax - pixelScale.xMin
@@ -253,7 +253,7 @@ function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixe
   return pixelCoords
 }
 
-function getBoundingBoxWithBuffer(coordPairs : number[][], bufferPercentage : number) : number[] {
+export function getBoundingBoxWithBuffer(coordPairs : number[][], bufferPercentage : number) : number[] {
   let eastings : number[] = []
   let northings : number[] = []
   coordPairs.forEach(coordPair => {
