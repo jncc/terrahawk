@@ -160,24 +160,25 @@ export let LeafletMap = () => {
   // listen for selection / deselection of polygon
   useEffect(() => {
     selectedPolyLayerGroup.clearLayers()
-    // reduce the active area 
-    if (!state.previousSelectedPolygon && state.selectedPolygon) {
-      // @ts-expect-error
-      map.setActiveArea('leaflet-active-area-when-polygon-selected')
-      let layer = L.geoJSON(state.selectedPolygon.geojson, {style: { weight: 5}})
-      map.panTo(layer.getBounds().getCenter())
-    }
-    // restore fullscreen active area
-    if (state.previousSelectedPolygon && !state.selectedPolygon) {
-      // @ts-expect-error
-      map.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
-    }
     if (state.selectedPolygon) {
       let layer = L.geoJSON(state.selectedPolygon.geojson, {style: { weight: 5}})
 
       layer.addTo(selectedPolyLayerGroup)
       // let layer = polyLayerGroup.getLayers().find((l: any) => state.selectedPolygon?.polyid === l.polyid)
 
+    }
+    if (!state.previousSelectedPolygon && state.selectedPolygon) {
+      // reduce the "active area" https://github.com/Mappy/Leaflet-active-area
+      // and pan to the center of the newly-selected polygon
+      // @ts-expect-error
+      map.setActiveArea('leaflet-active-area-when-polygon-selected')
+      let layer = L.geoJSON(state.selectedPolygon.geojson, {style: {weight: 5}})
+      map.panTo(layer.getBounds().getCenter())
+    }
+    if (state.previousSelectedPolygon && !state.selectedPolygon) {
+      // restore the "active area" (to full screen) with an animation (true, true)
+      // @ts-expect-error
+      map.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
     }
   }, [state.selectedPolygon, state.previousSelectedPolygon])
   

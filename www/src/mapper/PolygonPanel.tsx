@@ -14,9 +14,9 @@ import { mapperActions } from './slice'
 export let PolygonPanel = () => {
 
   let dispatch = useStateDispatcher()
-  let {selectedPolygon, selectedPolygonStats, selectedFrame} = useStateSelector(s => s.mapper)
+  let {selectedPolygon, selectedPolygonStats, selectedFrame, zoomedEnoughToShowPolygons} = useStateSelector(s => s.mapper)
 
-  if (!selectedPolygon)
+  if (!selectedPolygon || !zoomedEnoughToShowPolygons)
     return null
   // console.log('in PolygonPanel')
   // if (selectedPolygonStats) {
@@ -28,7 +28,7 @@ export let PolygonPanel = () => {
   let oneYearOfData = selectedPolygonStats ? selectedPolygonStats.filter((d: any) => d.year === '2020') : undefined
 
   return (
-    <div className="z-abovemap absolute top-6 right-6 bottom-6 text-left" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-36 text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[45rem] h-full" >
         
         <div className="flex items-center space-x-3 mb-3">

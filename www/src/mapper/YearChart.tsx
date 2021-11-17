@@ -113,7 +113,7 @@ let getPointStyleForZScore = (zScore: number) => {
   let z = Math.abs(zScore)
   return z > 2 ? {size: 6, color: '#D53F8C'} :
          z > 1 ? {size: 5, color: '#D69E2E'} :
-                 {size: 4, color: '#555'}
+                 {size: 4, color: '#888'}
 }
 
 let DateScatterPoint = ({ x, y, datum }: any) => {
