@@ -37,7 +37,6 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
   body.prepend(svgOutline)
 
   let s2TrueColourDiv = document.getElementById(props.frame)
-  console.log('Thumbnail doesn\'t exist already, generating...')
   getThumbnail(props.frame, polygon, thumbnailConfig.falseColour).then(thumbnailString => {
     let thumbnailDiv = document.createElement('div')
     thumbnailDiv.className = `thumbnail-overlay-${props.frame}`
