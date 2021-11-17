@@ -3,26 +3,27 @@ import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getDatesFromDateField, getFramesFromFrameField } from './helpers/frameHelpers'
+import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
 
-import { MonthStats } from './types'
+import { MonthStats, Statistic, StatValues } from './types'
 
-export let YearChart = (props: {year: number, data: MonthStats[]}) => {
+export let YearChart = (props: {year: number, data: MonthStats[], statistic: Statistic}) => {
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
     let dataForPeriod = props.data.find(d => d.month === value)
     return {
       x: label,
-      y: dataForPeriod ? dataForPeriod.mean : null,
-      z_score : dataForPeriod ? dataForPeriod.z_mean: null,
+      y: dataForPeriod ? getStatValues(props.statistic, dataForPeriod).value : null,
+      z_score : dataForPeriod ? getStatValues(props.statistic, dataForPeriod).z_score: null,
     }
   })
 
-  let getComparisionLineData = (f: (s: MonthStats) => number) => monthlyTicks.map(({value, label}) => {
+  let getComparisionLineData = (f: (s: StatValues) => number) => monthlyTicks.map(({value, label}) => {
     let dataForPeriod = props.data.find(d => d.month === value)
     return {
       x: label,
-      y: dataForPeriod ? f(dataForPeriod)  : null,
+      y: dataForPeriod ? f(getStatValues(props.statistic, dataForPeriod))  : null,
     }
   })
 
@@ -43,22 +44,22 @@ export let YearChart = (props: {year: number, data: MonthStats[]}) => {
 
         <VictoryStack>
           <VictoryArea
-            data={getComparisionLineData(s => s.cf_mean - (s.cf_mean_sd * 2))}
+            data={getComparisionLineData(s => s.cf_value - (s.cf_value_sd * 2))}
             colorScale={['transparent']}
             interpolation="cardinal"
             />
           <VictoryArea
-            data={getComparisionLineData(s => s.cf_mean_sd)}
+            data={getComparisionLineData(s => s.cf_value_sd)}
             colorScale={['#eee']}
             interpolation="cardinal"
             />
           <VictoryArea
-            data={getComparisionLineData(s => s.cf_mean_sd * 2)}
+            data={getComparisionLineData(s => s.cf_value_sd * 2)}
             colorScale={['#ddd']}
             interpolation="cardinal"
             />
           <VictoryArea
-            data={getComparisionLineData(s => s.cf_mean_sd)}
+            data={getComparisionLineData(s => s.cf_value_sd)}
             colorScale={['#eee']}
             interpolation="cardinal"
             />

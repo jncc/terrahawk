@@ -16,7 +16,7 @@ export function getColour(z: number) {
                     'white'
 }
 
-export let getChoroplethMaxZValue = (s: Statistic, c: ChoroplethItem) => {
+export let getChoroplethMaxZValue = (s: Statistic, c: ChoroplethItem): number => {
   switch (s) {
     case 'mean': return c.max_z_mean
     case 'median': return c.max_z_median

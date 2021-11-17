@@ -124,6 +124,13 @@ export type MonthStats = {
   poly_partition: string
 }
 
+export type StatValues = {
+  value:       number
+  cf_value:    number
+  cf_value_sd: number
+  z_score:     number
+}
+
 // util
 export type Bounds = { southWest: { lat: number, lng: number }, northEast: { lat: number, lng: number }}
 export type SimpleDate = { year: number, month: number, day: number }

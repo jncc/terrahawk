@@ -37,7 +37,7 @@ export let Mapper = () => {
       <FrameworkPanel />
       <PolygonPanel />
       <ControlsPanel />
-      <ThumbnailPanel />
+      {/* <ThumbnailPanel /> */}
       <LeafletMap />
     </div>
   </>

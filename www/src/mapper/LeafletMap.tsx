@@ -150,7 +150,7 @@ export let LeafletMap = () => {
   // react to changes of `showPolygons` and `zoomedEnoughToShowPolygons`
   useEffect(() => {
     if (state.showPolygons && state.zoomedEnoughToShowPolygons)
-      // showing ~1000 polygons causes a noticeable lag in the React UI, so add a short delay
+      // showing ~1000 polygons causes a noticeable lag in the UI, so add a short delay
       setTimeout(() => polyLayerGroup.addTo(map), 50)
     else
       setTimeout(() => polyLayerGroup.remove(), 50)

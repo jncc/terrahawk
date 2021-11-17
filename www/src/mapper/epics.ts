@@ -51,7 +51,10 @@ let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => 
 )
 
 let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
-  ofType(mapperActions.selectPolygon.type),
+  ofType(
+    mapperActions.selectPolygon.type,
+    mapperActions.alterQueryIndexname.type,
+  ),
   filter((a: PayloadAction<Poly | undefined>)  => a.payload !== undefined),
   switchMap(() =>
     concat(

@@ -14,7 +14,7 @@ import { mapperActions } from './slice'
 export let PolygonPanel = () => {
 
   let dispatch = useStateDispatcher()
-  let {selectedPolygon, selectedPolygonStats, selectedFrame, zoomedEnoughToShowPolygons} = useStateSelector(s => s.mapper)
+  let {selectedPolygon, selectedPolygonStats, selectedFrame, zoomedEnoughToShowPolygons, query} = useStateSelector(s => s.mapper)
 
   if (!selectedPolygon || !zoomedEnoughToShowPolygons)
     return null
@@ -55,7 +55,7 @@ export let PolygonPanel = () => {
         {oneYearOfData &&
         <>
           <div className="mb-4">
-            <YearChart year={2020} data={oneYearOfData} />
+            <YearChart year={2020} data={oneYearOfData} statistic={query.statistic} />
           </div>
           <div className="mb-4">
             Selected Frame: {selectedFrame}
