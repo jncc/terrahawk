@@ -362,6 +362,7 @@ App services workstream:
 Backlog
 -------
 
+- [ ] Update all `useStateSelector` usages to select only the variables needed
 - [ ] Check OS base map licence and attribution statement
   - Europa, like gov.scot
   - Use vector tiles https://labs.os.uk/public/os-data-hub-examples/os-vector-tile-api/vts-example-custom-style
