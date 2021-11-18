@@ -13,7 +13,7 @@ import proj4 from 'proj4'
 export let Thumbnail = (props: {frame: string, load: boolean}) => {
 
   let dispatch = useStateDispatcher()
-  let { selectedPolygon, selectedFrame, hoveredFrame } = useStateSelector(s => s.mapper )
+  let { selectedPolygon, selectedFrame, hoveredFrame, } = useStateSelector(s => s.mapper )
 
   let [loaded, setLoaded] = useState(false)
 
@@ -83,8 +83,12 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
   let [src, setSrc] = useState('')
 
   useEffect(() => {
-    getThumbnail(props.frame, polygon, thumbnailConfig.falseColour).then((src: string) => setSrc(src))
-  }, [props.frame, selectedPolygon!.polyid, thumbnailConfig.falseColour.text])  
+    if (props.load && !loaded) {
+      getThumbnail(props.frame, polygon, thumbnailConfig.falseColour).then((src: string) => setSrc(src))
+      setLoaded(true)
+    }
+  // }, [props.frame, selectedPolygon!.polyid, thumbnailConfig.falseColour.text])  
+  }, [loaded, props.load])  
 
   return (
     <div
