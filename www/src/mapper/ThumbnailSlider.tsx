@@ -24,7 +24,7 @@ export let ThumbnailSlider = (props: {frames: string[]}) => {
   return (
     <div className="flex gap-2 overflow-y-auto">
       {
-        props.frames.map((f, i) => <Thumbnail frame={f} load={i <= 5} />)
+        props.frames.map((f, i) => <Thumbnail key={f} frame={f} load={i <= 5} />)
       }
     </div>
   )

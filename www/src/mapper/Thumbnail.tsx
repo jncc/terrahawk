@@ -71,7 +71,7 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
   
     let pointsString = ''
 
-    console.log(polygonRing)
+    // console.log(polygonRing)
     polygonRing.forEach(coords => {
       let pixelCoords = convertOsgbToPixelCoords(coords, osgbScale, pixelScale)
       pointsString += `${pixelCoords[0]},${pixelCoords[1]} `
@@ -80,7 +80,7 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
     polygonRings.push(pointsString)
   })
 
-  let [src, setSrc] = useState('')
+  let [src, setSrc] = useState('http://placekitten.com/100/100')
 
   useEffect(() => {
     if (props.load && !loaded) {
@@ -88,21 +88,17 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
       setLoaded(true)
     }
   // }, [props.frame, selectedPolygon!.polyid, thumbnailConfig.falseColour.text])  
-  }, [loaded, props.load])  
+  }, [loaded, props.load])
 
   return (
     <div
-      key={props.frame}
+      className={`flex-none border-4 p-1 cursor-pointer ${borderColor}`}
       onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
       onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
       onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
     >
-      <div style={{
-        position: 'relative',
-        display: 'inline-block',
-        margin: '1px'}}>
-        <img key={props.frame} src={src} width={thumbnailWidth} height={thumbnailHeight} />
-        <svg style={{
+      <img src={src} height={thumbnailHeight} width={thumbnailWidth} />
+        {/* <svg style={{
           position: 'absolute',
           top: 0,
           left: 0}}>
@@ -113,11 +109,7 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
                 style={{stroke: 'black', strokeWidth: '1', fill: 'transparent'}} />
             })
           }
-        </svg>
-        
-      </div>
-      
-
+        </svg> */}
     </div>
   )
 }
