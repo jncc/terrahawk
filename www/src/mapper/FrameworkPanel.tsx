@@ -13,7 +13,6 @@ export let FrameworkPanel = () => {
   return (
     <div className="z-abovemap absolute bottom-6 left-6 animate-delayedfadein text-left" >
 
-
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2" >
 
         <div className="flex items-center space-x-3">

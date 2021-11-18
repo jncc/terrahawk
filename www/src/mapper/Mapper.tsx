@@ -12,6 +12,7 @@ import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 import { PolygonPanel } from './PolygonPanel'
 import { GazetteerPanel } from './GazetteerPanel'
+import { ThumbnailPanel } from './ThumbnailPanel'
 
 export let Mapper = () => {
 
@@ -24,11 +25,11 @@ export let Mapper = () => {
   
   return <>
     {makeScreenreaderNotice()}
-    {/* hide the small screen warning on large screen */} 
+    {/* on a large screen, hide the small screen warning */} 
     <div className="xl:hidden">
       {makeSmallScreenWarning()}
     </div>
-    {/* hide the mapper components unless on large screen */} 
+    {/* unless on large screen, hide the mapper components */} 
     <div className="hidden xl:block">
       {!zoomedEnoughToShowPolygons && makePleaseZoomInMessage()}
       <GazetteerPanel />
@@ -36,6 +37,7 @@ export let Mapper = () => {
       <FrameworkPanel />
       <PolygonPanel />
       <ControlsPanel />
+      {/* <ThumbnailPanel /> */}
       <LeafletMap />
     </div>
   </>

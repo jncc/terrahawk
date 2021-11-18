@@ -11,12 +11,14 @@ import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
 import { AnyAction, Dispatch } from '@reduxjs/toolkit'
+import 'leaflet-active-area'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 
 let map: L.Map
 let bboxRectangle: L.Rectangle
 let polyLayerGroup: L.LayerGroup<CustomPolygonLayer>
+let selectedPolyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 
 export let LeafletMap = () => {
 
@@ -47,7 +49,8 @@ export let LeafletMap = () => {
     L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
 
     // polygon layer group
-    polyLayerGroup = L.layerGroup([])
+    polyLayerGroup = L.layerGroup()
+    selectedPolyLayerGroup = L.layerGroup().addTo(map)
 
     // listen for zoom changes
     map.on('zoomend', () => {
@@ -147,20 +150,36 @@ export let LeafletMap = () => {
   // react to changes of `showPolygons` and `zoomedEnoughToShowPolygons`
   useEffect(() => {
     if (state.showPolygons && state.zoomedEnoughToShowPolygons)
-      // showing ~1000 polygons causes a noticeable lag in the React UI, so add a short delay
+      // showing ~1000 polygons causes a noticeable lag in the UI, so add a short delay
       setTimeout(() => polyLayerGroup.addTo(map), 50)
     else
       setTimeout(() => polyLayerGroup.remove(), 50)
     
   }, [state.showPolygons, state.zoomedEnoughToShowPolygons])
 
+  // listen for selection / deselection of polygon
   useEffect(() => {
-    let offset = map.getSize().x * 0.14
-    if (!state.previousSelectedPolygon && state.selectedPolygon)
-      map.panBy(new L.Point(offset, 0), {animate: true})
-    if (state.previousSelectedPolygon && !state.selectedPolygon)
-      map.panBy(new L.Point(-offset, 0), {animate: true})
-    
+    selectedPolyLayerGroup.clearLayers()
+    if (state.selectedPolygon) {
+      let layer = L.geoJSON(state.selectedPolygon.geojson, {style: { weight: 5}})
+
+      layer.addTo(selectedPolyLayerGroup)
+      // let layer = polyLayerGroup.getLayers().find((l: any) => state.selectedPolygon?.polyid === l.polyid)
+
+    }
+    if (!state.previousSelectedPolygon && state.selectedPolygon) {
+      // reduce the "active area" https://github.com/Mappy/Leaflet-active-area
+      // and pan to the center of the newly-selected polygon
+      // @ts-expect-error
+      map.setActiveArea('leaflet-active-area-when-polygon-selected')
+      let layer = L.geoJSON(state.selectedPolygon.geojson, {style: {weight: 5}})
+      map.panTo(layer.getBounds().getCenter())
+    }
+    if (state.previousSelectedPolygon && !state.selectedPolygon) {
+      // restore the "active area" (to full screen) with an animation (true, true)
+      // @ts-expect-error
+      map.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
+    }
   }, [state.selectedPolygon, state.previousSelectedPolygon])
   
     // react has nothing to do with the leaflet map
