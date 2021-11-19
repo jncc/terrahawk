@@ -1,8 +1,8 @@
 import { fromUrl } from 'geotiff';
 import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty';
-import { async } from 'regenerator-runtime';
+import proj4 from 'proj4'
 
-import { Polygon, Scale, ThumbnailType, ColourScale } from './types'
+import { Scale, ThumbnailType, ColourScale } from './types'
 import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailConfig } from './config'
 import { getArdUrl, getIndexUrl } from './urlHelper'
 import { getCacheItem , setCacheItem } from './cacheHelper'
@@ -15,59 +15,39 @@ const redBand = 2
 const vv = 0
 const vh = 1
 
-export function getPolygonSVGDefinition(polygon : Polygon, width : number, height : number) : Element {
-  // currently returns the whole element but could just return the point values
-  let svgNS = 'http://www.w3.org/2000/svg'
-  let svgElement = document.createElementNS(svgNS, 'svg');
-  svgElement.setAttribute('style', 'display:none')
+export function getPolygonOutline(coordinates : number[][][][], width : number, height : number) : string[] {
+  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
 
-  let defsElement = document.createElement('defs')
-
-  let symbolElement = document.createElementNS(svgNS, 'symbol')
-  symbolElement.id = `polygon_outline_${polygon['polygonId']}`
-
+  let osgbScale = {
+    xMin: thumbnailBbox[0],
+    xMax: thumbnailBbox[1],
+    yMin: thumbnailBbox[2],
+    yMax: thumbnailBbox[3]
+  }
   
-  polygon['coordinates'].forEach(polygonCoordSet => {
-    let thumbnailBbox = getBoundingBoxWithBuffer(polygonCoordSet[0], thumbnailBuffer) // first set of coords is always the outer ring so use that to get the bbox
-    let osgbScale = {
-      xMin: thumbnailBbox[0],
-      xMax: thumbnailBbox[1],
-      yMin: thumbnailBbox[2],
-      yMax: thumbnailBbox[3]
+  let polygonRings : string[] = []
+  let singlePolygonCoords = coordinates[0] // assume we only have one polygon in this geojson
+  singlePolygonCoords.forEach(polygonRing => {
+    let pixelScale = {
+      xMin: 0,
+      xMax: width,
+      yMin: 0,
+      yMax: height
     }
 
-    polygonCoordSet.forEach(polygonRing => {
-      let polygonElement = document.createElementNS(svgNS, 'polygon')
-      polygonElement.setAttribute('stroke', 'black')
-      polygonElement.setAttribute('fill', 'transparent')
-      polygonElement.setAttribute('stroke-width', '1')
-
-      let pixelScale = {
-        xMin: 0,
-        xMax: width,
-        yMin: 0,
-        yMax: height
-      }
-    
-      let pointsString = ''
-      polygonRing.forEach(coords => {
-        let pixelCoords = convertOsgbToPixelCoords(coords, osgbScale, pixelScale)
-        pointsString += `${pixelCoords[0]},${pixelCoords[1]} `
-      })
-      polygonElement.setAttribute('points', pointsString)
-    
-      symbolElement.appendChild(polygonElement)
+    let pointsString = ''
+    polygonRing.forEach(coords => {
+      let pixelCoords = convertOsgbToPixelCoords(coords, osgbScale, pixelScale)
+      pointsString += `${pixelCoords[0]},${pixelCoords[1]} `
     })
+
+    polygonRings.push(pointsString)
   })
 
-  defsElement.appendChild(symbolElement)
-  svgElement.appendChild(defsElement)
-
-  return svgElement
+  return polygonRings
 }
 
-export async function getThumbnail(frameId : string, polygon : Polygon, type : ThumbnailType) : Promise<string> {
-  let polygonId = polygon['polygonId']
+export async function getThumbnail(frameId : string, polygonId : string, coordinates: number[][][][], type : ThumbnailType) : Promise<string> {
   let thumbnailString = ''
   let thumbnailKey = `thumbs_${frameId}_${polygonId}_${type.text}`
 
@@ -79,11 +59,11 @@ export async function getThumbnail(frameId : string, polygon : Polygon, type : T
       let url = getArdUrl(frameId, ardUrlBase)
       let satellite = frameId.substring(0, 2).toLocaleLowerCase()
 
-      thumbnailString = await generateRGBThumbnail(url, polygon, satellite)
+      thumbnailString = await generateRGBThumbnail(url, coordinates, satellite)
     } else if (type.colourScale !== 'rgb' && type.domain) {
       let url = getIndexUrl(frameId, indicesUrlBase, type.text)
 
-      thumbnailString = await generateIndexThumbnail(url, polygon, type.domain, type.colourScale)
+      thumbnailString = await generateIndexThumbnail(url, coordinates, type.domain, type.colourScale)
     } else {
       console.error('Colour scale not of the right type')
     }
@@ -93,8 +73,31 @@ export async function getThumbnail(frameId : string, polygon : Polygon, type : T
   return thumbnailString
 }
 
-async function generateRGBThumbnail(url : string, polygon : Polygon, satellite : string) : Promise<string> {
-  let thumbnailBbox = getBoundingBoxWithBuffer(polygon['coordinates'][0][0], thumbnailBuffer)
+export function getReprojectedCoords(coordinates : any, fromProjection : string, toProjection : string) : any {
+  let reprojectedCoordinates = []
+  for (let a = 0; a < coordinates.length; a++) {
+    let innerRings = coordinates[a]
+
+    let reprojectedInnerRings = []
+    for (let b = 0; b < innerRings.length; b++) {
+      let coordPairs = innerRings[b]
+      let reprojectedCoordPairs = []
+      for (let c = 0; c < coordPairs.length; c++) {
+        let coordPair = coordPairs[c]
+        let reprojectedCoord = proj4(fromProjection, toProjection, coordPair)
+
+        reprojectedCoordPairs.push(reprojectedCoord)
+      }
+      reprojectedInnerRings.push(reprojectedCoordPairs)
+    }
+    reprojectedCoordinates.push(reprojectedInnerRings)
+  }
+
+  return reprojectedCoordinates
+}
+
+async function generateRGBThumbnail(url : string, coordinates : number[][][][], satellite : string) : Promise<string> {
+  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
@@ -117,8 +120,8 @@ async function generateRGBThumbnail(url : string, polygon : Polygon, satellite :
   return drawRGBImage(data, satellite)
 }
 
-async function generateIndexThumbnail(url : string, polygon : Polygon, domain : number[], colourScaleName : string) : Promise<string> {
-  let thumbnailBbox = getBoundingBoxWithBuffer(polygon['coordinates'][0][0], thumbnailBuffer)
+async function generateIndexThumbnail(url : string, coordinates : number[][][][], domain : number[], colourScaleName : string) : Promise<string> {
+  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
@@ -242,7 +245,7 @@ function stretchColour(sourceColourScale : number[], targetColourScale : number[
   return stretchedValue
 }
 
-export function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixelScale : Scale) {
+function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixelScale : Scale) {
   let osgbXRange = osgbScale.xMax - osgbScale.xMin
   let osgbYRange = osgbScale.yMax - osgbScale.yMin
   let pixelXRange = pixelScale.xMax - pixelScale.xMin
@@ -253,9 +256,11 @@ export function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scal
   return pixelCoords
 }
 
-export function getBoundingBoxWithBuffer(coordPairs : number[][], bufferPercentage : number) : number[] {
+function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number) : number[] {
   let eastings : number[] = []
   let northings : number[] = []
+
+  let coordPairs = coordinates[0][0] // assume there's only one polygon, then use just the outer ring to calculate the bbox
   coordPairs.forEach(coordPair => {
     eastings.push(coordPair[0])
     northings.push(coordPair[1])

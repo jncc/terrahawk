@@ -1,8 +1,3 @@
-export type Polygon = {
-  polygonId: string,
-  coordinates: number[][][][]
-}
-
 export type Scale = {
   xMax: number,
   xMin: number,

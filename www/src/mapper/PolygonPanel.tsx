@@ -10,6 +10,7 @@ import { maxBy } from 'lodash'
 import { ThumbnailSlider } from './ThumbnailSlider'
 import { getFramesFromFrameField } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
+import { Thumbnail } from './Thumbnail'
 
 export let PolygonPanel = () => {
 
@@ -61,6 +62,10 @@ export let PolygonPanel = () => {
             Selected Frame: {selectedFrame}
           </div>
           <ThumbnailSlider frames={oneYearOfData.flatMap(d => getFramesFromFrameField(d.frame))} />
+          {selectedFrame &&
+          <Thumbnail key={selectedFrame} frame={selectedFrame} height={500} width={500} showOutline={false} load={true}></Thumbnail>
+          }
+          
         </>
         }
 
