@@ -6,7 +6,8 @@ import LRUCache from 'lru-cache'
 
 import { RootState } from '../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
-import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery } from './types'
+import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery, MonthStats
+       } from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 // polygons
@@ -33,7 +34,7 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
 // choropleth
 // ----------
 
-let cache = new LRUCache<string, ChoroplethItem | ChoroplethNone>({ max: 10000 })
+let choroplethCache = new LRUCache<string, ChoroplethItem | ChoroplethNone>({ max: 10000 })
 
 /// Get *only* the key params (from a potentially wider object!)
 let pickKeyParams = (params: ChoroplethKeyParams): ChoroplethKeyParams =>
@@ -50,7 +51,7 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   let cached = state.polygons.polys
     .map(p => {
       let key = makeCacheKey(p.polyid, state.query)
-      return cache.get(key)
+      return choroplethCache.get(key)
     })
     .filter(item => item !== undefined) as (ChoroplethItem | ChoroplethNone)[]
 
@@ -71,7 +72,7 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
       // cache the items
       allItems.forEach(c => {
         let key = makeCacheKey(c.polyid, params)
-        cache.set(key, c)
+        choroplethCache.set(key, c)
       })
       return { items: allItems, params: pickKeyParams(params) }
     })
@@ -82,13 +83,15 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   return merge(cached$, needed.length ? api$ : EMPTY)
 }
 
-// polygon
-// -------
+// polygon stats
+// -------------
+
+let statsCache = new LRUCache<string, MonthStats>({ max: 100 })
 
 export let fetchPolygon = (state: RootState['mapper']): Observable<any> => {
 
-  if (!state.selectedPolygon)
-    throw 'Shouldn\'t get here - no polygon selected'
+if (!state.selectedPolygon)
+  throw 'Shouldn\'t get here - no polygon selected'
 
   let params = {
     framework:     state.query.framework,
@@ -96,10 +99,22 @@ export let fetchPolygon = (state: RootState['mapper']): Observable<any> => {
     polyid:        state.selectedPolygon.polyid,
     polyPartition: state.selectedPolygon.partition,
   }
-  
-  return api('polygon', params).pipe(
-    map(r =>( r.response))
-  )
+
+  let cacheKey = `${Object.values(params).join(':')}`
+
+  let cached = statsCache.get(cacheKey)
+
+  if (cached) {
+    return of(cached)
+  } else {
+    return api('polygon', params).pipe(
+      map(r => {
+        let result =  r.response
+        statsCache.set(cacheKey, result)
+        return result
+      })
+    )
+  }
 }
 
 let api = (endpoint: string, params: any) => {
