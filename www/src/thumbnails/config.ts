@@ -1,12 +1,20 @@
 export const ardUrlBase = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/data'
 export const indicesUrlBase = 'https://gws-access.jasmin.ac.uk/public/defra_eo/test/change-detection/indices'
 
-export const thumbnailCacheLimit = 100
-export const thumbnailBuffer = 0.1 // percent to add around the edge
+interface Dictionary<T> {
+  [Key: string]: T;
+}
 
-export const thumbnailConfig = {
+export const projections : Dictionary<string> = {
+  osgb: '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs',
+  tm65: '+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=1.000035 +x_0=200000 +y_0=250000 +ellps=mod_airy +towgs84=482.5,-130.6,564.6,-1.042,-0.214,-0.631,8.15 +units=m +no_defs'
+}
+
+export const thumbnailCacheLimit = 50
+export const thumbnailBuffer = 0.05 // percent to add around the edge
+
+export const thumbnailConfig : Dictionary<any> = {
   trueColour: {
-    text: 'trueColour',
     rgbDomains: {
       red: [0, 256],
       green: [0, 256],
@@ -15,7 +23,6 @@ export const thumbnailConfig = {
     colourScale: 'rgb'
   },
   falseColour: {
-    text: 'falseColour',
     rgbDomains: {
       red: [-20, 20],
       green: [-30, 20],
@@ -24,37 +31,30 @@ export const thumbnailConfig = {
     colourScale: 'rgb'
   },
   rvi: {
-    text: 'RVI',
     domain: [1, 1.6],
     colourScale: 'rvi'
   },
   rviv: {
-    text: 'RVIv',
     domain: [0, 4],
     colourScale: 'rviv'
   },
   ndmi: {
-    text: 'NDMI',
     domain: [-1, 1],
     colourScale: 'ndmi'
   },
   ndvi: {
-    text: 'NDVI',
     domain: [-1, 1],
     colourScale: 'ndvi'
   },
   ndwi: {
-    text: 'NDWI',
     domain: [-1, 1],
     colourScale: 'ndwi'
   },
   evi: {
-    text: 'EVI',
     domain: [-2, 3],
     colourScale: 'evi'
   },
   nbr: {
-    text: 'NBR',
     domain: [-1, 1],
     colourScale: 'nbr'
   }

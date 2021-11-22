@@ -3,7 +3,7 @@ import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty';
 import proj4 from 'proj4'
 
 import { Scale, ThumbnailType, ColourScale } from './types'
-import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailConfig } from './config'
+import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailConfig, projections } from './config'
 import { getArdUrl, getIndexUrl } from './urlHelper'
 import { getCacheItem , setCacheItem } from './cacheHelper'
 
@@ -47,53 +47,69 @@ export function getPolygonOutline(coordinates : number[][][][], width : number, 
   return polygonRings
 }
 
-export async function getThumbnail(frameId : string, polygonId : string, coordinates: number[][][][], type : ThumbnailType) : Promise<string> {
+export async function getThumbnail(frameId : string, polygonId : string, coordinates : number[][][][], thumbnailType : string, useCache : boolean = true) : Promise<string> {
   let thumbnailString = ''
-  let thumbnailKey = `thumbs_${frameId}_${polygonId}_${type.text}`
-
-  let cachedValue = getCacheItem(thumbnailKey)
-  if (cachedValue && cachedValue != null) {
-    thumbnailString = cachedValue
-  } else {
-    if (type.colourScale == 'rgb' && type.rgbDomains) {
-      let url = getArdUrl(frameId, ardUrlBase)
-      let satellite = frameId.substring(0, 2).toLocaleLowerCase()
-
-      thumbnailString = await generateRGBThumbnail(url, coordinates, satellite)
-    } else if (type.colourScale !== 'rgb' && type.domain) {
-      let url = getIndexUrl(frameId, indicesUrlBase, type.text)
-
-      thumbnailString = await generateIndexThumbnail(url, coordinates, type.domain, type.colourScale)
+  let type = thumbnailConfig[thumbnailType]
+  
+  if (useCache) {
+    let thumbnailKey = `thumbs_${frameId}_${polygonId}_${type.text}`
+    let cachedValue = getCacheItem(thumbnailKey)
+    if (cachedValue && cachedValue != null) {
+      thumbnailString = cachedValue
     } else {
-      console.error('Colour scale not of the right type')
+      thumbnailString = await getThumbnailString(frameId, coordinates, type)
+      setCacheItem(thumbnailKey, thumbnailString)
     }
-    setCacheItem(thumbnailKey, thumbnailString)
+  } else {
+    thumbnailString = await getThumbnailString(frameId, coordinates, type)
   }
 
   return thumbnailString
 }
 
-export function getReprojectedCoords(coordinates : any, fromProjection : string, toProjection : string) : any {
+export function getReprojectedCoordinates(coordinates : number[][][][], toProjection : string, fromProjection : string = 'WGS84') : any {
+  let targetProjDefinition = projections[toProjection.toLowerCase()]
+  
   let reprojectedCoordinates = []
   for (let a = 0; a < coordinates.length; a++) {
-    let innerRings = coordinates[a]
+    let polygonRings = coordinates[a]
 
-    let reprojectedInnerRings = []
-    for (let b = 0; b < innerRings.length; b++) {
-      let coordPairs = innerRings[b]
+    let reprojectedRings = []
+    for (let b = 0; b < polygonRings.length; b++) {
+      let coordPairs = polygonRings[b]
+
       let reprojectedCoordPairs = []
       for (let c = 0; c < coordPairs.length; c++) {
         let coordPair = coordPairs[c]
-        let reprojectedCoord = proj4(fromProjection, toProjection, coordPair)
+        let reprojectedCoord = proj4(fromProjection, targetProjDefinition, coordPair)
 
         reprojectedCoordPairs.push(reprojectedCoord)
       }
-      reprojectedInnerRings.push(reprojectedCoordPairs)
+      reprojectedRings.push(reprojectedCoordPairs)
     }
-    reprojectedCoordinates.push(reprojectedInnerRings)
+    reprojectedCoordinates.push(reprojectedRings)
   }
 
   return reprojectedCoordinates
+}
+
+async function getThumbnailString(frameId : string, coordinates: number[][][][], type : ThumbnailType) : Promise<string> {
+  let thumbnailString = ''
+
+  if (type.colourScale == 'rgb' && type.rgbDomains) {
+    let url = getArdUrl(frameId, ardUrlBase)
+    let satellite = frameId.substring(0, 2).toLocaleLowerCase()
+
+    thumbnailString = await generateRGBThumbnail(url, coordinates, satellite)
+  } else if (type.colourScale !== 'rgb' && type.domain) {
+    let url = getIndexUrl(frameId, indicesUrlBase, type.text)
+
+    thumbnailString = await generateIndexThumbnail(url, coordinates, type.domain, type.colourScale)
+  } else {
+    console.error('Colour scale not of the right type')
+  }
+
+  return thumbnailString
 }
 
 async function generateRGBThumbnail(url : string, coordinates : number[][][][], satellite : string) : Promise<string> {

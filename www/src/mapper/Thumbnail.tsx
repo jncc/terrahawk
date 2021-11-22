@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 
-import { getPolygonOutline, getThumbnail, getReprojectedCoords } from '../thumbnails/thumbnailGenerator'
-import { thumbnailConfig } from '../thumbnails/config'
+import { getPolygonOutline, getThumbnail, getReprojectedCoordinates } from '../thumbnails/thumbnailGenerator'
 
 export let Thumbnail = (props: {frame: string, height: number, width: number, showOutline: boolean, load: boolean}) => {
 
@@ -20,7 +19,7 @@ export let Thumbnail = (props: {frame: string, height: number, width: number, sh
 
   useEffect(() => {
     if (props.load && !loaded && selectedPolygon) {
-      getThumbnail(props.frame, selectedPolygon.polyid, reprojectedCoords, thumbnailConfig.trueColour).then((src: string) => setSrc(src))
+      getThumbnail(props.frame, selectedPolygon.polyid, reprojectedCoords, 'trueColour').then((src: string) => setSrc(src))
       setLoaded(true)
     }
   }, [loaded, props.load])
@@ -31,9 +30,7 @@ export let Thumbnail = (props: {frame: string, height: number, width: number, sh
                     hovered ?  'border-gray-300' :
                                'border-transparent'
 
-  let fromProjection = 'WGS84'
-  let toProjection = '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs' // epsg:27700
-  let reprojectedCoords = getReprojectedCoords(selectedPolygon.geojson.coordinates, fromProjection, toProjection)
+  let reprojectedCoords = getReprojectedCoordinates(selectedPolygon.geojson.coordinates, 'osgb')
 
   let polygonRings : string[] = []
   if (props.showOutline) {
