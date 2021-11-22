@@ -57,9 +57,9 @@ export let PolygonPanel = () => {
           <div className="mb-4">
             <YearChart year={2020} data={oneYearOfData} statistic={query.statistic} />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             Selected Frame: {selectedFrame}
-          </div>
+          </div> */}
           <ThumbnailSlider frames={oneYearOfData.flatMap(d => getFramesFromFrameField(d.frame))} />
         </>
         }

@@ -20,14 +20,15 @@ export let Thumbnail = (props: {frame: string, load: boolean}) => {
   return (
     <div
       key={props.frame}
-      className={`border-4 w-40 p-4 cursor-pointer ${borderColor}`}
+      className={`border-4 p-2 cursor-pointer ${borderColor}`}
       onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
       onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
       onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
     >
-      <div className="overflow-hidden">
+      {/* <div className="overflow-hidden">
         {props.frame}
-      </div>
+      </div> */}
+      <img src="http://placekitten.com/100/100" />      
     </div>
   )
 }
