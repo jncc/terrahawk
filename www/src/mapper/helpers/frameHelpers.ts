@@ -1,10 +1,10 @@
 
 import { trimAny } from '../../utility/stringUtility'
-import { SimpleDate } from '../types'
+import { MonthStats, SimpleDate } from '../types'
 
 /// Date field in the stats data is an aggregated string from Spark SQL's collect_list
 /// e.g. `[20210414, 20210421, 20210428]`
-export let getDatesFromDateField = (value: string): SimpleDate[] => {
+let getDatesFromDateField = (value: string): SimpleDate[] => {
   let strings = trimAny(value, ['[', ']']).split(', ')
   return strings.map(s => {
     return ({
@@ -17,6 +17,13 @@ export let getDatesFromDateField = (value: string): SimpleDate[] => {
 
 /// Frame field in the stats data is an aggregated string from Spark SQL's collect_list
 /// e.g. `[value1, value2, value3]`
-export let getFramesFromFrameField = (value: string): string[] => {
+let getFramesFromFrameField = (value: string): string[] => {
   return trimAny(value, ['[', ']']).split(', ')
+}
+
+/// Get the pairs of {frame, date} in the stats
+export let getFramesWithDate = (stats: MonthStats[]) => {
+  let allFrames = stats.flatMap(d => getFramesFromFrameField(d.frame))
+  let allDates = stats.flatMap(d => getDatesFromDateField(d.date))
+  return allFrames.map((f, i) => ({frame: f, date: allDates[i]}))
 }

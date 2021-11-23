@@ -2,13 +2,13 @@
 import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getDatesFromDateField, getFramesFromFrameField } from './helpers/frameHelpers'
+import { getFramesWithDate } from './helpers/frameHelpers'
 import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
 
-import { MonthStats, Statistic, StatValues } from './types'
+import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
 
-export let YearChart = (props: {year: number, data: MonthStats[], statistic: Statistic}) => {
+export let YearChart = (props: {year: number, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
     let dataForPeriod = props.data.find(d => d.month === value)
@@ -32,8 +32,8 @@ export let YearChart = (props: {year: number, data: MonthStats[], statistic: Sta
     return {
       x: label,
       y: 0,
-      frameCount: dataForPeriod ? getFramesFromFrameField(dataForPeriod.frame).length : null,
-      firstFrame: dataForPeriod ? getFramesFromFrameField(dataForPeriod.frame)[0] : null,
+      frameCount: dataForPeriod ? getFramesWithDate([dataForPeriod]).length : null,
+      firstFrame: dataForPeriod ? getFramesWithDate([dataForPeriod])[0].frame : null,
     }
   })
 
@@ -120,7 +120,8 @@ let getPointStyleForZScore = (zScore: number) => {
 let DateScatterPoint = ({ x, y, datum }: any) => {
 
   let dispatch = useStateDispatcher()
-  let { selectedFrame, hoveredFrame } = useStateSelector(s => s.mapper )
+  let selectedFrame = useStateSelector(s => s.mapper.selectedFrame)
+  let hoveredFrame = useStateSelector(s => s.mapper.hoveredFrame)
 
   let frame = datum.firstFrame
 

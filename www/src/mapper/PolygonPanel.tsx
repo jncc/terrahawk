@@ -1,34 +1,30 @@
 
 import React from 'react'
-import { InformationCircleIcon, LocationMarkerIcon, XIcon } from '@heroicons/react/outline'
+import { LocationMarkerIcon, XIcon } from '@heroicons/react/outline'
 import { ExclamationIcon } from '@heroicons/react/solid'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
-import { MonthStats } from './types'
+import { MonthStats, Statistic } from './types'
 import { maxBy } from 'lodash'
-import { ThumbnailSlider } from './ThumbnailSlider'
-import { getFramesFromFrameField } from './helpers/frameHelpers'
+import { getFramesWithDate } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
+import { ThumbSlider } from './ThumbSlider'
+import { last } from '../utility/arrayUtility'
 
 export let PolygonPanel = () => {
 
   let dispatch = useStateDispatcher()
-  let {selectedPolygon, selectedPolygonStats, selectedFrame, zoomedEnoughToShowPolygons, query} = useStateSelector(s => s.mapper)
+  let {selectedPolygon, selectedPolygonStats, zoomedEnoughToShowPolygons, query} = useStateSelector(s => s.mapper)
+
+  useHotkeys('esc', () => { dispatch(mapperActions.selectPolygon(undefined)) })
 
   if (!selectedPolygon || !zoomedEnoughToShowPolygons)
     return null
-  // console.log('in PolygonPanel')
-  // if (selectedPolygonStats) {
-  //   console.log('total frames ' + selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame)).length)
-  //   console.log('total distinct frames ' + new Set(selectedPolygonStats.flatMap(d => getFramesFromFrameField(d.frame))).size)
-  // }
-
-  // group by year and pass in one year per chart component
-  let oneYearOfData = selectedPolygonStats ? selectedPolygonStats.filter((d: any) => d.year === '2020') : undefined
 
   return (
-    <div className="z-abovemap absolute top-6 right-6 bottom-36 text-left" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-6 text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[45rem] h-full" >
         
         <div className="flex items-center space-x-3 mb-3">
@@ -40,32 +36,42 @@ export let PolygonPanel = () => {
             </div>
           </div>
           <div className="flex-1"></div>
-          {selectedPolygonStats &&
-          <div className="">
+          <div>
             {makeComparatorSummary(selectedPolygonStats)}
           </div>
-          }
-          <div className="">
-            <button onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
+          <div>
+            <button
+              className="custom-ring rounded-xl"
+              // start here when this panel opens...?
+              tabIndex={1}
+              onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
               <XIcon className="h-7 w-7 text-gray-400"/>
             </button>
           </div>
         </div>
-
-        {oneYearOfData &&
-        <>
-          <div className="mb-4">
-            <YearChart year={2020} data={oneYearOfData} statistic={query.statistic} />
-          </div>
-          <div className="mb-4">
-            Selected Frame: {selectedFrame}
-          </div>
-          <ThumbnailSlider frames={oneYearOfData.flatMap(d => getFramesFromFrameField(d.frame))} />
-        </>
-        }
+        {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query.statistic)}
 
       </div>
     </div>
+  )
+}
+
+let makeLoadedPolygonDetails = (stats: MonthStats[], statistic: Statistic) => {
+
+  // TODO: group by year and pass in one year per chart component...
+
+  let framesWithDate = getFramesWithDate(stats)
+  let mostRecentYear = last(framesWithDate).date.year
+  let oneYearOfStats = stats.filter(d => d.year === mostRecentYear.toString())
+  let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === mostRecentYear)
+
+  return (
+    <>
+      <div className="mb-4">
+        <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
+      </div>
+      <ThumbSlider framesWithDate={oneYearOfFramesWithDate} />
+    </>
   )
 }
 
