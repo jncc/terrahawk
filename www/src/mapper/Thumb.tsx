@@ -21,22 +21,24 @@ export let Thumb = (props: {frame: string, date: SimpleDate}) => {
 
   let div = useRef<HTMLDivElement>(null)
 
-  // set load to true if the div becomes visible
+  // set load to true when the div becomes visible
   useEffect(() => {
     if (div.current) {
-      setTimeout(() => {
-        if (div.current) {
-          new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-              if (e.isIntersecting) {
-                setLoad(true)
-              }
-            })
-          }).observe(div.current)
-        }
-      }, 300)
+      new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting)
+            setLoad(true)
+        })
+      }).observe(div.current)
     }
   }, [div.current])
+
+  // on first mount, show the selected thumb with no animation
+  useEffect(() => {
+    if (selected && div.current) {
+      div.current.scrollIntoView({inline: 'center'})
+    }
+  }, [])
 
   // when this thumb is selected, use the native browser scrollIntoView method
   useEffect(() => {
@@ -49,19 +51,28 @@ export let Thumb = (props: {frame: string, date: SimpleDate}) => {
     <div
       ref={div}
       key={props.frame}
-      tabIndex={0}
-      className={`flex-none custom-ring p-1.5 cursor-pointer rounded-xl ${bgColor}`}
+      className="flex-none rounded-xl pb-0.5"
       onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
       onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
-      onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
     >
-      <img src="http://placekitten.com/100/100" height={100} width={100}
-        className="rounded-lg"
-      />
-      <div>
+      <button
+        className={`custom-ring p-1.5 cursor-pointer rounded-xl mb-0.5 ${bgColor}`}
+        tabIndex={0}
+        onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
+      >
+        <img
+          src="http://placekitten.com/100/100"
+          height={100}
+          width={100}
+          className="rounded-lg"
+        />
+      </button>
+
+      <div className="text-center text-xs ">
         {getDisplayDate(props.date)}
-      {load ? 'load' : ''}
+        {/* {load ? '🍔' : ''} */}
       </div>
+
     </div>
   )
 }

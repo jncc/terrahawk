@@ -33,7 +33,7 @@ export let YearChart = (props: {year: number, data: MonthStats[], framesWithDate
       x: label,
       y: 0,
       frameCount: dataForPeriod ? getFramesWithDate([dataForPeriod]).length : null,
-      firstFrame: dataForPeriod ? getFramesWithDate([dataForPeriod])[0] : null,
+      firstFrame: dataForPeriod ? getFramesWithDate([dataForPeriod])[0].frame : null,
     }
   })
 
