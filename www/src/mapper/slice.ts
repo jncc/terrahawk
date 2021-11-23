@@ -3,6 +3,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../frameworks'
+import { last } from '../utility/arrayUtility'
+import { getFramesWithDate } from './helpers/frameHelpers'
 
 let defaultFramework = frameworks['liveng0']
 let defaultQuery = defaultFramework.defaultQuery
@@ -76,8 +78,12 @@ let slice = createSlice({
       state.selectedPolygonStats = undefined
       state.selectedFrame = undefined
     },
-    fetchPolygonCompleted: (state, a: PayloadAction<any>) => {
-      state.selectedPolygonStats = a.payload
+    fetchPolygonCompleted: (state, a: PayloadAction<MonthStats[] | undefined>) => {
+      let stats = a.payload
+      state.selectedPolygonStats = stats
+      if (stats && stats.length) {
+        state.selectedFrame = last(getFramesWithDate(stats)).frame
+      }
     },
     selectFrame: (state, a: PayloadAction<string | undefined>) => {
       state.selectedFrame = a.payload

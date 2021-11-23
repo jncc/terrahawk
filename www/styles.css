@@ -15,7 +15,7 @@
 
 @layer components {
   .custom-ring {
-    @apply focus:outline-none focus-visible:ring focus-visible:ring-blue-500
+    @apply focus:outline-none focus-visible:ring focus-visible:ring-green
   }
   .little-label-text {
     @apply text-gray-400 text-sm font-semibold

@@ -11,11 +11,10 @@ module.exports = {
     extend: {
       colors: {
         jncc:    '#2d7a29',
-        urgent:  '#da4167',
-        light:   '#e0e0e0',
-        dark:    '#22031f',
-        sparkle: '#3a606e',
-        rose: colors.rose,
+        // https://clrs.cc/
+        green:   '#2ECC40',
+        blue:    '#0074D9',
+        fuchsia: '#F012BE',
       },
       fontFamily: {
         // sans: ['Poppins', ...defaultTheme.fontFamily.sans],
