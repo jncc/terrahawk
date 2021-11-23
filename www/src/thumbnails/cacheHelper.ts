@@ -27,7 +27,7 @@ export function setCacheItem(key : string, value : string) {
     sessionStorage.setItem(key, value)
   } catch (error) {
     // don't stop thumbnails loading if caching fails
-    console.error(error)
+    // console.error(error)
   }
 }
 

@@ -1,5 +1,5 @@
-import { fromUrl } from 'geotiff';
-import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty';
+import { fromUrl } from 'geotiff'
+import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty'
 import proj4 from 'proj4'
 
 import { Scale, ThumbnailType, ColourScale } from './types'
@@ -47,7 +47,8 @@ export function getPolygonOutline(coordinates : number[][][][], width : number, 
   return polygonRings
 }
 
-export async function getThumbnail(frameId : string, polygonId : string, coordinates : number[][][][], thumbnailType : string, useCache : boolean = true) : Promise<string> {
+export async function getThumbnail(frameId: string, polygonId: string, coordinates: number[][][][], thumbnailType: string, useCache: boolean = true) {
+
   let thumbnailString = ''
   let type = thumbnailConfig[thumbnailType]
   
@@ -106,7 +107,7 @@ async function getThumbnailString(frameId : string, coordinates: number[][][][],
 
     thumbnailString = await generateIndexThumbnail(url, coordinates, type.domain, type.colourScale)
   } else {
-    console.error('Colour scale not of the right type')
+    throw 'Colour scale not of the right type'
   }
 
   return thumbnailString
@@ -131,7 +132,7 @@ async function generateRGBThumbnail(url : string, coordinates : number[][][][], 
     window: pixelBbox,
     samples: samples
   })
-  console.log(data)
+  // console.log(data)
 
   return drawRGBImage(data, satellite)
 }
@@ -170,7 +171,7 @@ async function generateIndexThumbnail(url : string, coordinates : number[][][][]
   })
   dataPlot.render()
 
-  let canvasImage = canvas.toDataURL("image/png")
+  let canvasImage = canvas.toDataURL('image/png')
   return canvasImage
 }
 
@@ -182,10 +183,10 @@ function drawRGBImage(data : any, satellite : string) : string {
   canvas.width = thumbnailPixelWidth
   canvas.height = thumbnailPixelHeight
 
-  let ctx = canvas.getContext("2d")
+  let ctx = canvas.getContext('2d')
 
   if (ctx) {
-    let totalPixelCount = 0;
+    let totalPixelCount = 0
     for (let y = 0; y < thumbnailPixelHeight; y++) {
       for (let x = 0; x < thumbnailPixelWidth; x++) {
         let alpha = 1
@@ -220,7 +221,7 @@ function drawRGBImage(data : any, satellite : string) : string {
     }
   }
 
-  let canvasImage = canvas.toDataURL("image/png")
+  let canvasImage = canvas.toDataURL('image/png')
   return canvasImage
 }
 
@@ -244,7 +245,8 @@ function getPixelBboxForThumbnail(thumbnailOsgbBbox : number[], ardOsgbBbox : nu
 
   let xMinPixel = Math.round(((thumbnailXmin - ardXmin) / bboxXRange)*ardPixelWidth)
   let xMaxPixel = Math.round(((thumbnailXmax - ardXmin) / bboxXRange)*ardPixelWidth)
-  let yMinPixel = Math.round((1-((thumbnailYmax - ardYmin) / bboxYRange))*ardPixelHeight) // pixel coords go topleft to bottomright so need to reverse the y
+  // pixel coords go topleft to bottomright so need to reverse the y
+  let yMinPixel = Math.round((1-((thumbnailYmax - ardYmin) / bboxYRange))*ardPixelHeight)
   let yMaxPixel = Math.round((1-((thumbnailYmin - ardYmin) / bboxYRange))*ardPixelHeight)
 
   let pixelBbox = [xMinPixel, yMinPixel, xMaxPixel, yMaxPixel]
@@ -267,13 +269,16 @@ function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixe
   let pixelXRange = pixelScale.xMax - pixelScale.xMin
   let pixelYRange = pixelScale.yMax - pixelScale.yMin
 
-  let pixelCoords = [Math.round(((osgbCoords[0] - osgbScale.xMin) / osgbXRange)*pixelXRange), Math.round((1-((osgbCoords[1] - osgbScale.yMin)) / osgbYRange)*pixelYRange)]
+  let pixelCoords = [
+    Math.round(((osgbCoords[0] - osgbScale.xMin) / osgbXRange) * pixelXRange),
+    Math.round((1 - ((osgbCoords[1] - osgbScale.yMin)) / osgbYRange) * pixelYRange)
+  ]
 
   return pixelCoords
 }
 
-function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number) : number[] {
-  let eastings : number[] = []
+function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number) {
+  let eastings  : number[] = []
   let northings : number[] = []
 
   let coordPairs = coordinates[0][0] // assume there's only one polygon, then use just the outer ring to calculate the bbox
