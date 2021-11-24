@@ -1,84 +1,35 @@
 
-import React, { Component } from 'react'
-// import 'react-responsive-carousel/lib/styles/carousel.min.css'
-// import { Carousel } from 'react-responsive-carousel'
+import React from 'react'
 
-// import 'pure-react-carousel/dist/react-carousel.es.css';
-// import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel'
-// import AliceCarousel from 'react-alice-carousel'
-// import 'react-alice-carousel/lib/alice-carousel.css'
+import { SimpleDate } from './types'
+import { Thumb } from './Thumbnail'
+import { getPolygonOutline, getReprojectedCoordinates } from '../thumbnails/thumbnailGenerator'
+import { height, width } from './helpers/thumbnailHelper'
+import { frameworks } from '../frameworks'
+import { useStateSelector } from '../state/hooks'
 
-import Carousel from '@brainhubeu/react-carousel'
-import '@brainhubeu/react-carousel/lib/style.css'
+export let ThumbSlider = (props: {framesWithDate: {frame: string, date: SimpleDate}[]}) => {
 
-import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { Thumbnail } from './Thumbnail'
-
-export let ThumbnailSlider = (props: {frames: string[]}) => {
-
-  let {selectedPolygonStats, selectedFrame} = useStateSelector(s => s.mapper)
-
-  if (!props.frames || !selectedPolygonStats || !selectedFrame)
+  let query = useStateSelector(s => s.mapper.query)
+  let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon)
+  
+  if (!selectedPolygon)
     return null
 
+  // do calcs common to all the thumbnails in the slider up here
+  let nativeCoords = getReprojectedCoordinates(selectedPolygon.geojson.coordinates, frameworks[query.framework].srs)
+  let polygonRings = getPolygonOutline(nativeCoords, width, height)
+
+  let outline = <svg 
+                  className="col-span-full row-span-full"
+                  height={height}
+                  width={width}>
+                  {polygonRings.map((points, i) => <polygon key={i} points={points} style={{stroke: '#eeeeee', strokeWidth: '1', fill: 'none'}} />)}
+                </svg>
+
   return (
-    <div className="flex gap-2 overflow-y-auto">
-      {
-        props.frames.map((f, i) => <Thumbnail key={f} frame={f} height={100} width={100} showOutline={true} load={i <= 5} />)
-      }
+    <div className="flex overflow-y-auto gap-0.5 pb-2 pt-1 ">
+      {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
     </div>
   )
-
-  // return (
-
-  //   <div className="">
-  //     <div>frameCount {frameCount}</div>
-  //     <div>indexOfSelectedFrame {indexOfSelectedFrame}</div>
-
-  //     <Carousel
-  //       itemWidth={144}
-  //       // offset={10} // gap
-  //       value={indexOfSelectedFrame}
-  //       // onChange={(value) => {valu}}
-  //     >
-  //       {getItems(props.frames, indexOfSelectedFrame)}
-  //     </Carousel>
-  //   </div>
-  // )
 }
-
-let getItems = (frames: string[], indexOfSelectedFrame: number) => {
-  return frames.map((f, i) => {
-    return (
-        <div key={f} className="w-36 border-2 border-gray-300 p-2 rounded-xl overflow-hidden">
-          {indexOfSelectedFrame == i && <div>SELECTED</div>}
-          {f}
-        </div>
-    )
-  })
-}
-
-// let getPureItems = (frames: string[]) => {
-//   return frames.map((f, i) => {
-//     return (
-//         <Slide key={f}  index={i}  className="w-36">{f.substr(0, 15)}</Slide>
-//     )
-//   })
-// }
-
-    // <AliceCarousel mouseTracking items={getItems(frames)} autoWidth />
-
-    // <CarouselProvider
-    //     naturalSlideWidth={100}
-    //     naturalSlideHeight={10}
-    //     totalSlides={3}
-    //   >
-
-    //     <Slider>
-    //       {getPureItems(props.frames)}
-    //     </Slider>
-
-    //     <ButtonBack>Back</ButtonBack>
-    //     <ButtonNext>Next</ButtonNext>        
-
-    // </CarouselProvider>

@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import jnccLogoUrl from '../assets/JNCCLogo_Black-340.png'
+import jnccLogo from '../assets/JNCCLogo_Black-340.png'
 import { LeafletMap } from './LeafletMap'
 import { ControlsPanel } from './ControlsPanel'
 import { QueryPanel } from './QueryPanel'
@@ -36,7 +36,7 @@ export let Mapper = () => {
       <QueryPanel />
       <FrameworkPanel />
       <PolygonPanel />
-      <ControlsPanel />
+      {/* <ControlsPanel /> */}
       {/* <ThumbnailPanel /> */}
       <LeafletMap />
     </div>
@@ -52,7 +52,7 @@ let makeSmallScreenWarning = () =>
   <div className="h-screen flex">
     <div className="m-auto space-y-2 p-5">
       <div className="opacity-70">
-        <img src={jnccLogoUrl} alt="JNCC logo" width="340" height="127" />
+        <img src={jnccLogo} alt="JNCC logo" width="340" height="127" />
       </div>
       <h1 className="text-xl">
         This map is made for large displays. 🦉 

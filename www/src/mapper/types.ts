@@ -4,6 +4,7 @@ export type Statistic = 'mean' | 'median' | 'min' | 'max' | 'Q1' | 'Q3'
 
 export type Framework = {
   name: string
+  srs: string
   boundary: any
   maxBounds: Bounds
   defaultZoom: number

@@ -13,8 +13,8 @@ export let Loader = () => {
         {/* https://codepen.io/shalimano/pen/wBmNGJ */}
         <div className="absolute overflow-x-hidden w-full h-loader bg-gray-600 bg-opacity-40">
           <div className="absolute h-3px"></div>
-          <div className="absolute bg-gray-600 h-loader animate-increase rounded-sm "></div>
-          <div className="absolute bg-gray-600 h-loader animate-decrease rounded-sm "></div>
+          <div className="absolute bg-gray-600 h-loader animate-loaderincrease rounded-sm "></div>
+          <div className="absolute bg-gray-600 h-loader animate-loaderdecrease rounded-sm "></div>
         </div>
       </div>
     )

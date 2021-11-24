@@ -10,7 +10,7 @@ import { MonthStats, Statistic } from './types'
 import { maxBy } from 'lodash'
 import { getFramesWithDate } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
-import { ThumbSlider } from './ThumbSlider'
+import { ThumbSlider } from './ThumbnailSlider'
 import { last } from '../utility/arrayUtility'
 
 export let PolygonPanel = () => {

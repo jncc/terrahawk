@@ -26,21 +26,13 @@ module.exports = {
         'loader': '4px'
       },
       animation: {
+        'loaderincrease': 'increase 2s infinite',
+        'loaderdecrease': 'decrease 2s 0.5s infinite',
+        'quickfadein': 'fadeIn 0.2s ease-in',
         'delayedfadein': 'delayedFadeIn 2s ease-in-out',
-        'quickfadeout': 'quickFadeOut 1s ease-in-out',
-        'increase': 'increase 2s infinite',
-        'decrease': 'decrease 2s 0.5s infinite'
+        'delayedthumbnail': 'fadeInOut 2s ease-in-out 3s infinite',
       },
       keyframes: () => ({
-        delayedFadeIn: {
-          '0%':   { opacity: '0' },
-          '90%':  { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        quickFadeOut: {
-          'from': { opacity: '1' },
-          'to':   { opacity: '0' },
-        },
         increase: {
           'from': { left: '-5%', width: '5%' },
           'to': { left: '130%', width: '100%' },
@@ -49,6 +41,25 @@ module.exports = {
           'from': { left: '-80%', width: '80%' },
           'to': { left: '110%', width: '10%' },
         },
+        delayedFadeIn: {
+          '0%':   { opacity: '0' },
+          '90%':  { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeIn: {
+          '0%':   { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeInOut: {
+          '0%':   { opacity: '0' },
+          '50%':  { opacity: '1' },
+          '100%': { opacity: '0' },
+        }
+        // pulse: {
+        //   'from': { transform: scale(1) },
+        //   '50%': { transform: scale(0.85) },
+        //   'to': { transform: scale(1) }
+        // }
       }),
     }
   },

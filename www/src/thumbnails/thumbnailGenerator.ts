@@ -68,7 +68,7 @@ export async function getThumbnail(frameId: string, polygonId: string, coordinat
   return thumbnailString
 }
 
-export function getReprojectedCoordinates(coordinates : number[][][][], toProjection : string, fromProjection : string = 'WGS84') : any {
+export function getReprojectedCoordinates(coordinates : number[][][][], toProjection : string, fromProjection : string = 'WGS84') {
   let targetProjDefinition = projections[toProjection.toLowerCase()]
   
   let reprojectedCoordinates = []
