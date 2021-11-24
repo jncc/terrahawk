@@ -2,14 +2,12 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { GlobeIcon } from '@heroicons/react/outline'
 
-import { frameworks } from '../frameworks'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getPolygonOutline, getReprojectedCoordinates, getThumbnail } from '../thumbnails/thumbnailGenerator'
+import { getThumbnail } from '../thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
-import { SimpleDate } from './types'
+import { Poly, SimpleDate } from './types'
 import { height, width } from './helpers/thumbnailHelper'
-// import loader from '../assets/1494.gif'
 
 export let Thumb = (props: {
   frame:        string,
@@ -18,24 +16,19 @@ export let Thumb = (props: {
   outlineSvg:   ReactElement}) => {
 
   let dispatch = useStateDispatcher()
-  let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon)
+  let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // can't be undefined down here
   let hoveredFrame    = useStateSelector(s => s.mapper.hoveredFrame)
   let selectedFrame   = useStateSelector(s => s.mapper.selectedFrame)
+  let showOutlines    = useStateSelector(s => s.mapper.showOutlines)
 
-  if (!selectedPolygon)
-    return null
-
-  let polyid = selectedPolygon.polyid
-
-  let [load, setLoad] = useState(false)
+  let [load, setLoad]     = useState(false)
   let [loaded, setLoaded] = useState(false)
-  let [src, setSrc] = useState('http://placekitten.com/100/100')
+  let [src, setSrc]       = useState('http://placekitten.com/100/100')
 
-  let hovered = props.frame === hoveredFrame
+  let hovered  = props.frame === hoveredFrame
   let selected = props.frame === selectedFrame
-  let bgColor = selected ? 'bg-blue' :
-                hovered  ? 'bg-gray-300' :
-                           'bg-transparent'
+  let scale    = hovered ? `scale-[104%]` : `scale-100`
+  let bgColor  = selected ? 'bg-blue' : 'bg-transparent'
 
   let div = useRef<HTMLDivElement>(null)
 
@@ -44,7 +37,7 @@ export let Thumb = (props: {
     if (div.current) {
       new IntersectionObserver((entries) => {
         entries.forEach(e => {
-          if (e.isIntersecting)
+          if (e.isIntersecting && !load)
             setLoad(true)
         })
       }).observe(div.current)
@@ -65,10 +58,11 @@ export let Thumb = (props: {
     }
   }, [selected])
 
+  // load the image
   useEffect(() => {
     if (load && !loaded) {
       setTimeout(() => {
-        getThumbnail(props.frame, polyid, props.nativeCoords, 'trueColour', true).then((img) => {
+        getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
           setSrc(img)
           setLoaded(true)
         })
@@ -77,40 +71,36 @@ export let Thumb = (props: {
   }, [load, loaded])
 
   return (
-    <div
-      ref={div}
-      className="flex-none rounded-xl"
-      >
+    <div ref={div} className="flex-none">
       <button
-        className={`custom-ring p-1.5 cursor-pointer rounded-xl ${bgColor}`}
+        className={`custom-ring p-1.5 cursor-pointer rounded-xl ${bgColor}    `}
         onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
         onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
       >
         <div
-          className="grid"
+          className={`grid   transition duration-10 ease-in-out ${scale}`}
           style={{height: height, width: width}}
           onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
         >
-          <div
-            className="flex col-span-full row-span-full rounded-lg bg-gray-100"
-            style={{height: height, width: width}}          
-          >
-            {/* {!loaded && load &&
+          {/* the light grey intitial background square */}
+          <div className="col-span-full row-span-full flex rounded-lg bg-gray-100" style={{height: height, width: width}} >
+            {/* loader (actually appears after short delay)  */}
+            {!loaded && load &&
             <div className="m-auto">
               <GlobeIcon className="h-5 w-5 text-gray-400 opacity-0 animate-delayedthumbnail"/>
             </div>
-            } */}
+            }
           </div>
           {loaded &&
           <>
           <img
             src={src}
-            className="col-span-full row-span-full rounded-lg animate-quickfadein"
-            height={height}
-            width={width}
+            className="col-span-full row-span-full rounded-md animate-quickfadein"
+            height="100%"
+            width="100%"
             alt={`Thumbnail image for ${getDisplayDate(props.date)}`}
           />
-          {/* {props.outlineSvg} */}
+          {showOutlines && props.outlineSvg}
           </>
           }
         </div>
@@ -118,7 +108,6 @@ export let Thumb = (props: {
 
       <div className="text-center text-sm ">
         {getDisplayDate(props.date)}
-        {/* {load ? '🍔' : ''} */}
       </div>
 
     </div>

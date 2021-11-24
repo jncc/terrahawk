@@ -27,29 +27,35 @@ export let PolygonPanel = () => {
     <div className="z-abovemap absolute top-6 right-6 bottom-6 text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[45rem] h-full" >
         
-        <div className="flex items-center space-x-3 mb-3">
-          <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
-          <div className="leading-tight">
-            <div>{selectedPolygon.habitat}</div>
-            <div className="flex gap-2 items-center">
-              <div className="little-label-text ">Polygon {selectedPolygon.polyid}</div>
+        <div className="flex flex-col h-full">
+
+          <div className="flex-none">
+            <div className="flex items-center space-x-3 mb-3">
+              <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
+              <div className="leading-tight">
+                <div>{selectedPolygon.habitat}</div>
+                <div className="flex gap-2 items-center">
+                  <div className="little-label-text ">Polygon {selectedPolygon.polyid}</div>
+                </div>
+              </div>
+              <div className="flex-1"></div>
+              <div>
+                {makeComparatorSummary(selectedPolygonStats)}
+              </div>
+              <div>
+                <button
+                  className="custom-ring rounded-xl"
+                  // start here when this panel opens...?
+                  tabIndex={1}
+                  onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
+                  <XIcon className="h-7 w-7 text-gray-400"/>
+                </button>
+              </div>
             </div>
           </div>
-          <div className="flex-1"></div>
-          <div>
-            {makeComparatorSummary(selectedPolygonStats)}
-          </div>
-          <div>
-            <button
-              className="custom-ring rounded-xl"
-              // start here when this panel opens...?
-              tabIndex={1}
-              onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
-              <XIcon className="h-7 w-7 text-gray-400"/>
-            </button>
-          </div>
+          {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query.statistic)}
+
         </div>
-        {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query.statistic)}
 
       </div>
     </div>
@@ -67,10 +73,12 @@ let makeLoadedPolygonDetails = (stats: MonthStats[], statistic: Statistic) => {
 
   return (
     <>
-      <div className="mb-4">
+      <div className="flex-grow">
         <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
       </div>
-      <ThumbSlider framesWithDate={oneYearOfFramesWithDate} />
+      <div className="flex-none">
+        <ThumbSlider framesWithDate={oneYearOfFramesWithDate} />
+      </div>
     </>
   )
 }

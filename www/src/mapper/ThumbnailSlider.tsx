@@ -1,35 +1,49 @@
 
-import React from 'react'
+import React, { useMemo } from 'react'
 
-import { SimpleDate } from './types'
+import { Poly, SimpleDate } from './types'
 import { Thumb } from './Thumbnail'
 import { getPolygonOutline, getReprojectedCoordinates } from '../thumbnails/thumbnailGenerator'
 import { height, width } from './helpers/thumbnailHelper'
 import { frameworks } from '../frameworks'
-import { useStateSelector } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../state/hooks'
+import { Toggle } from '../components/Toggle'
+import { mapperActions } from './slice'
 
 export let ThumbSlider = (props: {framesWithDate: {frame: string, date: SimpleDate}[]}) => {
 
-  let query = useStateSelector(s => s.mapper.query)
-  let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon)
+  let dispatch = useStateDispatcher()
+  let framework = useStateSelector(s => s.mapper.query.framework)
+  let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // selectedPolygon can't be undefined in this component
+  let showOutlines = useStateSelector(s => s.mapper.showOutlines)
   
-  if (!selectedPolygon)
-    return null
-
-  // do calcs common to all the thumbnails in the slider up here
-  let nativeCoords = getReprojectedCoordinates(selectedPolygon.geojson.coordinates, frameworks[query.framework].srs)
-  let polygonRings = getPolygonOutline(nativeCoords, width, height)
-
+  // do calcs common to all the thumbnails up here in the slider
+  let nativeCoords = useMemo(() => getReprojectedCoordinates(selectedPolygon.geojson.coordinates, frameworks[framework].srs),
+                                                            [selectedPolygon.geojson.coordinates, frameworks[framework].srs])
+  let polygonRings = useMemo(() => getPolygonOutline(nativeCoords, width, height),
+                                                    [nativeCoords, width, height])
   let outline = <svg 
-                  className="col-span-full row-span-full"
+                  className="col-span-full row-span-full animate-quickfadein"
                   height={height}
                   width={width}>
                   {polygonRings.map((points, i) => <polygon key={i} points={points} style={{stroke: '#eeeeee', strokeWidth: '1', fill: 'none'}} />)}
                 </svg>
 
   return (
-    <div className="flex overflow-y-auto gap-0.5 pb-2 pt-1 ">
-      {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
-    </div>
+    <>
+      <div className="flex overflow-y-auto gap-0.5 pb-2 pt-1 ">
+        {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
+      </div>
+
+      <div className="flex py-2">
+        <div className="flex-grow"></div>
+        <div className="flex-none">
+
+          <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
+
+        </div>
+
+      </div>
+    </>
   )
 }

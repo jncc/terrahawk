@@ -23,6 +23,7 @@ let slice = createSlice({
     selectedPolygonStats: undefined as MonthStats[] | undefined,
     selectedFrame: undefined as string | undefined,
     hoveredFrame: undefined as string | undefined,
+    showOutlines: true,
   },
   reducers: {
     togglePolygons: (state) => {
@@ -90,6 +91,9 @@ let slice = createSlice({
     },
     hoverFrame: (state, a: PayloadAction<string | undefined>) => {
       state.hoveredFrame = a.payload
+    },
+    toggleOutlines: (state) => {
+      state.showOutlines = !state.showOutlines
     },
   },
 })
