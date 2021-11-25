@@ -28,9 +28,9 @@ module.exports = {
       animation: {
         'loaderincrease': 'increase 2s infinite',
         'loaderdecrease': 'decrease 2s 0.5s infinite',
-        'quickfadein': 'fadeIn 0.2s ease-in',
-        'delayedfadein': 'delayedFadeIn 2s ease-in-out',
-        'delayedthumbnail': 'fadeInOut 2s ease-in-out 3s infinite',
+        'quickfadein': 'fadeIn 0.4s ease',
+        'delayedfadein': 'delayedFadeIn 2s ease',
+        'delayedthumbnail': 'fadeInOut 3s 4s ease-in-out infinite',
       },
       keyframes: () => ({
         increase: {

@@ -24,8 +24,8 @@ export let PolygonPanel = () => {
     return null
 
   return (
-    <div className="z-abovemap absolute top-6 right-6 bottom-6 text-left" >
-      <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-[45rem] h-full" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-6 left-[32rem] 2xl:left-[60rem] text-left" >
+      <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-full h-full" >
         
         <div className="flex flex-col h-full">
 
