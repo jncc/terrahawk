@@ -10,7 +10,7 @@ import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { Toggle } from '../components/Toggle'
 import { mapperActions } from './slice'
 
-export let ThumbSlider = (props: {framesWithDate: {frame: string, date: SimpleDate}[]}) => {
+export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: SimpleDate}[]}) => {
 
   let dispatch = useStateDispatcher()
   let framework = useStateSelector(s => s.mapper.query.framework)
@@ -31,7 +31,7 @@ export let ThumbSlider = (props: {framesWithDate: {frame: string, date: SimpleDa
 
   return (
     <>
-      <div className="flex overflow-y-auto gap-0.5 pb-2 pt-1 ">
+      <div className="flex overflow-y-auto pb-2 pt-1">
         {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
       </div>
 

@@ -28,15 +28,16 @@ export let Thumb = (props: {
   let hovered  = props.frame === hoveredFrame
   let selected = props.frame === selectedFrame
   let scale    = hovered ? `scale-[104%]` : `scale-100`
-  let bgColor  = selected ? 'bg-blue' : 'bg-transparent'
+  let borderColor  = selected ? 'border-blue' : 'border-transparent'
 
   let div = useRef<HTMLDivElement>(null)
 
-  // set load to true when the div becomes visible
+  // set load to true when the div becomes visible TODO: for long enough!
   useEffect(() => {
     if (div.current) {
       new IntersectionObserver((entries) => {
         entries.forEach(e => {
+          console.log(e.isIntersecting + ' ' + props.frame)
           if (e.isIntersecting && !load)
             setLoad(true)
         })
@@ -74,7 +75,7 @@ export let Thumb = (props: {
     <div ref={div} className="flex-none">
       {/* the button (so the thumb can be selected), padded to leave the background color visible when selected */}
       <button
-        className={`custom-ring p-1.5 cursor-pointer rounded-xl ${bgColor}    `}
+        className={`custom-ring p-1 cursor-pointer rounded-xl border-4 ${borderColor}`}
         onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
         onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
         onClick={() => dispatch(mapperActions.selectFrame(props.frame))}

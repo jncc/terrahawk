@@ -10,7 +10,7 @@ import { MonthStats, Statistic } from './types'
 import { maxBy } from 'lodash'
 import { getFramesWithDate } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
-import { ThumbSlider } from './ThumbnailSlider'
+import { ThumbnailSlider } from './ThumbnailSlider'
 import { last } from '../utility/arrayUtility'
 
 export let PolygonPanel = () => {
@@ -24,7 +24,7 @@ export let PolygonPanel = () => {
     return null
 
   return (
-    <div className="z-abovemap absolute top-6 right-6 bottom-6 left-[32rem] 2xl:left-[60rem] text-left" >
+    <div className="z-abovemap absolute top-6 right-6 bottom-6 left-[33rem] 2xl:left-[60rem] text-left" >
       <div className="bg-white rounded-xl overflow-hidden shadow-xl pl-4 pr-6 py-2 w-full h-full" >
         
         <div className="flex flex-col h-full">
@@ -45,8 +45,6 @@ export let PolygonPanel = () => {
               <div className="flex items-center">
                 <button
                   className="close-button"
-                  // start here when this panel opens...?
-                  // tabIndex={1}
                   onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
                   <XIcon className="h-7 w-7"/>
                 </button>
@@ -67,17 +65,21 @@ let makeLoadedPolygonDetails = (stats: MonthStats[], statistic: Statistic) => {
   // TODO: group by year and pass in one year per chart component...
 
   let framesWithDate = getFramesWithDate(stats)
-  let mostRecentYear = last(framesWithDate).date.year
+  let mostRecentYear = 2020 //last(framesWithDate).date.year
   let oneYearOfStats = stats.filter(d => d.year === mostRecentYear.toString())
   let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === mostRecentYear)
 
   return (
     <>
-      <div className="flex-grow">
+      <div className="flex-grow flex-row overflow-y-scroll mb-5">
+        <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
+        <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
+        <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
+        <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
         <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
       </div>
       <div className="flex-none">
-        <ThumbSlider framesWithDate={oneYearOfFramesWithDate} />
+        <ThumbnailSlider framesWithDate={oneYearOfFramesWithDate} />
       </div>
     </>
   )

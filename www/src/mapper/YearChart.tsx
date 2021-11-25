@@ -38,7 +38,7 @@ export let YearChart = (props: {year: number, data: MonthStats[], framesWithDate
   })
 
   return (
-    <div className="h-48 border-2 border-gray-300 rounded-xl">
+    <div className="h-48">
 
       <VictoryChart width={600} height={200} padding={30}  >
 

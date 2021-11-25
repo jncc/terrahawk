@@ -36,7 +36,7 @@
     top: 0;
     bottom: 0;    
     left: 14rem; /* width of query (left) panel */
-    right: 45rem; /* width of polygon (right) panel */
+    right: 55rem; /* approx. width of polygon (right) panel */
   }
   .leaflet-active-area-when-polygon-not-selected {
     position: absolute;
