@@ -20,6 +20,5 @@ export let Toggle = (props: { label: string, position: 'left'|'right', checked: 
       <span className={`cursor-pointer w-8 h-5 flex items-center flex-shrink-0 ${margin} p-0.5 bg-gray-200 ${hover} rounded-full duration-100 ease-in-out peer-checked:bg-gray-400 after:w-4 after:h-4 after:bg-white after:rounded-full after:shadow-md after:duration-100 peer-checked:after:translate-x-3`}></span>
       {props.position === 'right' && props.label}
     </label>
-
   )
 }

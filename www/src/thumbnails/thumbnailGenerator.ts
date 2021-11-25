@@ -132,6 +132,8 @@ async function generateRGBThumbnail(url : string, coordinates : number[][][][], 
     window: pixelBbox,
     samples: samples
   })
+  
+  // TODO: some images aren't exactly square, for some reason
   // console.log(data)
 
   return drawRGBImage(data, satellite)

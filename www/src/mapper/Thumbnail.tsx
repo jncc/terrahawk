@@ -44,21 +44,21 @@ export let Thumb = (props: {
     }
   }, [div.current])
 
-  // on first mount, show the selected thumb with no animation
+  // on first mount, if this is the selected thumb, scroll to it with no animation
   useEffect(() => {
     if (selected && div.current) {
       div.current.scrollIntoView({inline: 'center'})
     }
   }, [])
 
-  // when this thumb is selected, use the native browser scrollIntoView method
+  // when this thumb is selected, scroll to it
   useEffect(() => {
     if (selected && div.current) {
       div.current.scrollIntoView({behavior: 'smooth', inline: 'center'})
     }
   }, [selected])
 
-  // load the image
+  // load the image when necessary
   useEffect(() => {
     if (load && !loaded) {
       setTimeout(() => {
@@ -72,19 +72,21 @@ export let Thumb = (props: {
 
   return (
     <div ref={div} className="flex-none">
+      {/* the button (so the thumb can be selected), padded to leave the background color visible when selected */}
       <button
         className={`custom-ring p-1.5 cursor-pointer rounded-xl ${bgColor}    `}
         onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
         onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
+        onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
       >
+        {/* a container div */}
         <div
           className={`grid   transition duration-10 ease-in-out ${scale}`}
           style={{height: height, width: width}}
-          onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
-        >
+          >
           {/* the light grey intitial background square */}
-          <div className="col-span-full row-span-full flex rounded-lg bg-gray-100" style={{height: height, width: width}} >
-            {/* loader (actually appears after short delay)  */}
+          <div className="col-span-full row-span-full flex rounded-lg bg-gray-100" >
+            {/* loader (appears after short delay thanks to animation)  */}
             {!loaded && load &&
             <div className="m-auto">
               <GlobeIcon className="h-5 w-5 text-gray-400 opacity-0 animate-delayedthumbnail"/>
@@ -93,13 +95,18 @@ export let Thumb = (props: {
           </div>
           {loaded &&
           <>
-          <img
-            src={src}
-            className="col-span-full row-span-full rounded-md animate-quickfadein"
-            height="100%"
-            width="100%"
-            alt={`Thumbnail image for ${getDisplayDate(props.date)}`}
-          />
+          {/* the image might not be exactly square, so use a container div */}
+          <div
+            className="col-span-full row-span-full animate-quickfadein"
+            style={{height: height, width: width}}
+          >
+            <img
+              src={src}
+              className="w-full h-full rounded-md"
+              alt={`Thumbnail image for ${getDisplayDate(props.date)}`}
+            />
+
+          </div>
           {showOutlines && props.outlineSvg}
           </>
           }

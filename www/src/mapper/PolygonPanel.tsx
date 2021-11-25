@@ -42,13 +42,13 @@ export let PolygonPanel = () => {
               <div>
                 {makeComparatorSummary(selectedPolygonStats)}
               </div>
-              <div>
+              <div className="flex items-center">
                 <button
-                  className="custom-ring rounded-xl"
+                  className="close-button"
                   // start here when this panel opens...?
-                  tabIndex={1}
+                  // tabIndex={1}
                   onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
-                  <XIcon className="h-7 w-7 text-gray-400"/>
+                  <XIcon className="h-7 w-7"/>
                 </button>
               </div>
             </div>

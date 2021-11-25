@@ -21,18 +21,16 @@
     @apply text-gray-400 text-sm font-semibold
   }
   .arrow-button {
-    @apply custom-ring px-1 py-1 text-gray-400 rounded-lg hover:bg-gray-200 hover:text-gray-500 active:bg-gray-400 active:text-white
-    /* @apply custom-ring px-2 py-2 rounded-lg bg-gray-100 text-gray-600  hover:bg-gray-200 hover:text-gray-500 active:bg-gray-400 active:text-white */
+    @apply custom-ring px-1 py-1 text-gray-400 rounded-lg hover:bg-gray-200 hover:text-gray-500 active:bg-gray-300 active:text-gray-500
   }
-  .filter-black-to-jncc-green {
-    filter: invert(38%) sepia(11%) saturate(3054%) hue-rotate(69deg) brightness(95%) contrast(86%);
+  .close-button {
+    @apply custom-ring text-gray-400 rounded-lg hover:bg-gray-200 hover:text-gray-500 active:bg-gray-300 active:text-gray-500
   }
   /* todo this doesn't work */
   .custom-leaflet-tooltip {
     background: green;
     @apply rounded-3xl;
   }
- 
   .leaflet-active-area-when-polygon-selected {
     position: absolute;
     top: 0;
