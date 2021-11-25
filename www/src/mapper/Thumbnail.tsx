@@ -1,6 +1,9 @@
 
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { GlobeIcon } from '@heroicons/react/outline'
+import { fromIntersection } from 'rxjs-web-observers'
+import { of, concat } from 'rxjs'
+import { debounceTime, tap, mergeMap, mergeMapTo, map, filter, switchMap, catchError, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getThumbnail } from '../thumbnails/thumbnailGenerator'
@@ -8,6 +11,7 @@ import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Poly, SimpleDate } from './types'
 import { height, width } from './helpers/thumbnailHelper'
+import { last } from '../utility/arrayUtility'
 
 export let Thumb = (props: {
   frame:        string,
@@ -32,16 +36,15 @@ export let Thumb = (props: {
 
   let div = useRef<HTMLDivElement>(null)
 
-  // set load to true when the div becomes visible TODO: for long enough!
+  // set load to true when the div becomes visible
   useEffect(() => {
     if (div.current) {
-      new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          console.log(e.isIntersecting + ' ' + props.frame)
-          if (e.isIntersecting && !load)
-            setLoad(true)
-        })
-      }).observe(div.current)
+      fromIntersection(div.current).pipe(
+        mergeMap(entries => entries),
+        debounceTime(500), // disregard a brief period of visibility while slider moves
+        filter(entry => entry.isIntersecting),
+        tap(() => setLoad(true)),
+      ).subscribe()
     }
   }, [div.current])
 
