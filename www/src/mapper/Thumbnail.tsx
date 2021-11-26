@@ -2,8 +2,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { GlobeIcon } from '@heroicons/react/outline'
 import { fromIntersection } from 'rxjs-web-observers'
-import { of, concat } from 'rxjs'
-import { debounceTime, tap, mergeMap, mergeMapTo, map, filter, switchMap, catchError, } from 'rxjs/operators'
+import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getThumbnail } from '../thumbnails/thumbnailGenerator'
@@ -11,7 +10,6 @@ import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Poly, SimpleDate } from './types'
 import { height, width } from './helpers/thumbnailHelper'
-import { last } from '../utility/arrayUtility'
 
 export let Thumb = (props: {
   frame:        string,
@@ -31,8 +29,8 @@ export let Thumb = (props: {
 
   let hovered  = props.frame === hoveredFrame
   let selected = props.frame === selectedFrame
-  let scale    = hovered ? `scale-[104%]` : `scale-100`
-  let borderColor  = selected ? 'border-blue' : 'border-transparent'
+  let hoveredScale   = hovered  ? `scale-[104%]` : `scale-100`
+  let selectedColor  = selected ? 'border-blue'  : 'border-transparent'
 
   let div = useRef<HTMLDivElement>(null)
 
@@ -41,7 +39,7 @@ export let Thumb = (props: {
     if (div.current) {
       fromIntersection(div.current).pipe(
         mergeMap(entries => entries),
-        debounceTime(500), // disregard a brief period of visibility while slider moves
+        debounceTime(500), // disregard briefly to allow slider to move
         filter(entry => entry.isIntersecting),
         tap(() => setLoad(true)),
       ).subscribe()
@@ -78,19 +76,19 @@ export let Thumb = (props: {
     <div ref={div} className="flex-none">
       {/* the button (so the thumb can be selected), padded to leave the background color visible when selected */}
       <button
-        className={`custom-ring p-1 cursor-pointer rounded-xl border-4 ${borderColor}`}
+        className={`custom-ring p-1 cursor-pointer rounded-xl border-4 ${selectedColor}`}
         onMouseEnter={() => dispatch(mapperActions.hoverFrame(props.frame))}
         onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
         onClick={() => dispatch(mapperActions.selectFrame(props.frame))}
       >
-        {/* a container div */}
+        {/* a container grid to enable overlaying children directly on top of each other (with `col-span-full row-span-full`) */}
         <div
-          className={`grid   transition duration-10 ease-in-out ${scale}`}
+          className={`grid  transition duration-10 ease-in-out ${hoveredScale}`}
           style={{height: height, width: width}}
           >
           {/* the light grey intitial background square */}
           <div className="col-span-full row-span-full flex rounded-lg bg-gray-100" >
-            {/* loader (appears after short delay thanks to animation)  */}
+            {/* loader (appears after short delay thanks to animation) */}
             {!loaded && load &&
             <div className="m-auto">
               <GlobeIcon className="h-5 w-5 text-gray-400 opacity-0 animate-delayedthumbnail"/>
@@ -99,7 +97,7 @@ export let Thumb = (props: {
           </div>
           {loaded &&
           <>
-          {/* the image might not be exactly square, so use a container div */}
+          {/* the generated image might not be exactly square, so use a sized container div and make the img `w-full h-full` */}
           <div
             className="col-span-full row-span-full animate-quickfadein"
             style={{height: height, width: width}}

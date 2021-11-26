@@ -35,7 +35,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
         {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
       </div>
 
-      <div className="flex py-2">
+      <div className="flex mt-1">
         <div className="flex-grow"></div>
         <div className="flex-none">
 
