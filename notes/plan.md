@@ -308,25 +308,38 @@ Pivot to MVP
 Sprint 19 (to November 26)
 --------------------------
 
-- [ ] 🎁 Get S2 index files into CEDA archive {ih, uw}
-  - [ ] Requires some manual QA first
-  - [ ] Get metadata to CEDA
-  - [ ] Document this process (data engineering wiki?)
-- [ ] 🎁 Find a suitable base map service {mb, pr}
-- [ ] Onboarding {cj} {pm}
-- [ ] Refamiliarisation with thumbnails {cj}
+- [x] 🎁 (PARTIALLY DONE) Get S2 index files into CEDA archive {ih, uw}
+  - [x] Requires some manual QA first
+  - [x] Get metadata to CEDA
+  - [ ] ~~Document this process (data engineering wiki?)~~
+- [x] 🎁 Find a suitable base map service {mb, pr}
+- [x] Onboarding {cj} {pm}
+- [x] Refamiliarisation with thumbnails {cj}
   - explore any gotchas with integration
   - plan for async loading
   - polygon coords Vs geojson
 - [ ] 🎁 Show charts/graphs and related stats for selected polygon {pm}
-- [ ] 🎁 Implement suitable base map for *MVP* {pm}
-
-Sprint 20 (to December 10; *MVP* release?)
---------------------------------------------
-
-- [ ] 🎁 Implement thumbnails {pm, cj}
+- [x] 🎁 Implement suitable base map for *MVP* {pm}
+- [x] 🎁 Implement thumbnails {pm, cj}
   - there is a working prototype made by {cj}...
   - graft and integrate into the React app {pm}
+
+Sprint 20 (to December 10; *MVP* release)
+-----------------------------------------
+
+- [ ] Date filtering {pm}
+- [ ] Charts {pm}
+  - [ ] Support negative values
+  - [ ] Layout - stretch?
+  - [ ] Ungroup "captures"/frames, spread over year
+  - [ ] Styling / position for captures
+- [ ] Fix thumbnail ordering {pm}
+- [ ] Support Index thumbnails (maybe just those dates that are done) {pm}
+- [ ] Fix polygon selection {pm}
+- [ ] Add map controls (zoom, polygon toggle) {pm}
+- [ ] Plan and deliver demo {pr, pm}
+- [ ] 🎁 Get all S2 index files into CEDA archive {ih, uw}
+  - [ ] Document this process (data engineering wiki?)
 
 Sprint 21 (to January ?)
 ------------------------
@@ -335,10 +348,6 @@ Sprint 21 (to January ?)
 - [ ] Process S1 stats {ih, pm, fm}
 - [ ] Process seasonal stats {pm, fm}
 - [ ] Respond to go-live issues {pm}
-- [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
-  - research & design 
-  - get some data into Postgres
-  
 
 Upcoming sprints
 ----------------
@@ -355,6 +364,10 @@ UI workstream
 
 App services workstream:
 
+- [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
+  - research & design 
+  - get some data into Postgres
+  
 - [ ] Gazetteer {cj}
   - Design & implement backend DB with several datasets
   - API
