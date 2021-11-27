@@ -64,6 +64,9 @@ export let Thumb = (props: {
   useEffect(() => {
     if (load && !loaded) {
       setTimeout(() => {
+        console.log(props.frame)
+        console.log(selectedPolygon.polyid)
+        console.log(props.nativeCoords)
         getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
           setSrc(img)
           setLoaded(true)
