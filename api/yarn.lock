@@ -3700,11 +3700,6 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
-plotty@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/plotty/-/plotty-0.4.7.tgz#3679b6c36cddb794101e33a864e156616341933c"
-  integrity sha512-pYmY/SiiduIkMWWBOCi/BewQPnbQGwHod661rTN/89/vSiGQrtKb5EiErGaHwLEaSPXsjzs7mGx2BYCYx0da6A==
-
 postgres-array@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/postgres-array/-/postgres-array-2.0.0.tgz#48f8fce054fbc69671999329b8834b772652d82e"

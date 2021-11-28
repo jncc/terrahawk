@@ -6,7 +6,7 @@
     "clean": "rimraf ./built",
     "tsc": "tsc --noEmit",
     "build": "tsc --outDir ./built",
-    "dev": "yarn tsc --skipLibCheck && NODE_ENV=development ts-node ./src/host/local.ts",
+    "dev": "yarn tsc --skipLibCheck && NODE_ENV=development ts-node --files ./src/host/local.ts",
     "deploy:alpha": "yarn clean && yarn build && ENVNAME=alpha AWS_PROFILE=jncc-habmon-alpha-admin sls deploy"
   },
   "author": "",
@@ -21,7 +21,6 @@
     "geotiff": "^1.0.8",
     "pg": "^8.5.1",
     "pg-format": "1.0.4",
-    "plotty": "^0.4.7",
     "proj4": "^2.7.5"
   },
   "devDependencies": {

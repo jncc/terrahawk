@@ -6,6 +6,7 @@ import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getThumbnail } from '../thumbnails/thumbnailGenerator'
+// import { getThumbnail, getBoundingBoxWithBuffer } from '../../../api/src/endpoints/thumbnails/thumbnailGenerator' //' thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Poly, SimpleDate } from './types'
@@ -62,11 +63,14 @@ export let Thumb = (props: {
 
   // load the image when necessary
   useEffect(() => {
+
     if (load && !loaded) {
       setTimeout(() => {
-        console.log(props.frame)
-        console.log(selectedPolygon.polyid)
-        console.log(props.nativeCoords)
+        // let box = getBoundingBoxWithBuffer(props.nativeCoords)
+        // console.log(props.frame)
+        // console.log(selectedPolygon.polyid)
+        // console.log(box)
+        // getThumbnail(props.frame, selectedPolygon.polyid, box, 'trueColour', true).then((img) => {
         getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
           setSrc(img)
           setLoaded(true)

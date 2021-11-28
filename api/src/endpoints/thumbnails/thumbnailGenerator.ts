@@ -1,5 +1,5 @@
 import { fromUrl } from 'geotiff'
-import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty'
+// import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty'
 import * as proj4 from 'proj4'
 
 import { Scale, ThumbnailType, ColourScale } from './types'
@@ -17,7 +17,7 @@ const vv = 0
 const vh = 1
 
 export function getPolygonOutline(coordinates : number[][][][], width : number, height : number) : string[] {
-  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
+  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates)
 
   let osgbScale = {
     xMin: thumbnailBbox[0],
@@ -48,10 +48,15 @@ export function getPolygonOutline(coordinates : number[][][][], width : number, 
   return polygonRings
 }
 
-export async function getThumbnail(frameId: string, polygonId: string, coordinates: number[][][][], thumbnailType: string, useCache: boolean = true) {
-
-  let thumbnailString = ''
+export async function getThumbnail(frameId: string, box: number[], thumbnailType: string) {
+  
   let type = thumbnailConfig[thumbnailType]
+  return await getRequestedTypeOfThumbnail(frameId, box, type)
+}
+// export async function getThumbnail(frameId: string, polygonId: string, box: number[], thumbnailType: string, useCache: boolean = true) {
+
+//   let thumbnailString = ''
+//   let type = thumbnailConfig[thumbnailType]
   
   // if (useCache) {
   //   let thumbnailKey = `thumbs_${frameId}_${polygonId}_${type.text}`
@@ -63,11 +68,11 @@ export async function getThumbnail(frameId: string, polygonId: string, coordinat
   //     setCacheItem(thumbnailKey, thumbnailString)
   //   }
   // } else {
-    thumbnailString = await getThumbnailString(frameId, coordinates, type)
+    // thumbnailString = await getRequestedTypeOfThumbnail(frameId, box, type)
   // }
 
-  return thumbnailString
-}
+//   return thumbnailString
+// }
 
 export function getReprojectedCoordinates(coordinates : number[][][][], toProjection : string, fromProjection : string = 'WGS84') {
   let targetProjDefinition = projections[toProjection.toLowerCase()]
@@ -95,32 +100,29 @@ export function getReprojectedCoordinates(coordinates : number[][][][], toProjec
   return reprojectedCoordinates
 }
 
-async function getThumbnailString(frameId : string, coordinates: number[][][][], type : ThumbnailType) : Promise<string> {
-  let thumbnailString = ''
+async function getRequestedTypeOfThumbnail(frameId : string, box: number[], type : ThumbnailType) {
 
   if (type.colourScale == 'rgb' && type.rgbDomains) {
     let url = getArdUrl(frameId, ardUrlBase)
     let satellite = frameId.substring(0, 2).toLocaleLowerCase()
-
-    thumbnailString = await generateRGBThumbnail(url, coordinates, satellite)
-  } else if (type.colourScale !== 'rgb' && type.domain) {
-    let url = getIndexUrl(frameId, indicesUrlBase, type.text)
-
-    thumbnailString = await generateIndexThumbnail(url, coordinates, type.domain, type.colourScale)
-  } else {
+    return await generateRGBThumbnail(url, box, satellite)
+  }
+  // else if (type.colourScale !== 'rgb' && type.domain) {
+  //   let url = getIndexUrl(frameId, indicesUrlBase, type.text)
+  //   return await generateIndexThumbnail(url, box, type.domain, type.colourScale)
+  // }
+  else {
     throw 'Colour scale not of the right type'
   }
-
-  return thumbnailString
 }
 
-async function generateRGBThumbnail(url : string, coordinates : number[][][][], satellite : string) : Promise<string> {
-  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
+async function generateRGBThumbnail(url : string, box : number[], satellite : string) {
+  // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
 
-  let pixelBbox = getPixelBboxForThumbnail(thumbnailBbox, bbox, image.getWidth(), image.getHeight())
+  let pixelBbox = getPixelBboxForThumbnail(box, bbox, image.getWidth(), image.getHeight())
   let samples = []
 
   if (satellite == 's1') {
@@ -140,52 +142,54 @@ async function generateRGBThumbnail(url : string, coordinates : number[][][][], 
   return drawRGBImage(data, satellite)
 }
 
-async function generateIndexThumbnail(url : string, coordinates : number[][][][], domain : number[], colourScaleName : string) : Promise<string> {
-  let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
-  let tiff = await fromUrl(url)
-  let image = await tiff.getImage()
-  let bbox = await image.getBoundingBox()
+// async function generateIndexThumbnail(url : string, box : number[], domain : number[], colourScaleName : string) {
+//   // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
+//   let tiff = await fromUrl(url)
+//   let image = await tiff.getImage()
+//   let bbox = await image.getBoundingBox()
 
-  let pixelBbox = getPixelBboxForThumbnail(thumbnailBbox, bbox, image.getWidth(), image.getHeight())
+//   let pixelBbox = getPixelBboxForThumbnail(box, bbox, image.getWidth(), image.getHeight())
 
-  let data = await image.readRasters({ 
-      window: pixelBbox
-  })
+//   let data = await image.readRasters({ 
+//       window: pixelBbox
+//   })
 
-  let thumbnailPixelHeight = data.height
-  let thumbnailPixelWidth = data.width
-
-
+//   let thumbnailPixelHeight = data.height
+//   let thumbnailPixelWidth = data.width
 
 
-  // let canvas = document.createElement('canvas')
-  let canvas = createCanvas(thumbnailPixelWidth, thumbnailPixelHeight)
 
 
-  
+//   // let canvas = document.createElement('canvas')
+//   let canvas = createCanvas(thumbnailPixelWidth, thumbnailPixelHeight)
 
-  let colourScale : ColourScale | undefined = colourScales.find(scale => scale.name == colourScaleName)
-  if (colourScale) {
-    addColorScale(colourScale.name, colourScale.colours, colourScale.positions)
-    renderColorScaleToCanvas(colourScaleName, canvas)
-  }
 
-  let dataPlot = new plot({
-    canvas: canvas,
-    data: data[0],
-    colorScale: colourScaleName,
-    width: thumbnailPixelWidth,
-    height: thumbnailPixelHeight,
-    domain: domain,
-    noDataValue: -9999
-  })
-  dataPlot.render()
 
-  let canvasImage = canvas.toDataURL('image/png')
-  return canvasImage
-}
 
-function drawRGBImage(data : any, satellite : string) : string {
+//   let colourScale : ColourScale | undefined = colourScales.find(scale => scale.name == colourScaleName)
+//   if (colourScale) {
+//     addColorScale(colourScale.name, colourScale.colours, colourScale.positions)
+//     renderColorScaleToCanvas(colourScaleName, canvas)
+//   }
+
+//   let dataPlot = new plot({
+//     canvas: canvas,
+//     data: data[0],
+//     colorScale: colourScaleName,
+//     width: thumbnailPixelWidth,
+//     height: thumbnailPixelHeight,
+//     domain: domain,
+//     noDataValue: -9999
+//   })
+//   dataPlot.render()
+
+//   // let canvasImage = canvas.toDataURL('image/png')
+//   // return canvasImage
+
+//   return canvas
+// }
+
+function drawRGBImage(data : any, satellite : string) {
   let thumbnailPixelHeight = data.height
   let thumbnailPixelWidth = data.width
 
@@ -239,8 +243,9 @@ function drawRGBImage(data : any, satellite : string) : string {
     }
   }
 
-  let canvasImage = canvas.toDataURL('image/png')
-  return canvasImage
+  // let canvasImage = canvas.toDataURL('image/png')
+  // return canvasImage
+  return canvas
 }
 
 function getPixelBboxForThumbnail(thumbnailOsgbBbox : number[], ardOsgbBbox : number[], ardPixelWidth : number, ardPixelHeight : number) {
@@ -295,7 +300,7 @@ function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixe
   return pixelCoords
 }
 
-function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number) {
+export function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number = thumbnailBuffer) {
   let eastings  : number[] = []
   let northings : number[] = []
 
