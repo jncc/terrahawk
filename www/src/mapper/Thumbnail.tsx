@@ -63,12 +63,10 @@ export let Thumb = (props: {
   // load the image when necessary
   useEffect(() => {
     if (load && !loaded) {
-      setTimeout(() => {
-        getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
-          setSrc(img)
-          setLoaded(true)
-        })
-      }, 500) // hack to reduce jank - let the slider finish animating
+      getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
+        setSrc(img)
+        setLoaded(true)
+      })
     }
   }, [load, loaded])
 
