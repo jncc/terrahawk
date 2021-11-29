@@ -1,11 +1,12 @@
 import { fromUrl } from 'geotiff'
-// import { plot, addColorScale, renderColorScaleToCanvas } from 'plotty'
 import * as proj4 from 'proj4'
 
 import { Scale, ThumbnailType, ColourScale } from './types'
 import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailConfig, projections } from './config'
 import { getArdUrl, getIndexUrl } from './urlHelper'
 import { createCanvas } from 'canvas'
+import { integer } from 'aws-sdk/clients/cloudfront'
+import { renderColorScaleToCanvas, renderWithColourScale } from './colourScaleHelper'
 // import { getCacheItem , setCacheItem } from './cacheHelper'
 
 // bands as they appear in the geotiff image
@@ -107,10 +108,10 @@ async function getRequestedTypeOfThumbnail(frameId : string, box: number[], type
     let satellite = frameId.substring(0, 2).toLocaleLowerCase()
     return await generateRGBThumbnail(url, box, satellite)
   }
-  // else if (type.colourScale !== 'rgb' && type.domain) {
-  //   let url = getIndexUrl(frameId, indicesUrlBase, type.text)
-  //   return await generateIndexThumbnail(url, box, type.domain, type.colourScale)
-  // }
+  else if (type.colourScale !== 'rgb' && type.domain) {
+    let url = getIndexUrl(frameId, indicesUrlBase, type.text)
+    return await generateIndexThumbnail(url, box, type.domain, type.colourScale)
+  }
   else {
     throw 'Colour scale not of the right type'
   }
@@ -142,52 +143,42 @@ async function generateRGBThumbnail(url : string, box : number[], satellite : st
   return drawRGBImage(data, satellite)
 }
 
-// async function generateIndexThumbnail(url : string, box : number[], domain : number[], colourScaleName : string) {
-//   // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
-//   let tiff = await fromUrl(url)
-//   let image = await tiff.getImage()
-//   let bbox = await image.getBoundingBox()
+async function generateIndexThumbnail(url : string, box : number[], domain : number[], colourScaleName : string) {
+  // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
+  let tiff = await fromUrl(url)
+  let image = await tiff.getImage()
+  let bbox = await image.getBoundingBox()
 
-//   let pixelBbox = getPixelBboxForThumbnail(box, bbox, image.getWidth(), image.getHeight())
+  let pixelBbox = getPixelBboxForThumbnail(box, bbox, image.getWidth(), image.getHeight())
 
-//   let data = await image.readRasters({ 
-//       window: pixelBbox
-//   })
+  let data = await image.readRasters({ 
+      window: pixelBbox
+  })
 
-//   let thumbnailPixelHeight = data.height
-//   let thumbnailPixelWidth = data.width
-
-
-
-
-//   // let canvas = document.createElement('canvas')
-//   let canvas = createCanvas(thumbnailPixelWidth, thumbnailPixelHeight)
+  let thumbnailPixelHeight = data.height
+  let thumbnailPixelWidth = data.width
 
 
 
 
-//   let colourScale : ColourScale | undefined = colourScales.find(scale => scale.name == colourScaleName)
-//   if (colourScale) {
-//     addColorScale(colourScale.name, colourScale.colours, colourScale.positions)
-//     renderColorScaleToCanvas(colourScaleName, canvas)
-//   }
+  // let canvas = document.createElement('canvas')
+  let canvas = createCanvas(thumbnailPixelWidth, thumbnailPixelHeight)
+  let colourScaleCanvas = createCanvas(0, 0)
 
-//   let dataPlot = new plot({
-//     canvas: canvas,
-//     data: data[0],
-//     colorScale: colourScaleName,
-//     width: thumbnailPixelWidth,
-//     height: thumbnailPixelHeight,
-//     domain: domain,
-//     noDataValue: -9999
-//   })
-//   dataPlot.render()
 
-//   // let canvasImage = canvas.toDataURL('image/png')
-//   // return canvasImage
 
-//   return canvas
-// }
+  let colourScale : ColourScale | undefined = colourScales.find(scale => scale.name == colourScaleName)
+  if (colourScale) {
+    renderColorScaleToCanvas(colourScaleName, colourScaleCanvas)
+  }
+
+  renderWithColourScale(canvas, colourScaleCanvas, -9999, data[0], thumbnailPixelHeight, thumbnailPixelWidth, domain)
+
+  // let canvasImage = canvas.toDataURL('image/png')
+  // return canvasImage
+
+  return canvas
+}
 
 function drawRGBImage(data : any, satellite : string) {
   let thumbnailPixelHeight = data.height

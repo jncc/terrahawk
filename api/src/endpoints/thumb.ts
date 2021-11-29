@@ -20,6 +20,6 @@ export const getThumb = async (args: any) => {
    let box = [501483.46637888433, 502286.5142532888, 422093.4853378338, 422896.5332122383]
 
 
-   let thumbCanvas = getThumbnail(frame, box, 'trueColour')
+   let thumbCanvas = getThumbnail(frame, box, 'ndwi')
    return (await thumbCanvas).createPNGStream()
 }
