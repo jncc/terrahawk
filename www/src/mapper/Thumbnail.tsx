@@ -113,7 +113,7 @@ export let Thumb = (props: {
         </div>
       </button>
 
-      <div className="text-center text-sm ">
+      <div className="text-center text-sm">
         {getDisplayDate(props.date)}
       </div>
 

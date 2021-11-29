@@ -26,7 +26,7 @@ export let PolygonPanel = () => {
 
   return (
     <div className={`z-abovemap absolute top-6 right-6 bottom-6 left-[50%] transform transition-opacity ${showClasses}`}>
-      <div className="w-full h-full bg-white rounded-xl shadow-xl px-4 py-2.5 " >
+      <div className="w-full h-full bg-white rounded-xl shadow-xl px-4 py-2.5">
         
         {selectedPolygon && zoomedEnoughToShowPolygons &&
         <div className="flex flex-col h-full">

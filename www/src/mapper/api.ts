@@ -101,7 +101,6 @@ if (!state.selectedPolygon)
   }
 
   let cacheKey = `${Object.values(params).join(':')}`
-
   let cached = statsCache.get(cacheKey)
 
   if (cached) {
