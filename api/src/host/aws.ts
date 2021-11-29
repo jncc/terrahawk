@@ -5,11 +5,9 @@ import { env } from '../env'
 import { getAlive } from '../endpoints/alive'
 import { getPolygons } from '../endpoints/polygons'
 import { getLookups } from '../endpoints/lookups'
-import { getColours } from '../endpoints/colours'
 import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
 import { getChoropleth } from '../endpoints/choropleth'
-import { getChoroplethFacade } from '../endpoints/choroplethFacade'
 import { getPolygon } from '../endpoints/polygon'
 
 export let helloHandler: APIGatewayProxyHandler = async (event) => {
@@ -37,11 +35,6 @@ export let choroplethHandler: APIGatewayProxyHandler = async (event) => {
   return success(await getChoropleth(body))
 }
 
-export let choroplethFacadeHandler: APIGatewayProxyHandler = async (event) => {
-  let body = JSON.parse(event.body ?? "{}")
-  return success(await getChoroplethFacade(body))
-}
-
 export let polygonsHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
   return success(await getPolygons(body))
@@ -54,12 +47,6 @@ export let polygonHandler: APIGatewayProxyHandler = async (event) => {
 
 export let lookupsHandler: APIGatewayProxyHandler = async (event) => {
   return success(await getLookups(event.queryStringParameters))
-}
-
-export let coloursHandler: APIGatewayProxyHandler = async (event) => {
-  let body = JSON.parse(event.body ?? "{}")
-  let result = await getColours(body)
-  return success(result)
 }
 
 export let statsHandler: APIGatewayProxyHandler = async (event) => {
