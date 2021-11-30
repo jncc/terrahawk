@@ -6,7 +6,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
-import { MonthStats, Statistic } from './types'
+import { Indexname, MonthStats, Statistic } from './types'
 import { maxBy } from 'lodash'
 import { getFramesWithDate } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
@@ -41,9 +41,6 @@ export let PolygonPanel = () => {
                 </div>
               </div>
               <div className="flex-1"></div>
-              <div>
-                {makeComparatorSummary(selectedPolygonStats)}
-              </div>
               <div className="flex items-center pr-1">
                 <button
                   className="close-button"
@@ -53,7 +50,7 @@ export let PolygonPanel = () => {
               </div>
             </div>
           </div>
-          {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query.statistic)}
+          {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query.indexname, query.statistic)}
 
         </div>
         }
@@ -63,7 +60,7 @@ export let PolygonPanel = () => {
   )
 }
 
-let makeLoadedPolygonDetails = (stats: MonthStats[], statistic: Statistic) => {
+let makeLoadedPolygonDetails = (stats: MonthStats[], indexname: Indexname, statistic: Statistic) => {
 
   // TODO: group by year and pass in one year per chart component...
 
@@ -74,6 +71,9 @@ let makeLoadedPolygonDetails = (stats: MonthStats[], statistic: Statistic) => {
 
   return (
     <>
+      <div className="flex-none ">
+        {makeChartTitle(stats, indexname, statistic)}
+      </div>
       <div className="flex-grow flex-row overflow-y-scroll mb-5">
         <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
         <YearChart year={mostRecentYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={statistic} />
@@ -88,7 +88,7 @@ let makeLoadedPolygonDetails = (stats: MonthStats[], statistic: Statistic) => {
   )
 }
 
-let makeComparatorSummary = (data: MonthStats[] | undefined) => {
+let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, statistic: Statistic) => {
   if (!data)
     return null
 
@@ -98,20 +98,26 @@ let makeComparatorSummary = (data: MonthStats[] | undefined) => {
     return null
 
   return (
-    <div className="flex gap-1 items-center p-2 text-sm ">
-      <div className="flex flex-col justify-between">
-        <div className="flex-1 bg-gray-200 p-0.5 px-3"></div>
-        <div className="flex-1 bg-gray-300 p-1"></div>
-        <div className="flex-1 bg-gray-200 p-0.5"></div>
+    <div className="flex justify-center items-center gap-4 pb-2 ">
+      <div className="italic">
+        Monthly {statistic} {indexname} 
       </div>
-      { (parseInt(maxCfCount) < 20) && 
+      <div>
+        •
+      </div>
+      <div className="flex items-center gap-1 little-label-text  ">
+        <div className="flex flex-col justify-between">
+          <div className="flex-1 bg-gray-200 p-0.5 px-3"></div>
+          <div className="flex-1 bg-gray-300 p-1"></div>
+          <div className="flex-1 bg-gray-200 p-0.5"></div>
+        </div>
+        <div>
+          {maxCfCount} comparators
+        </div>
+        {(parseInt(maxCfCount) < 20) && 
         <ExclamationIcon className="h-6 w-6 text-[orange]"/>
-      }
-      {/* <span className="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-white bg-gray-400 rounded-full" > */}
-        <span>{maxCfCount} </span>
-      {/* </span> */}
-      comparators
-      {/* <InformationCircleIcon className="h-5 w-5 text-gray-400"/> */}
+        }
+      </div>
     </div>
   )
 }
