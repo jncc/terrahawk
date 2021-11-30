@@ -1,5 +1,6 @@
 
 import { orderBy } from 'lodash'
+import { zeroPad } from '../../utility/numberUtility'
 import { trimAny } from '../../utility/stringUtility'
 import { MonthStats, SimpleDate } from '../types'
 
@@ -31,5 +32,3 @@ export let getFramesWithDate = (stats: MonthStats[]) => {
   // fix the date order
   return orderBy(zipped, x => `${x.date.year}-${zeroPad(x.date.month)}-${zeroPad(x.date.day)}`)
 }
-
-let zeroPad = (n: number) => String(n).padStart(2, '0')
