@@ -3,6 +3,7 @@ import React from 'react'
 import { LocationMarkerIcon, XIcon } from '@heroicons/react/outline'
 import { ExclamationIcon } from '@heroicons/react/solid'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
@@ -13,6 +14,7 @@ import { mapperActions } from './slice'
 import { ThumbnailSlider } from './ThumbnailSlider'
 import { zeroPad } from '../utility/numberUtility'
 import { indexnames } from './helpers/statsHelper'
+import { getIndexnameIcon } from './helpers/iconHelper'
 
 export let PolygonPanel = () => {
 
@@ -111,15 +113,11 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
   if (!maxCfCount)
     return null
 
-  let indexnameInfo = indexnames.find(x => x[0] === indexname)
-
   return (
-    <div className="flex justify-center items-center gap-4 pb-2 ">
+    <div className="flex justify-center items-center gap-2 pb-2 ">
+      <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-500" /></div>
       <div className="italic">
-        Monthly {statistic} {indexname} (<span className="text-sm">{indexnameInfo?.[2]} {indexnameInfo?.[1]} </span>)
-      </div>
-      <div>
-        •
+        Monthly {statistic} {indexname} <span className="text-sm">({indexnames[indexname].description})</span> against {maxCfCount} comparators
       </div>
       <div className="flex items-center gap-1 little-label-text  ">
         <div className="flex flex-col justify-between">
@@ -127,9 +125,8 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
           <div className="flex-1 bg-gray-300 p-1"></div>
           <div className="flex-1 bg-gray-200 p-0.5"></div>
         </div>
-        <div>
-          {maxCfCount} comparators
-        </div>
+      </div>
+      <div>
         {(parseInt(maxCfCount) < 20) && 
         <ExclamationIcon className="h-6 w-6 text-[orange]"/>
         }

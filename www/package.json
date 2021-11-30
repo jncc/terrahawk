@@ -16,6 +16,9 @@
     "deploy:alpha": "yarn build && AWS_PROFILE=jncc-habmon-alpha-admin sls client deploy"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "@heroicons/react": "^1.0.4",
     "@reduxjs/toolkit": "^1.6.1",
     "@tailwindcss/typography": "^0.4.1",

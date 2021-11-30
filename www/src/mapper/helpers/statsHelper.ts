@@ -12,9 +12,15 @@ export let getStatValues = (statistic: Statistic, s: MonthStats): StatValues => 
   }
 }
 
-export const indexnames: [Indexname, string, string][] = [
-  ['EVI', 'vegetation', '🌿'], ['NBR', 'burn', '🔥'], ['NDMI', 'moisture', '💦'], ['NDVI', 'vegetation', '🌿'], ['NDWI', 'water', '🌊']
-]
+// todo: make this the source of truth in `types`, then define the union from it
+export const indexnames: {[name in Indexname]: { description: string}} = {
+  'EVI':  {description: 'vegetation', },
+  'NBR':  {description: 'burn',       },
+  'NDMI': {description: 'moisture',   },
+  'NDVI': {description: 'vegetation', },
+  'NDWI': {description: 'water',      },
+}
 
+// todo: make this the source of truth in `types`, then define the union from it
 export const statistics: Statistic[] = ['mean' , 'median' , 'min' , 'max' , 'Q1' , 'Q3']
   
