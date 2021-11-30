@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { YearChart } from './YearChart'
 import { Indexname, MonthStats, Poly, Query, Statistic } from './types'
-import { groupBy, maxBy } from 'lodash'
+import { chain, groupBy, maxBy } from 'lodash'
 import { getFramesWithDate } from './helpers/frameHelpers'
 import { mapperActions } from './slice'
 import { ThumbnailSlider } from './ThumbnailSlider'
@@ -77,12 +77,10 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
 
   // lovely...
   let filteredStats = selectedPolygonStats.filter(s => `${s.year}${s.month}` >= `${query.yearFrom}${zeroPad(query.monthFrom)}` && `${s.year}${s.month}` <= `${query.yearTo}${zeroPad(query.monthTo)}`)
+  let years = groupBy(filteredStats, s => s.year)
 
   let yearOfSelectedFrame = framesWithDate.filter(x => x.frame === selectedFrame).map(x => x.date.year).find(() => true) // ie, first()
-  let yearGroups = groupBy(filteredStats, s => s.year)
-  // let yearOfThumbs = 
 
-  let oneYearOfStats = selectedPolygonStats.filter(d => d.year === mostRecentFullYear.toString())
   let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === mostRecentFullYear)
 
   return (
@@ -91,11 +89,13 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
         {makeChartTitle(selectedPolygonStats, query.indexname, query.statistic)}
       </div>
       <div className="flex-grow flex-row overflow-y-scroll mb-5">
-        <YearChart year={mostRecentFullYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={query.statistic} />
-        <YearChart year={mostRecentFullYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={query.statistic} />
-        <YearChart year={mostRecentFullYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={query.statistic} />
-        <YearChart year={mostRecentFullYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={query.statistic} />
-        <YearChart year={mostRecentFullYear} data={oneYearOfStats} framesWithDate={oneYearOfFramesWithDate} statistic={query.statistic} />
+        {chain(Object.entries(years))
+          .orderBy(([year]) => year, ['desc'])
+          .map(([year, monthStats]) => <YearChart
+          year={year}
+          data={monthStats}
+          framesWithDate={getFramesWithDate(monthStats)}
+          statistic={query.statistic} />).value()}
       </div>
       <div className="flex-none">
         <ThumbnailSlider framesWithDate={oneYearOfFramesWithDate} />
@@ -115,7 +115,7 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
 
   return (
     <div className="flex justify-center items-center gap-2 pb-2 ">
-      <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-500" /></div>
+      <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-400" /></div>
       <div className="italic">
         Monthly {statistic} {indexname} <span className="text-sm">({indexnames[indexname].description})</span> against {maxCfCount} comparators
       </div>

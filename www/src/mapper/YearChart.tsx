@@ -8,7 +8,7 @@ import { mapperActions } from './slice'
 
 import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
 
-export let YearChart = (props: {year: number, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
+export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
     let dataForPeriod = props.data.find(d => d.month === value)
