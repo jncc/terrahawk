@@ -67,7 +67,8 @@ export let PolygonPanel = () => {
 
 let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: MonthStats[], query: Query, selectedFrame: string|undefined) => {
 
-  let mostRecentFullYear = 2020 // todo: calculate instead
+  let mostRecentFullYear = '2020' // todo: calculate instead, e.g. chain(Object.keys(years)).max().value()
+
   // let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly
   // let selectedPolygonStats = useStateSelector(s => s.mapper.selectedPolygonStats) as MonthStats[]
   // let selectedFrame = useStateSelector(s => s.mapper.selectedFrame)
@@ -79,9 +80,10 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
   let filteredStats = selectedPolygonStats.filter(s => `${s.year}${s.month}` >= `${query.yearFrom}${zeroPad(query.monthFrom)}` && `${s.year}${s.month}` <= `${query.yearTo}${zeroPad(query.monthTo)}`)
   let years = groupBy(filteredStats, s => s.year)
 
-  let yearOfSelectedFrame = framesWithDate.filter(x => x.frame === selectedFrame).map(x => x.date.year).find(() => true) // ie, first()
-
-  let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === mostRecentFullYear)
+  // frames displayed need to be the year of the selected frame, or else (if none selected) a sensible default
+  let yearOfSelectedFrame = framesWithDate.filter(x => x.frame === selectedFrame).map(x => x.date.year.toString()).find(() => true) // ie, first()
+  let yearOfFramesToUse = yearOfSelectedFrame ? yearOfSelectedFrame : mostRecentFullYear
+  let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === Number.parseInt(yearOfFramesToUse))
 
   return (
     <>
@@ -90,7 +92,7 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
       </div>
       <div className="flex-grow flex-row overflow-y-scroll mb-5">
         {chain(Object.entries(years))
-          .orderBy(([year]) => year, ['desc'])
+          // .orderBy(([year]) => year, ['desc'])
           .map(([year, monthStats]) => <YearChart
           year={year}
           data={monthStats}
