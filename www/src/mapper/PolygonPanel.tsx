@@ -118,10 +118,10 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
     return null
 
   return (
-    <div className="flex justify-center items-center gap-2 pb-2 ">
+    <div className="flex justify-center items-center gap-3 pt-1 pb-2 ">
       <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-400" /></div>
       <div className="italic">
-        Monthly {statistic} {indexname} <span className="text-sm">({indexnames[indexname].description})</span> against {maxCfCount} comparators
+        Monthly {statistic} {indexname} <span className="">({indexnames[indexname].description})</span> compared with {maxCfCount} similar polygons
       </div>
       <div className="flex items-center gap-1 little-label-text  ">
         <div className="flex flex-col justify-between">
