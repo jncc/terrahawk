@@ -383,7 +383,9 @@ Backlog
 
 - [ ] Download stats as CSV/text file
 
-- XTunable warning thresholds (default Amber=1 and Red=2)
+- [ ] Tunable warning thresholds (default Amber=1 and Red=2)
+
+- [ ] Delay the expensive render to improve responsiveness (especially when updating querying using cached data) - React 18 or debounce?
 
 - [ ] Glue / Spark optimisation https://aws.amazon.com/blogs/big-data/optimize-memory-management-in-aws-glue/ 
 
