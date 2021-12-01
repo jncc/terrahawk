@@ -55,7 +55,7 @@ let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) =
     mapperActions.selectPolygon.type,
     mapperActions.alterQueryIndexname.type,
   ),
-  filter((a: PayloadAction<Poly | undefined>)  => a.payload !== undefined),
+  filter(()  => state$.value.mapper.selectedPolygon != undefined),
   switchMap(() =>
     concat(
       of(globalActions.startLoading('polygon')),
