@@ -2,7 +2,6 @@
 import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getFramesWithDate } from './helpers/frameHelpers'
 import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
 
@@ -32,8 +31,8 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
     return {
       x: label,
       y: 0,
-      frameCount: dataForPeriod ? getFramesWithDate([dataForPeriod]).length : null,
-      firstFrame: dataForPeriod ? getFramesWithDate([dataForPeriod])[0].frame : null,
+      frameCount: dataForPeriod ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value)).length : null,
+      firstFrame: dataForPeriod ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value))[0].frame : null,
     }
   })
 
