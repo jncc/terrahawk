@@ -67,18 +67,16 @@ export let PolygonPanel = () => {
 
 let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: MonthStats[], query: Query, selectedFrame: string|undefined) => {
 
-  let mostRecentFullYear = '2020' // todo: calculate instead, e.g. chain(Object.keys(years)).max().value()
-
-  // let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly
-  // let selectedPolygonStats = useStateSelector(s => s.mapper.selectedPolygonStats) as MonthStats[]
-  // let selectedFrame = useStateSelector(s => s.mapper.selectedFrame)
-  // let {query} = useStateSelector(s => s.mapper)
+  // todo: calculate instead, e.g. chain(Object.keys(years)).max().value()
+  let mostRecentFullYear = '2020'
 
   let framesWithDate = getFramesWithDate(selectedPolygonStats)
 
-  // lovely...
+  // todo: knarly....
   let filteredStats = selectedPolygonStats.filter(s => `${s.year}${s.month}` >= `${query.yearFrom}${zeroPad(query.monthFrom)}` && `${s.year}${s.month}` <= `${query.yearTo}${zeroPad(query.monthTo)}`)
-  let years = groupBy(filteredStats, s => s.year)
+  
+  // group stats into years
+  let statsGroupedByYears = groupBy(filteredStats, s => s.year)
 
   // frames displayed need to be the year of the selected frame, or else (if none selected) a sensible default
   let yearOfSelectedFrame = framesWithDate.filter(x => x.frame === selectedFrame).map(x => x.date.year.toString()).find(() => true) // ie, first()
@@ -91,13 +89,17 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
         {makeChartTitle(selectedPolygonStats, query.indexname, query.statistic)}
       </div>
       <div className="flex-grow flex-row overflow-y-scroll mb-5">
-        {chain(Object.entries(years))
+        {chain(Object.entries(statsGroupedByYears))
           // .orderBy(([year]) => year, ['desc'])
-          .map(([year, monthStats]) => <YearChart
-          year={year}
-          data={monthStats}
-          framesWithDate={getFramesWithDate(monthStats)}
-          statistic={query.statistic} />).value()}
+          .map(([year, monthStats]) =>
+            <YearChart
+              key={year}
+              year={year}
+              data={monthStats}
+              framesWithDate={getFramesWithDate(monthStats)}
+              statistic={query.statistic} />)
+          .value()
+        }
       </div>
       <div className="flex-none">
         <ThumbnailSlider framesWithDate={oneYearOfFramesWithDate} />

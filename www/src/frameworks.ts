@@ -21,7 +21,7 @@ export const frameworks: {[framework: string]: Framework} = {
       statistic: 'mean',
       yearFrom: 2020,
       monthFrom: 1,
-      yearTo: 2020,
+      yearTo: 2021,
       monthTo: 12,
     },
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}}
