@@ -1,6 +1,8 @@
 
 import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
+import useDimensions from 'use-element-dimensions'
+
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
@@ -8,6 +10,10 @@ import { mapperActions } from './slice'
 import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
 
 export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
+
+  // victory chart does not automatically fill the width of its container, so
+  // we need to measure it https://github.com/FormidableLabs/victory/issues/396
+  let [{width, height}, ref] = useDimensions()
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
     let dataForPeriod = props.data.find(d => d.month === value)
@@ -37,9 +43,9 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   })
 
   return (
-    <div className="h-48">
+    <div ref={ref} className="h-48 px-2 my-3">
 
-      <VictoryChart width={600} height={200} padding={30}  >
+      <VictoryChart width={width} height={height} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
 
         <VictoryStack>
           <VictoryArea
@@ -87,7 +93,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
         <VictoryAxis style={{axis: {stroke: 'transparent'}}}   />
         <VictoryAxis dependentAxis style={{axis: {stroke: 'transparent'}}}  />
 
-        <VictoryLabel text={props.year} x={300} y={30} textAnchor="middle" style={{fontSize:'15'}} />
+        <VictoryLabel text={props.year} x={width/2} y={10} textAnchor="middle" style={{fontSize: '14', fill: ''}}  />
 
       </VictoryChart>
     </div>

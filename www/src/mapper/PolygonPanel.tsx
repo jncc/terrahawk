@@ -85,7 +85,7 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
 
   return (
     <>
-      <div className="flex-none ">
+      <div className="flex-none">
         {makeChartTitle(selectedPolygonStats, query.indexname, query.statistic)}
       </div>
       <div className="flex-grow flex-row overflow-y-scroll mb-5">
@@ -118,9 +118,9 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
     return null
 
   return (
-    <div className="flex justify-center items-center gap-3 pt-1 pb-2 ">
+    <div className="flex justify-center items-center gap-3 pt-1 pb-2 text-sm text-gray-900">
       <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-400" /></div>
-      <div className="italic">
+      <div className="">
         Monthly {statistic} {indexname} <span className="">({indexnames[indexname].description})</span> compared with {maxCfCount} similar polygons
       </div>
       <div className="flex items-center gap-1 little-label-text  ">
