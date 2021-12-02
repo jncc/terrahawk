@@ -8,6 +8,7 @@ import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
 
 import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
+import { chain, zip } from 'lodash'
 
 export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
 
@@ -16,63 +17,56 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   let [{width, height}, ref] = useDimensions()
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
-    let dataForPeriod = props.data.find(d => d.month === value)
+    let dataForInterval = props.data.find(d => d.month === value)
     return {
       x: label,
-      y: dataForPeriod ? getStatValues(props.statistic, dataForPeriod).value : null,
-      z_score : dataForPeriod ? getStatValues(props.statistic, dataForPeriod).z_score: null,
+      y: dataForInterval ? getStatValues(props.statistic, dataForInterval).value : null,
+      z_score : dataForInterval ? getStatValues(props.statistic, dataForInterval).z_score: null,
     }
   })
 
-  let getComparisionLineData = (f: (s: StatValues) => number) => monthlyTicks.map(({value, label}) => {
-    let dataForPeriod = props.data.find(d => d.month === value)
-    return {
-      x: label,
-      y: dataForPeriod ? f(getStatValues(props.statistic, dataForPeriod))  : null,
-    }
-  })
+  let getComparisionAreaData = (lo: (s: StatValues) => number, hi: (s: StatValues) => number) => {
+      return monthlyTicks.map(({value, label}) => {
+      let dataForInterval = props.data.find(d => d.month === value)
+      return {
+        x:  label,
+        y0: dataForInterval ? lo(getStatValues(props.statistic, dataForInterval)) : null,
+        y:  dataForInterval ? hi(getStatValues(props.statistic, dataForInterval)) : null,
+      }
+    })
+  }
 
   let frameScatterData = monthlyTicks.map(({value, label}) => {
-    let dataForPeriod = props.data.find(d => d.month === value)
+    let dataForInterval = props.data.find(d => d.month === value)
     return {
       x: label,
       y: 0,
-      frameCount: dataForPeriod ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value)).length : null,
-      firstFrame: dataForPeriod ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value))[0].frame : null,
+      frameCount: dataForInterval ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value)).length : null,
+      firstFrame: dataForInterval ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value))[0].frame : null,
     }
   })
 
+  let yellowComparisonData = getComparisionAreaData(s => s.cf_value - (s.cf_value_sd * 2), s => s.cf_value + (s.cf_value_sd * 2))
+  let redComparisonData    = getComparisionAreaData(s => s.cf_value - (s.cf_value_sd * 1), s => s.cf_value + (s.cf_value_sd * 1))
+
   return (
-    <div ref={ref} className="h-48 px-2 my-3">
+    <div ref={ref} className="h-32 max-w-4xl m-auto px-2 my-3">
 
       <VictoryChart width={width} height={height} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
 
-        <VictoryStack>
-          <VictoryArea
-            data={getComparisionLineData(s => s.cf_value - (s.cf_value_sd * 2))}
-            colorScale={['transparent']}
-            interpolation="cardinal"
-            />
-          <VictoryArea
-            data={getComparisionLineData(s => s.cf_value_sd)}
-            colorScale={['#eee']}
-            interpolation="cardinal"
-            />
-          <VictoryArea
-            data={getComparisionLineData(s => s.cf_value_sd * 2)}
-            colorScale={['#ddd']}
-            interpolation="cardinal"
-            />
-          <VictoryArea
-            data={getComparisionLineData(s => s.cf_value_sd)}
-            colorScale={['#eee']}
-            interpolation="cardinal"
-            />
-        </VictoryStack>
-           
+        <VictoryArea
+          data={yellowComparisonData}
+          style={{data: {fill:'#eee'}}}
+          interpolation="natural"
+          />
+        <VictoryArea
+          data={redComparisonData}
+          style={{data: {fill:'#ddd'}}}
+          interpolation="natural"
+          />
         <VictoryLine
           style={{ data: {stroke: '#666'}}}
-          interpolation="cardinal"
+          interpolation="natural"
           data={polygonLineData}
         />
         <VictoryScatter
@@ -80,13 +74,9 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
           data={polygonLineData}
           size={({ datum }) => getPointStyleForZScore(datum.z_score).size}
         />
-
         <VictoryScatter
           style={{data: {fill: '#666'}}}
           data={frameScatterData}
-          // size={({ datum }) => datum.frameCount}
-          // size={6}
-
           dataComponent={<DateScatterPoint />}          
         />
 
