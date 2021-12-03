@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryStack, VictoryArea, VictoryLabel  } from 'victory'
+import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryArea, VictoryLabel  } from 'victory'
 import useDimensions from 'use-element-dimensions'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
@@ -8,7 +8,6 @@ import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
 
 import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
-import { chain, zip } from 'lodash'
 import { getDayOfYear } from '../utility/dateUtility'
 
 export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
@@ -101,7 +100,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
             dependentAxis
             style={{axis: {stroke: 'transparent'}}}
           />
-          <VictoryLabel text={props.year} x={width/2} y={10} textAnchor="middle" style={{fontSize: '14', fill: ''}}  />
+          <VictoryLabel text={props.year} x={width / 2} y={10} textAnchor="middle" style={{fontSize: '14', fill: ''}}  />
         </VictoryChart>
 
       </div>
@@ -141,25 +140,25 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
 
   let hovered = frame === hoveredFrame
   let selected = frame === selectedFrame
-  let borderColor = selected ? 'red' :
+  let borderColor = selected ? '#0074D9' :
                     hovered ?  'rgb(209, 213, 219)' :
                                'transparent'  
+
+  let style = selected ? {} : {}
+
   return (
     <circle
       cx={x}
       cy={y}
       // r={hovered || selected ? 12 : 6}
-      r={4}
-      
+      r={5}
       stroke={borderColor}
-      strokeWidth={3}
-      // fill={hovered ? "#777" : "#666"}
-      fill="#666"
-      // onClick={() => setSelected(!selected)}
+      strokeWidth={7}
+      fill="#777777"
       onClick={() => dispatch(mapperActions.selectFrame(frame))}
       onMouseEnter={() => dispatch(mapperActions.hoverFrame(frame))}
       onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
-      style={{cursor: 'pointer'}}
+      style={{cursor: 'pointer', ...style}}
     />
   )
 }
