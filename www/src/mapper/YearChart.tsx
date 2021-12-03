@@ -82,7 +82,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
           <VictoryLine
             animate={{ duration: 300, easing: 'sinOut'}}
             style={{ data: {stroke: '#666'}}}
-            interpolation="natural"
+            interpolation="linear"
             data={polygonLineData}
           />
           <VictoryScatter
