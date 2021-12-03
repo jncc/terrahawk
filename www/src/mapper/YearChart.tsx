@@ -50,10 +50,10 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   let redComparisonData    = getComparisionAreaData(s => s.cf_value - (s.cf_value_sd * 1), s => s.cf_value + (s.cf_value_sd * 1))
 
   return (
-    <div ref={ref} className="max-w-4xl m-auto px-2 my-3">
+    <div ref={ref} className="max-w-4xl m-auto px-2 mb-4 border-2 border-gray-300 rounded-xl p-3">
 
       <div className="">
-        <VictoryChart width={width} height={32} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
+        <VictoryChart width={width} height={16} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
           <VictoryScatter
             style={{data: {fill: '#666'}}}
             data={frameScatterData}
@@ -61,8 +61,6 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
           />
           <VictoryAxis
             style={{axis: {stroke: 'transparent'}}}
-            // padding={}
-
           />
         </VictoryChart>
       </div>
@@ -95,6 +93,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
           />
           <VictoryAxis
             style={{axis: {stroke: 'transparent'}}} 
+            orientation="bottom"
           />
           <VictoryAxis
             dependentAxis

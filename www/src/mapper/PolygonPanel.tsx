@@ -15,6 +15,7 @@ import { ThumbnailSlider } from './ThumbnailSlider'
 import { zeroPad } from '../utility/numberUtility'
 import { indexnames } from './helpers/statsHelper'
 import { getIndexnameIcon } from './helpers/iconHelper'
+import { Dispatch, AnyAction } from 'redux'
 
 export let PolygonPanel = () => {
 
@@ -34,34 +35,38 @@ export let PolygonPanel = () => {
         
         {selectedPolygon && zoomedEnoughToShowPolygons &&
         <div className="flex flex-col h-full">
-
-          <div className="flex-none">
-            <div className="flex items-center space-x-3 mb-3">
-              <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
-              <div className="leading-tight">
-                <div>{selectedPolygon.habitat}</div>
-                <div className="flex gap-2 items-center">
-                  <div className="little-label-text ">Polygon {selectedPolygon.polyid}</div>
-                </div>
-              </div>
-              <div className="flex-1"></div>
-              <div className="flex items-center pr-1">
-                <button
-                  className="close-button"
-                  onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
-                  <XIcon className="h-7 w-7"/>
-                </button>
-              </div>
-            </div>
-          </div>
-
+          {makeHeaderBar(dispatch, selectedPolygon)}
           {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygon, selectedPolygonStats, query, selectedFrame)}
-
         </div>
         }
 
       </div>
     </div>
+  )
+}
+
+let makeHeaderBar = (dispatch: Dispatch<AnyAction>, selectedPolygon: Poly) => {
+
+  return (
+    <div className="flex-none  mb-2">
+      <div className="flex items-center space-x-3">
+        <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
+        <div className="leading-tight">
+          <div>{selectedPolygon.habitat}</div>
+          <div className="flex gap-2 items-center">
+            <div className="little-label-text ">Polygon {selectedPolygon.polyid}</div>
+          </div>
+        </div>
+        <div className="flex-1"></div>
+        <div className="flex items-center pr-1">
+          <button
+            className="close-button"
+            onClick={() => dispatch(mapperActions.selectPolygon(undefined))}>
+            <XIcon className="h-7 w-7"/>
+          </button>
+        </div>
+      </div>
+    </div>    
   )
 }
 
@@ -85,10 +90,10 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
 
   return (
     <>
-      <div className="flex-none">
+      <div className="flex-none mb-2">
         {makeChartTitle(selectedPolygonStats, query.indexname, query.statistic)}
       </div>
-      <div className="flex-grow flex-row overflow-y-scroll mb-5">
+      <div className="flex-grow flex-row overflow-y-scroll mb-5 pr-3">
         {chain(Object.entries(statsGroupedByYears))
           // .orderBy(([year]) => year, ['desc'])
           .map(([year, monthStats]) =>
