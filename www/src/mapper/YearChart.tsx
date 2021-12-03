@@ -14,7 +14,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
 
   // victory chart does not automatically fill the width of its container, so
   // we need to measure it https://github.com/FormidableLabs/victory/issues/396
-  let [{width, height}, ref] = useDimensions()
+  let [{width}, ref] = useDimensions()
 
   let polygonLineData = monthlyTicks.map(({value, label}) => {
     let dataForInterval = props.data.find(d => d.month === value)
@@ -40,7 +40,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
     let dataForInterval = props.data.find(d => d.month === value)
     return {
       x: label,
-      y: 0,
+      y: 5,
       frameCount: dataForInterval ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value)).length : null,
       firstFrame: dataForInterval ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value))[0].frame : null,
     }
@@ -50,47 +50,60 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   let redComparisonData    = getComparisionAreaData(s => s.cf_value - (s.cf_value_sd * 1), s => s.cf_value + (s.cf_value_sd * 1))
 
   return (
-    <div ref={ref} className="h-32 max-w-4xl m-auto px-2 my-3">
+    <div ref={ref} className="max-w-4xl m-auto px-2 my-3">
 
-      <VictoryChart width={width} height={height} padding={{left: 35, right: 35, bottom:30, top: 5}} domainPadding={{x: 5, y:5}}  >
-        <VictoryArea
-          animate={{ duration: 300, easing: 'sinOut'}}
-          data={yellowComparisonData}
-          style={{data: {fill:'#eee'}}}
-          interpolation="natural"
+      <div className="">
+        <VictoryChart width={width} height={32} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
+          <VictoryScatter
+            style={{data: {fill: '#666'}}}
+            data={frameScatterData}
+            dataComponent={<DateScatterPoint />}          
           />
-        <VictoryArea
-          animate={{ duration: 300, easing: 'sinOut'}}
-          data={redComparisonData}
-          style={{data: {fill:'#ddd'}}}
-          interpolation="natural"
+          <VictoryAxis
+            style={{axis: {stroke: 'transparent'}}}
+            // padding={}
+
           />
-        <VictoryLine
-          animate={{ duration: 300, easing: 'sinOut'}}
-          style={{ data: {stroke: '#666'}}}
-          interpolation="natural"
-          data={polygonLineData}
-        />
-        <VictoryScatter
-          animate={{ duration: 300, easing: 'sinOut'}}
-          style={{data: {fill: ({datum}) => getPointStyleForZScore(datum.z_score).color}}}
-          data={polygonLineData}
-          size={({ datum }) => getPointStyleForZScore(datum.z_score).size}
-        />
-        <VictoryScatter
-          style={{data: {fill: '#666'}}}
-          data={frameScatterData}
-          dataComponent={<DateScatterPoint />}          
-        />
-        <VictoryAxis
-          style={{axis: {stroke: 'transparent'}}} 
-        />
-        <VictoryAxis
-          dependentAxis
-          style={{axis: {stroke: 'transparent'}}}
-        />
-        <VictoryLabel text={props.year} x={width/2} y={10} textAnchor="middle" style={{fontSize: '14', fill: ''}}  />
-      </VictoryChart>
+        </VictoryChart>
+      </div>
+
+      <div className="h-32">
+        <VictoryChart width={width} height={128} padding={{left: 35, right: 35, bottom:30, top: 5}} domainPadding={{x: 5, y: 5}}  >
+          <VictoryArea
+            animate={{ duration: 300, easing: 'sinOut'}}
+            data={yellowComparisonData}
+            style={{data: {fill:'#eee'}}}
+            interpolation="natural"
+            />
+          <VictoryArea
+            animate={{ duration: 300, easing: 'sinOut'}}
+            data={redComparisonData}
+            style={{data: {fill:'#ddd'}}}
+            interpolation="natural"
+            />
+          <VictoryLine
+            animate={{ duration: 300, easing: 'sinOut'}}
+            style={{ data: {stroke: '#666'}}}
+            interpolation="natural"
+            data={polygonLineData}
+          />
+          <VictoryScatter
+            animate={{ duration: 300, easing: 'sinOut'}}
+            style={{data: {fill: ({datum}) => getPointStyleForZScore(datum.z_score).color}}}
+            data={polygonLineData}
+            size={({ datum }) => getPointStyleForZScore(datum.z_score).size}
+          />
+          <VictoryAxis
+            style={{axis: {stroke: 'transparent'}}} 
+          />
+          <VictoryAxis
+            dependentAxis
+            style={{axis: {stroke: 'transparent'}}}
+          />
+          <VictoryLabel text={props.year} x={width/2} y={10} textAnchor="middle" style={{fontSize: '14', fill: ''}}  />
+        </VictoryChart>
+
+      </div>
     </div>
   )
 }
