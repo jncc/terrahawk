@@ -110,7 +110,7 @@ export let QueryPanel = () => {
               </select>
             </div>
           </div>
-
+{/* 
           <div className="flex justify-between items-center mb-2">
             <button
               className="arrow-button"
@@ -140,7 +140,7 @@ export let QueryPanel = () => {
               <ChevronDoubleRightIcon className="h-5 w-5" />
             </button>
           </div>
-
+ */}
         </div>
 
       </div>

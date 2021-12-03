@@ -52,24 +52,27 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   return (
     <div ref={ref} className="h-32 max-w-4xl m-auto px-2 my-3">
 
-      <VictoryChart width={width} height={height} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
-
+      <VictoryChart width={width} height={height} padding={{left: 35, right: 35, bottom:30, top: 5}} domainPadding={{x: 5, y:5}}  >
         <VictoryArea
+          animate={{ duration: 300, easing: 'sinOut'}}
           data={yellowComparisonData}
           style={{data: {fill:'#eee'}}}
           interpolation="natural"
           />
         <VictoryArea
+          animate={{ duration: 300, easing: 'sinOut'}}
           data={redComparisonData}
           style={{data: {fill:'#ddd'}}}
           interpolation="natural"
           />
         <VictoryLine
+          animate={{ duration: 300, easing: 'sinOut'}}
           style={{ data: {stroke: '#666'}}}
           interpolation="natural"
           data={polygonLineData}
         />
         <VictoryScatter
+          animate={{ duration: 300, easing: 'sinOut'}}
           style={{data: {fill: ({datum}) => getPointStyleForZScore(datum.z_score).color}}}
           data={polygonLineData}
           size={({ datum }) => getPointStyleForZScore(datum.z_score).size}
@@ -79,12 +82,14 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
           data={frameScatterData}
           dataComponent={<DateScatterPoint />}          
         />
-
-        <VictoryAxis style={{axis: {stroke: 'transparent'}}}   />
-        <VictoryAxis dependentAxis style={{axis: {stroke: 'transparent'}}}  />
-
+        <VictoryAxis
+          style={{axis: {stroke: 'transparent'}}} 
+        />
+        <VictoryAxis
+          dependentAxis
+          style={{axis: {stroke: 'transparent'}}}
+        />
         <VictoryLabel text={props.year} x={width/2} y={10} textAnchor="middle" style={{fontSize: '14', fill: ''}}  />
-
       </VictoryChart>
     </div>
   )
