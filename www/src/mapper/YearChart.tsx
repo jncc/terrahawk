@@ -9,6 +9,7 @@ import { mapperActions } from './slice'
 
 import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
 import { chain, zip } from 'lodash'
+import { getDayOfYear } from '../utility/dateUtility'
 
 export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
 
@@ -36,13 +37,12 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
     })
   }
 
-  let frameScatterData = monthlyTicks.map(({value, label}) => {
-    let dataForInterval = props.data.find(d => d.month === value)
+  let frameScatterData = props.framesWithDate.map((pair) => {
+    let day = getDayOfYear(pair.date.year, pair.date.month, pair.date.day)
     return {
-      x: label,
+      x: day,
       y: 5,
-      frameCount: dataForInterval ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value)).length : null,
-      firstFrame: dataForInterval ? props.framesWithDate.filter(x => x.date.month === Number.parseInt(value))[0].frame : null,
+      frame: pair.frame
     }
   })
 
@@ -53,7 +53,9 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
     <div ref={ref} className="max-w-4xl m-auto px-2 mb-4 border-2 border-gray-300 rounded-xl p-3">
 
       <div className="">
-        <VictoryChart width={width} height={16} padding={{left: 35, right: 35}} domainPadding={{x: 5}}  >
+        <VictoryChart width={width} height={16} padding={{left: 5, right: 5}} domainPadding={{x: 5, y: 5}} 
+          domain={{x: [1, 366]}}
+        >
           <VictoryScatter
             style={{data: {fill: '#666'}}}
             data={frameScatterData}
@@ -135,7 +137,7 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
   let selectedFrame = useStateSelector(s => s.mapper.selectedFrame)
   let hoveredFrame = useStateSelector(s => s.mapper.hoveredFrame)
 
-  let frame = datum.firstFrame
+  let frame = datum.frame
 
   let hovered = frame === hoveredFrame
   let selected = frame === selectedFrame
@@ -147,15 +149,15 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
       cx={x}
       cy={y}
       // r={hovered || selected ? 12 : 6}
-      r={datum.frameCount}
+      r={4}
       
       stroke={borderColor}
       strokeWidth={3}
       // fill={hovered ? "#777" : "#666"}
       fill="#666"
       // onClick={() => setSelected(!selected)}
-      onClick={() => dispatch(mapperActions.selectFrame(datum.firstFrame))}
-      onMouseEnter={() => dispatch(mapperActions.hoverFrame(datum.firstFrame))}
+      onClick={() => dispatch(mapperActions.selectFrame(frame))}
+      onMouseEnter={() => dispatch(mapperActions.hoverFrame(frame))}
       onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
       style={{cursor: 'pointer'}}
     />

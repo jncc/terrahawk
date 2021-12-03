@@ -36,7 +36,7 @@ export let PolygonPanel = () => {
         {selectedPolygon && zoomedEnoughToShowPolygons &&
         <div className="flex flex-col h-full">
           {makeHeaderBar(dispatch, selectedPolygon)}
-          {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygon, selectedPolygonStats, query, selectedFrame)}
+          {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query, selectedFrame)}
         </div>
         }
 
@@ -70,7 +70,7 @@ let makeHeaderBar = (dispatch: Dispatch<AnyAction>, selectedPolygon: Poly) => {
   )
 }
 
-let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: MonthStats[], query: Query, selectedFrame: string|undefined) => {
+let makeLoadedPolygonDetails = (selectedPolygonStats: MonthStats[], query: Query, selectedFrame: string|undefined) => {
 
   // todo: calculate instead, e.g. chain(Object.keys(years)).max().value()
   let mostRecentFullYear = '2020'
@@ -87,6 +87,9 @@ let makeLoadedPolygonDetails = (selectedPolygon: Poly, selectedPolygonStats: Mon
   let yearOfSelectedFrame = framesWithDate.filter(x => x.frame === selectedFrame).map(x => x.date.year.toString()).find(() => true) // ie, first()
   let yearOfFramesToUse = yearOfSelectedFrame ? yearOfSelectedFrame : mostRecentFullYear
   let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === Number.parseInt(yearOfFramesToUse))
+
+  // let percentageOfMissingData = Object.entries(statsGroupedByYears)
+  //   .map(([year, monthStats]) => monthStats.some(s => s.))
 
   return (
     <>
