@@ -52,7 +52,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
     <div ref={ref} className="max-w-4xl m-auto px-2 mb-4 border-2 border-gray-300 rounded-xl p-3">
 
       <div className="">
-        <VictoryChart width={width} height={16} padding={{left: 5, right: 5}} domainPadding={{x: 5, y: 5}} 
+        <VictoryChart width={width} height={16} padding={{left: 15, right: 10}} domainPadding={{x: 5, y: 5}} 
           domain={{x: [1, 366]}}
         >
           <VictoryScatter
