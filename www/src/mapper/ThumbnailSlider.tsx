@@ -31,18 +31,41 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
 
   return (
     <>
-      <div className="flex overflow-y-auto pb-2 pt-1">
+      <div className="flex overflow-y-auto pb-2 pt-1 mb-1">
         {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
       </div>
-
-      <div className="flex mt-1">
+      <div className="flex gap-4">
         <div className="flex-grow"></div>
-        <div className="flex-none">
+        <div className="flex-none flex items-center text-sm">
 
-          <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
+            {/* <div>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  className="form-radio"
+                  name="thumbnailtype"
+                  value="colour"
+                  checked
+                />
+                <span className="ml-2">Colour</span>
+              </label>
+            </div>
+            <div>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  className="form-radio"
+                  name="thumbnailtype"
+                  value="index"
+                />
+                <span className="ml-2">Index</span>
+              </label>
+            </div> */}
 
         </div>
-
+        <div className="flex-none">
+          <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
+        </div>
       </div>
     </>
   )
