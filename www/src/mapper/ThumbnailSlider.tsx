@@ -22,7 +22,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
                                                             [selectedPolygon.geojson.coordinates, frameworks[framework].srs])
   let polygonRings = useMemo(() => getPolygonOutline(nativeCoords, width, height),
                                                     [nativeCoords, width, height])
-  let outline = <svg 
+  let outline = <svg
                   className="col-span-full row-span-full animate-quickfadein"
                   height={height}
                   width={width}>

@@ -12,7 +12,7 @@ Sprint 1 (to Tues 16 Feb)
 -------------------------
 
 - [x] Flesh out API-first proposal for PR/LW {pm}
-- [x] Talk to Cathy / Felix re Jasmin hosting capabilities {pm}
+- [x] Talk to devs re Jasmin hosting capabilities {pm}
   - Jasmin can host the thumbnails on 'group workspace'
 - [x] Confirm current shiny PoC cannot be upscaled in reasonable time {bt, ih, pm}
 - [x] Go over Jasmin processing technically {cj, ih, pm, fm}
@@ -327,13 +327,13 @@ Sprint 19 (to November 26)
 Sprint 20 (to December 10; *MVP* release)
 -----------------------------------------
 
-- [ ] Date filtering {pm}
+- [x] Date filtering {pm}
 - [ ] Charts {pm}
-  - [ ] Support negative values
-  - [ ] Layout - stretch?
+  - [x] Support negative values
+  - [x] Layout - stretch?
   - [ ] Ungroup "captures"/frames, spread over year
   - [ ] Styling / position for captures
-- [ ] Fix thumbnail ordering {pm}
+- [x] Fix thumbnail ordering {pm}
 - [ ] Support Index thumbnails (maybe just those dates that are done) {pm}
 - [ ] Fix polygon selection {pm}
 - [ ] Add map controls (zoom, polygon toggle) {pm}
@@ -383,7 +383,9 @@ Backlog
 
 - [ ] Download stats as CSV/text file
 
-- XTunable warning thresholds (default Amber=1 and Red=2)
+- [ ] Tunable warning thresholds (default Amber=1 and Red=2)
+
+- [ ] Delay the expensive render to improve responsiveness (especially when updating querying using cached data) - React 18 or debounce?
 
 - [ ] Glue / Spark optimisation https://aws.amazon.com/blogs/big-data/optimize-memory-management-in-aws-glue/ 
 

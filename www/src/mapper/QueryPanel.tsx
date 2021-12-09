@@ -5,11 +5,7 @@ import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, Chevron
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 import { Indexname, Statistic } from './types'
-
-const indexnames: [Indexname, string, string][] = [
-  ['EVI', 'vegetation', '🌿'], ['NBR', 'burn', '🔥'], ['NDMI', 'moisture', '💦'], ['NDVI', 'vegetation', '🌿'], ['NDWI', 'water', '🌊']
-]
-const statistics: Statistic[] = ['mean' , 'median' , 'min' , 'max' , 'Q1' , 'Q3']
+import { indexnames, statistics } from './helpers/statsHelper'
 
 const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021]
 const months = [
@@ -36,7 +32,7 @@ export let QueryPanel = () => {
             onChange={e => dispatch(mapperActions.alterQueryIndexname(e.target.value as Indexname))}
             className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
             {
-              indexnames.map(ix => <option key={ix[0]} value={ix[0]}>{`${ix[0]}`}</option>)
+              Object.entries(indexnames).map(([name, info]) => <option key={name} value={name}>{`${name}`} {`(${info.description})`}</option>)
             }
           </select>
         </div>
@@ -114,7 +110,7 @@ export let QueryPanel = () => {
               </select>
             </div>
           </div>
-
+{/* 
           <div className="flex justify-between items-center mb-2">
             <button
               className="arrow-button"
@@ -144,7 +140,7 @@ export let QueryPanel = () => {
               <ChevronDoubleRightIcon className="h-5 w-5" />
             </button>
           </div>
-
+ */}
         </div>
 
       </div>

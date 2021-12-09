@@ -11,5 +11,5 @@ export let bboxRectangleStyle = {
   interactive: false,
   color: '#667EEA',
   fill: false,
-  weight: 1,
+  weight: 2,
 }

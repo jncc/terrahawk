@@ -65,17 +65,10 @@ export let Thumb = (props: {
   useEffect(() => {
 
     if (load && !loaded) {
-      setTimeout(() => {
-        // let box = getBoundingBoxWithBuffer(props.nativeCoords)
-        // console.log(props.frame)
-        // console.log(selectedPolygon.polyid)
-        // console.log(box)
-        // getThumbnail(props.frame, selectedPolygon.polyid, box, 'trueColour', true).then((img) => {
-        getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
-          setSrc(img)
-          setLoaded(true)
-        })
-      }, 500) // hack to reduce jank - let the slider finish animating
+      getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
+        setSrc(img)
+        setLoaded(true)
+      })
     }
   }, [load, loaded])
 
@@ -122,7 +115,7 @@ export let Thumb = (props: {
         </div>
       </button>
 
-      <div className="text-center text-sm ">
+      <div className="text-center text-sm">
         {getDisplayDate(props.date)}
       </div>
 

@@ -1,4 +1,6 @@
 
+import { chain, orderBy, uniqBy } from 'lodash'
+import { zeroPad } from '../../utility/numberUtility'
 import { trimAny } from '../../utility/stringUtility'
 import { MonthStats, SimpleDate } from '../types'
 
@@ -25,5 +27,8 @@ let getFramesFromFrameField = (value: string): string[] => {
 export let getFramesWithDate = (stats: MonthStats[]) => {
   let allFrames = stats.flatMap(d => getFramesFromFrameField(d.frame))
   let allDates = stats.flatMap(d => getDatesFromDateField(d.date))
-  return allFrames.map((f, i) => ({frame: f, date: allDates[i]}))
+  let zipped = allFrames.map((f, i) => ({frame: f, date: allDates[i]}))
+
+  // fix the date order
+  return orderBy(zipped, x => `${x.date.year}-${zeroPad(x.date.month)}-${zeroPad(x.date.day)}`)
 }

@@ -82,9 +82,6 @@ let slice = createSlice({
     fetchPolygonCompleted: (state, a: PayloadAction<MonthStats[] | undefined>) => {
       let stats = a.payload
       state.selectedPolygonStats = stats
-      if (stats && stats.length) {
-        state.selectedFrame = last(getFramesWithDate(stats)).frame
-      }
     },
     selectFrame: (state, a: PayloadAction<string | undefined>) => {
       state.selectedFrame = a.payload

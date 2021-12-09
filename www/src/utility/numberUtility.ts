@@ -7,3 +7,5 @@ export const roundTo2Decimals = (n: number) => Math.round(100 * n) / 100
 
 /** Rounds the number to 1 decimal place. */
 export const roundTo1Decimal = (n: number) => Math.round(10 * n) / 10
+
+export const zeroPad = (n: number) => String(n).padStart(2, '0')

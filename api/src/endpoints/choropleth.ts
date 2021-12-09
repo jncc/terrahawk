@@ -3,7 +3,6 @@ import * as format from 'pg-format'
 
 import { athenaExpress } from "../aws"
 import { parseArgs } from "./choroplethArgParser"
-import { getPolygonsImpl } from './polygons'
 
 /*
     example: POST /choropleth
@@ -56,6 +55,10 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
     // %L outputs an escaped SQL literal.
     // %s outputs a simple string.
 
+    // get date strings like '202004' (for April 2020)
+    let dateFrom = `${q.yearFrom}${zeroPad(q.monthFrom)}`
+    let dateTo = `${q.yearTo}${zeroPad(q.monthTo)}`
+
     let sql = format(`
         select s.polyid,
             max(abs(s.z_mean)  ) as max_z_mean,
@@ -68,20 +71,16 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
         where
             framework=%L
             and indexname=%L
-            and cast(year as integer) >= cast(%L as integer)
-            and cast(month as integer) >= cast(%L as integer)
-            and cast(year as integer) <= cast(%L as integer)
-            and cast(month as integer) <= cast(%L as integer)
+            and year || month >= %L
+            and year || month <= %L
             and poly_partition in (%L)
             and polyid in (%L)
         group by polyid
         `,
         q.framework,
         q.indexname,
-        q.yearFrom,
-        q.monthFrom,
-        q.yearTo,
-        q.monthTo,
+        dateFrom,
+        dateTo,
         q.polyPartitions,
         q.polyids
     )
@@ -89,6 +88,8 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
     console.log(sql)
 
     let result = await athenaExpress().query({ sql, db: 'statsdb' })
-    if (!result.Items) throw 'No items returned from query'
+    // if (!result.Items) throw 'No items returned from query'
     return result.Items
 }
+
+let zeroPad = (n: number) => String(n).padStart(2, '0')
