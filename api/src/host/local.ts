@@ -63,7 +63,7 @@ if (env.NODE_ENV === 'development') {
 
         let result = await getThumb(req.query)
         res.setHeader('Content-Type', 'image/png')
-        result.pipe(res)
+        res.send(result)
     }))
 
     app.listen(8000, () => {

@@ -21,5 +21,5 @@ export const getThumb = async (args: any) => {
 
 
    let thumbCanvas = getThumbnail(frame, box, 'ndwi')
-   return (await thumbCanvas).createPNGStream()
+   return (await thumbCanvas).toBuffer('image/png')
 }
