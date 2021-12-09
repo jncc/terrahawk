@@ -122,7 +122,7 @@ functions:
       - httpApi:
           path: /stats
           method: POST
-  stats:
+  thumb:
     handler: built/host/aws.thumbHandler
     events:
       - httpApi:
