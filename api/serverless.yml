@@ -61,6 +61,20 @@ provider:
 #    - exclude-me.js
 #    - exclude-me-dir/**
 
+layers:
+  canvas:
+    package:
+      artifact: layers/node12_canvas_layer.zip
+    description: Canvas layer for thumb function
+    compatibleRuntimes:
+      - nodejs12.x
+  canvaslib64:
+    package:
+      artifact: layers/node12_canvas_lib64_layer.zip
+    description: Canvaslib64 layer for thumb function
+    compatibleRuntimes:
+      - nodejs12.x
+
 functions:
   hello:
     handler: built/host/aws.helloHandler
@@ -128,6 +142,9 @@ functions:
       - httpApi:
           path: /thumb
           method: GET
+    layers:
+      - { Ref: CanvasLambdaLayer }
+      - { Ref: Canvaslib64LambdaLayer }
 
 # plugins:
 #   - serverless-finch

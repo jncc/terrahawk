@@ -20,3 +20,4 @@ Deploy to an AWS environment:
 
     deploy:alpha
 
+Prebuilt lambda layers taken from [node-canvas-lambda](https://github.com/jwerre/node-canvas-lambda).
