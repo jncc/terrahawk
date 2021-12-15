@@ -47,6 +47,19 @@ export function parseFrameName(args: Args) {
     return args.framename
 }
 
+export function parseThumbType(args: Args) {
+    if (!args.thumbType) {
+        throw `Expected 'thumbType'.`
+    }
+    if (typeof args.thumbType !== 'string') {
+        throw `Expected 'thumbType' to be a string.`
+    }
+    if (args.thumbType.length < 3) {
+        throw `Invalid thumbType.`
+    }
+    return args.thumbType
+}
+
 export function parseBbox(args: Args) {
     if (!args.bbox) {
         throw `Expected 'bbox'.`

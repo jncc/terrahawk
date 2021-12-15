@@ -7,7 +7,7 @@ export const getThumb = async (input: any) => {
   let args = parseArgs(input)
   let frame = args.frameName
   let bbox = JSON.parse(args.bbox) as number[]
-  let thumbType = args.indexname.toLowerCase()
+  let thumbType = args.thumbType
 
   let thumbCanvas = getThumbnail(frame, bbox, thumbType)
   return (await thumbCanvas).toBuffer('image/png')

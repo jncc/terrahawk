@@ -1,5 +1,5 @@
 
-import { ensureSomeArgs, parseFrameName, parseIndexname, parseBbox } from '../validation'
+import { ensureSomeArgs, parseFrameName, parseThumbType, parseBbox } from '../validation'
 
 /**
  * Parses an args input map from Express or Lambda.
@@ -8,12 +8,12 @@ import { ensureSomeArgs, parseFrameName, parseIndexname, parseBbox } from '../va
 
     let args = ensureSomeArgs(maybeArgs)
     let frameName = parseFrameName(args)
-    let indexname = parseIndexname(args)
+    let thumbType = parseThumbType(args)
     let bbox = parseBbox(args)
 
     return {
         frameName,
-        indexname,
+        thumbType,
         bbox
     }
 }
