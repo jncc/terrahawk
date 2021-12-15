@@ -1,25 +1,14 @@
+import { getThumbnail } from './thumbnails/thumbnailGenerator'
+import { parseArgs } from './thumbArgParser'
 
-import { createCanvas } from 'canvas'
-import { getBoundingBoxWithBuffer, getThumbnail } from './thumbnails/thumbnailGenerator'
-
-export const getThumb = async (args: any) => {
-
+export const getThumb = async (input: any) => {
   console.log(`At ${(new Date()).toISOString()} - entering function`)
 
-  // let canvas = createCanvas(200, 200)
+  let args = parseArgs(input)
+  let frame = args.frameName
+  let bbox = JSON.parse(args.bbox) as number[]
+  let thumbType = args.indexname.toLowerCase()
 
-  // let ctx = canvas.getContext('2d')
-  // ctx.fillStyle = 'green';
-  // ctx.fillRect(10, 10, 150, 100);
-
-  // return canvas.createPNGStream()
-
-
-   let frame = 'S2A_20200206_lat54lon066_T30UXE_ORB137_utm30n_osgb'
-   let unnecessaryPolyid = '712395'
-   let box = [501483.46637888433, 502286.5142532888, 422093.4853378338, 422896.5332122383]
-
-
-   let thumbCanvas = getThumbnail(frame, box, 'ndwi')
-   return (await thumbCanvas).toBuffer('image/png')
+  let thumbCanvas = getThumbnail(frame, bbox, thumbType)
+  return (await thumbCanvas).toBuffer('image/png')
 }

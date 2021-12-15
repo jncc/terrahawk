@@ -34,6 +34,19 @@ export function parseIndexname(args: Args) {
     return args.indexname
 }
 
+export function parseFrameName(args: Args) {
+    if (!args.framename) {
+        throw `Expected 'framename'.`
+    }
+    if (typeof args.framename !== 'string') {
+        throw `Expected 'framename' to be a string.`
+    }
+    if (args.framename.length < 40) {
+        throw `Invalid framename.`
+    }
+    return args.framename
+}
+
 export function parseBbox(args: Args) {
     if (!args.bbox) {
         throw `Expected 'bbox'.`

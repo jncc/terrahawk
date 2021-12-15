@@ -28,6 +28,10 @@ provider:
   httpApi:
     cors: true # could remove if eventually all on same domain
 
+  layers:
+    - { Ref: CanvasLambdaLayer }
+    - { Ref: Canvaslib64LambdaLayer }
+
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -146,9 +150,7 @@ functions:
       - httpApi:
           path: /thumb
           method: GET
-    layers:
-      - { Ref: CanvasLambdaLayer }
-      - { Ref: Canvaslib64LambdaLayer }
+    
 
 # plugins:
 #   - serverless-finch
