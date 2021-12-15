@@ -75,6 +75,10 @@ layers:
     compatibleRuntimes:
       - nodejs12.x
 
+package:
+  exclude:
+    - 'layers/**'
+
 functions:
   hello:
     handler: built/host/aws.helloHandler
