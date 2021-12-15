@@ -5,7 +5,7 @@ import { fromIntersection } from 'rxjs-web-observers'
 import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getThumbnail } from '../thumbnails/thumbnailGenerator'
+import { getBoundingBoxWithBuffer, getThumbnail } from '../thumbnails/thumbnailGenerator'
 // import { getThumbnail, getBoundingBoxWithBuffer } from '../../../api/src/endpoints/thumbnails/thumbnailGenerator' //' thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
@@ -23,10 +23,11 @@ export let Thumb = (props: {
   let hoveredFrame    = useStateSelector(s => s.mapper.hoveredFrame)
   let selectedFrame   = useStateSelector(s => s.mapper.selectedFrame)
   let showOutlines    = useStateSelector(s => s.mapper.showOutlines)
+  let useProxy        = useStateSelector(s => s.mapper.useProxy)
 
-  let [load, setLoad]     = useState(false)
-  let [loaded, setLoaded] = useState(false)
-  let [src, setSrc]       = useState('http://placekitten.com/100/100')
+  let [load, setLoad]         = useState(false)
+  let [loaded, setLoaded]     = useState(false)
+  let [src, setSrc]           = useState('http://placekitten.com/100/100')
 
   let hovered  = props.frame === hoveredFrame
   let selected = props.frame === selectedFrame
@@ -65,11 +66,21 @@ export let Thumb = (props: {
   useEffect(() => {
 
     if (load && !loaded) {
-      getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
-        setSrc(img)
+      if (useProxy) {
+        let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
+        let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=trueColour&bbox=${JSON.stringify(bbox)}`
+        setSrc(url)
         setLoaded(true)
-      })
+      } else {
+        getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
+          setSrc(img)
+          setLoaded(true)
+        })
+      } 
     }
+
+      
+
   }, [load, loaded])
 
   return (
