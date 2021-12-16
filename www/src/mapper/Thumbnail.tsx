@@ -6,7 +6,6 @@ import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getBoundingBoxWithBuffer, getThumbnail } from '../thumbnails/thumbnailGenerator'
-// import { getThumbnail, getBoundingBoxWithBuffer } from '../../../api/src/endpoints/thumbnails/thumbnailGenerator' //' thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Poly, SimpleDate } from './types'
@@ -78,8 +77,6 @@ export let Thumb = (props: {
         })
       } 
     }
-
-      
 
   }, [load, loaded])
 
