@@ -38,9 +38,9 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
 
       <div className="flex mt-1">
         <div className="flex-grow"></div>
-        <div className="flex-none">
+        {/* <div className="flex-none">
           <Toggle label="Proxy" position="left" checked={useProxy} onChange={() => dispatch(mapperActions.toggleProxy())} />
-        </div>
+        </div> */}
         <div className="flex-none">
           <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
         </div>
