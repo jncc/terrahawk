@@ -279,7 +279,7 @@ function convertOsgbToPixelCoords(osgbCoords : number[], osgbScale : Scale, pixe
   return pixelCoords
 }
 
-function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number) {
+export function getBoundingBoxWithBuffer(coordinates : number[][][][], bufferPercentage : number) {
   let eastings  : number[] = []
   let northings : number[] = []
 

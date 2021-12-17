@@ -16,6 +16,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let framework = useStateSelector(s => s.mapper.query.framework)
   let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // selectedPolygon can't be undefined in this component
   let showOutlines = useStateSelector(s => s.mapper.showOutlines)
+  let useProxy = useStateSelector(s => s.mapper.useProxy)
   
   // do calcs common to all the thumbnails up here in the slider
   let nativeCoords = useMemo(() => getReprojectedCoordinates(selectedPolygon.geojson.coordinates, frameworks[framework].srs),

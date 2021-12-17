@@ -24,6 +24,7 @@ let slice = createSlice({
     selectedFrame: undefined as string | undefined,
     hoveredFrame: undefined as string | undefined,
     showOutlines: true,
+    useProxy: true
   },
   reducers: {
     togglePolygons: (state) => {
@@ -91,6 +92,9 @@ let slice = createSlice({
     },
     toggleOutlines: (state) => {
       state.showOutlines = !state.showOutlines
+    },
+    toggleProxy: (state) => {
+      state.useProxy = !state.useProxy
     },
   },
 })

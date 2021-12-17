@@ -9,6 +9,7 @@ import { getPolygons } from '../endpoints/polygons'
 import { getLookups } from '../endpoints/lookups'
 import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
+import { getThumb } from '../endpoints/thumb'
 
 if (env.NODE_ENV === 'development') {
 
@@ -48,6 +49,13 @@ if (env.NODE_ENV === 'development') {
 
         let result = await getStats(req.body)
         res.json(result)
+    }))
+
+    app.get('/thumb', asyncHandler(async(req, res) => {
+
+        let result = await getThumb(req.query)
+        res.setHeader('Content-Type', 'image/png')
+        res.send(result)
     }))
 
     app.listen(8000, () => {
