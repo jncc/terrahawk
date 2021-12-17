@@ -328,31 +328,47 @@ Sprint 20 (to December 10; *MVP* release)
 -----------------------------------------
 
 - [x] Date filtering {pm}
-- [ ] Charts {pm}
+- [x] Charts {pm}
   - [x] Support negative values
   - [x] Layout - stretch?
-  - [ ] Ungroup "captures"/frames, spread over year
-  - [ ] Styling / position for captures
+  - [x] Ungroup "captures"/frames, spread over year
+  - [x] ~~Styling~~ / position for captures
 - [x] Fix thumbnail ordering {pm}
-- [ ] Support Index thumbnails (maybe just those dates that are done) {pm}
+- [x] Plan and deliver demo {pr, pm}
+- [x] Rerun the S2 to fix the metadata {ih}
+- [x] 🎁 Get all S2 index files into CEDA archive ALMOST DONE {ih, uw}
+  - [x] Document this process
+
+Sprint 21 (to January 7th)
+--------------------------
+
+- [ ] Book science / data science talks {uw, pr}
+- [ ] Add back map controls (zoom, polygon toggle) {pm}
+- [ ] Slightly improve the index dropdown (description-first) {pm, ih}
+- [ ] Process some S1 stats on Jasmin to flush any issues {ih}
+- [ ] Guidance / help modal? {pm, ih}
+
+Stretch-targets / next sprint
+-----------------------------
+
 - [ ] Fix polygon selection {pm}
-- [ ] Add map controls (zoom, polygon toggle) {pm}
-- [ ] Plan and deliver demo {pr, pm}
-- [ ] 🎁 Get all S2 index files into CEDA archive {ih, uw}
-  - [ ] Document this process (data engineering wiki?)
-
-Sprint 21 (to January ?)
-------------------------
-
-- [ ] Guidance / help modal {pm, ih}
-- [ ] Process S1 stats {ih, pm, fm}
-- [ ] Process seasonal stats {pm, fm}
-- [ ] Respond to go-live issues {pm}
+- [ ] Support index thumbnails {pm}
+- [ ] Styling of capture points {pm}
+- [ ] 🐞 Fix hover ineffiency {pm}
+- [ ] Look into Leaflet tooltip Z-order {pm}
 
 Upcoming sprints
 ----------------
 
-Stats data workstream:
+- [ ] Respond to go-live issues {pm}
+- [ ] Report write-up / design documentation {pm, ih, pr}
+- [ ] Process seasonal stats {pm, fm}
+- [ ] Filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
+- [ ] Download data (as CSV or shapefile)
+- [ ] Seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
+
+Stats data workstream
+---------------------
 
 - [ ] Basic automated QA checks/assertions {fm, ih}
 - [ ] 🎁 Run all stats all the way through
@@ -360,15 +376,17 @@ Stats data workstream:
 - [ ] QA the final stats {ih}
 
 UI workstream
+-------------
+
   - [ ] 🎁 Field data in UI {pm}
 
-App services workstream:
+App services workstream
+-----------------------
 
 - [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
   - research & design 
   - get some data into Postgres
-  
-- [ ] Gazetteer {cj}
+- [ ] 🎁 Gazetteer {cj}
   - Design & implement backend DB with several datasets
   - API
 
@@ -376,6 +394,7 @@ Backlog
 -------
 
 - [ ] Update all `useStateSelector` usages to select only the variables needed
+
 - [ ] Check OS base map licence and attribution statement
   - Europa, like gov.scot
   - Use vector tiles https://labs.os.uk/public/os-data-hub-examples/os-vector-tile-api/vts-example-custom-style
@@ -383,7 +402,7 @@ Backlog
 
 - [ ] Download stats as CSV/text file
 
-- [ ] Tunable warning thresholds (default Amber=1 and Red=2)
+- [ ] Tunable warning thresholds (default Yellow=1 and Red=2)
 
 - [ ] Delay the expensive render to improve responsiveness (especially when updating querying using cached data) - React 18 or debounce?
 
@@ -394,7 +413,7 @@ Backlog
   - Chain jobs (maybe not needed)?
   - Bookmarking?
 
-- [ ] UI techincal debt
+- [ ] UI technical debt
   - Serverless.js 'Deprecation warning: Detected ".env" files.'
 
 - [ ] Implement contractor's fix for S1 top-shift problem :-)
@@ -404,6 +423,7 @@ Backlog
 
 - [ ] Aggregate the rows by month and season (separate output DBs).
   - need to store the frames contributing to the aggregation - can we store them efficiently without normalising??
+
 - [ ]  Database normalisation (storage optimisation)?
     - `habitat`
     - `frame`

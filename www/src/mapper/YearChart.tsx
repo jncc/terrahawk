@@ -52,7 +52,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
     <div ref={ref} className="max-w-4xl m-auto px-2 mb-4 border-2 border-gray-300 rounded-xl p-3">
 
       <div className="">
-        <VictoryChart width={width} height={16} padding={{left: 15, right: 10}} domainPadding={{x: 5, y: 5}} 
+        <VictoryChart width={width} height={16} padding={{left: 20, right: 10}} domainPadding={{x: 5, y: 5}} 
           domain={{x: [1, 366]}}
         >
           <VictoryScatter
@@ -67,7 +67,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
       </div>
 
       <div className="h-32">
-        <VictoryChart width={width} height={128} padding={{left: 35, right: 35, bottom:30, top: 5}} domainPadding={{x: 5, y: 5}}  >
+        <VictoryChart width={width} height={128} padding={{left: 40, right: 35, bottom:30, top: 5}} domainPadding={{x: 5, y: 5}}  >
           <VictoryArea
             animate={{ duration: 300, easing: 'sinOut'}}
             data={yellowComparisonData}

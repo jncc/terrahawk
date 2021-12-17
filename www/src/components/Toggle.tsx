@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react'
+import React from 'react'
 
-export let Toggle = (props: { label: string, position: 'left'|'right', checked: boolean, onChange: () => void }) => {
+export let Toggle = (props: {label: string, position: 'left'|'right', checked: boolean, onChange: () => void}) => {
 
   // let [checked, setChecked] = useState(checked)
   {/* https://medium.com/front-end-weekly/build-a-css-only-toggle-switch-using-tailwindcss-d2739882934         */ }
