@@ -103,16 +103,14 @@ export let Thumb = (props: {
           </div>
           {/* the generated image might not be exactly square, so use a sized container div and make the img `w-full h-full` */}
           <div
-            className="col-span-full row-span-full"
-            style={{height: height, width: width, visibility: loaded? 'visible' : 'hidden'}}
+            className="col-span-full row-span-full animate-quickfadein"
+            style={{height: height, width: width, display: loaded? 'block' : 'none'}}
           >
             <img
               src={src}
               className="w-full h-full rounded-md"
               alt={`Thumbnail image for ${getDisplayDate(props.date)}`}
-              onLoad={(e) => {
-                let imageElement = e.target as HTMLElement
-                imageElement.classList.add('animate-quickfadein') // trigger animation when visible
+              onLoad={() => {
                 setLoaded(true)
               }}
             />
