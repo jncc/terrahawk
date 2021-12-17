@@ -65,7 +65,7 @@ export let thumbHandler: APIGatewayProxyHandler = async (event) => {
       headers: {
         'Content-Type': 'image/png',
       },
-      body: result.toString('base64'),
+      body: result.toString('base64'), // somehow this lets you return binary media, see https://docs.aws.amazon.com/apigateway/latest/developerguide/lambda-proxy-binary-media.html
       isBase64Encoded: true
     }
 }
