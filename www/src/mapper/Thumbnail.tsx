@@ -26,7 +26,7 @@ export let Thumb = (props: {
 
   let [load, setLoad]         = useState(false)
   let [loaded, setLoaded]     = useState(false)
-  let [src, setSrc]           = useState('http://placekitten.com/100/100')
+  let [src, setSrc]           = useState('')
 
   let hovered  = props.frame === hoveredFrame
   let selected = props.frame === selectedFrame
@@ -69,11 +69,9 @@ export let Thumb = (props: {
         let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
         let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=trueColour&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
-        setLoaded(true)
       } else {
         getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
           setSrc(img)
-          setLoaded(true)
         })
       } 
     }
@@ -103,23 +101,24 @@ export let Thumb = (props: {
             </div>
             }
           </div>
-          {loaded &&
-          <>
           {/* the generated image might not be exactly square, so use a sized container div and make the img `w-full h-full` */}
           <div
-            className="col-span-full row-span-full animate-quickfadein"
-            style={{height: height, width: width}}
+            className="col-span-full row-span-full"
+            style={{height: height, width: width, visibility: loaded? 'visible' : 'hidden'}}
           >
             <img
               src={src}
               className="w-full h-full rounded-md"
               alt={`Thumbnail image for ${getDisplayDate(props.date)}`}
+              onLoad={(e) => {
+                let imageElement = e.target as HTMLElement
+                imageElement.classList.add('animate-quickfadein') // trigger animation when visible
+                setLoaded(true)
+              }}
             />
 
           </div>
-          {showOutlines && props.outlineSvg}
-          </>
-          }
+          {loaded && showOutlines && props.outlineSvg}
         </div>
       </button>
 
