@@ -51,8 +51,8 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   return (
     <div ref={ref} className="max-w-4xl m-auto px-2 mb-4 border-2 border-gray-300 rounded-xl p-3">
 
-      <div className="">
-        <VictoryChart width={width} height={16} padding={{left: 20, right: 10}} domainPadding={{x: 5, y: 5}} 
+      <div className="mb-1">
+        <VictoryChart width={width} height={22} padding={{left: 20, right: 10}} domainPadding={{x: 5, y: 10}} 
           domain={{x: [1, 366]}}
         >
           <VictoryScatter
@@ -137,28 +137,33 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
   let hoveredFrame = useStateSelector(s => s.mapper.hoveredFrame)
 
   let frame = datum.frame
-
   let hovered = frame === hoveredFrame
   let selected = frame === selectedFrame
-  let borderColor = selected ? '#0074D9' :
-                    hovered ?  'rgb(209, 213, 219)' :
-                               'transparent'  
 
-  let style = selected ? {} : {}
+  let size = hovered ? 4.5 : 4
 
   return (
-    <circle
-      cx={x}
-      cy={y}
-      // r={hovered || selected ? 12 : 6}
-      r={5}
-      stroke={borderColor}
-      strokeWidth={7}
-      fill="#777777"
-      onClick={() => dispatch(mapperActions.selectFrame(frame))}
-      onMouseEnter={() => dispatch(mapperActions.hoverFrame(frame))}
-      onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
-      style={{cursor: 'pointer', ...style}}
-    />
+    <>
+      {selected && <circle
+        cx={x}
+        cy={y}
+        r={9}
+        fill="white"
+        stroke="rgb(0, 116, 217)"
+        strokeWidth={3}
+      />}
+      <circle
+        cx={x}
+        cy={y}
+        r={size}
+        stroke="#777"
+        strokeWidth={3}
+        fill="white"
+        onClick={() => dispatch(mapperActions.selectFrame(frame))}
+        onMouseEnter={() => dispatch(mapperActions.hoverFrame(frame))}
+        onMouseLeave={() => dispatch(mapperActions.hoverFrame(undefined))}
+        style={{cursor: 'pointer'}}
+      />
+    </>
   )
 }

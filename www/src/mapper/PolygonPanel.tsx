@@ -51,8 +51,8 @@ let makeHeaderBar = (dispatch: Dispatch<AnyAction>, selectedPolygon: Poly) => {
     <div className="flex-none  mb-2">
       <div className="flex items-center space-x-3">
         <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
-        <div className="leading-tight">
-          <div>{selectedPolygon.habitat}</div>
+        <div className="text-lg leading-tight">
+          <div className="">{selectedPolygon.habitat}</div>
           <div className="flex gap-2 items-center">
             <div className="little-label-text ">Polygon {selectedPolygon.polyid}</div>
           </div>
@@ -126,9 +126,9 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
     return null
 
   return (
-    <div className="flex justify-center items-center gap-3 pt-1 pb-2 text-sm text-gray-900">
+    <div className="flex justify-center items-center gap-3 pt-1 pb-2 text-gray-900">
       <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-400" /></div>
-      <div className="">
+      <div className="italic">
         Monthly {statistic} {indexname} <span className="">({indexnames[indexname].description})</span> compared with {maxCfCount} similar polygons
       </div>
       <div className="flex items-center gap-1 little-label-text  ">
