@@ -83,6 +83,12 @@ let slice = createSlice({
     fetchPolygonCompleted: (state, a: PayloadAction<MonthStats[] | undefined>) => {
       let stats = a.payload
       state.selectedPolygonStats = stats
+      // select the first frame, by default
+      // todo: it would be better to have a common function that gets the visible (queried for) frames
+      if (stats) {
+        let framesWithDate = getFramesWithDate(stats).filter(s => s.date.year >= state.query.yearFrom)
+        state.selectedFrame = framesWithDate[0].frame
+      }
     },
     selectFrame: (state, a: PayloadAction<string | undefined>) => {
       state.selectedFrame = a.payload
