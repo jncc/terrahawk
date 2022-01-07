@@ -157,7 +157,7 @@ let DateScatterPoint = ({ x, y, datum }: any) => {
         cy={y}
         r={size}
         stroke="#777"
-        strokeWidth={3}
+        strokeWidth={2}
         fill="white"
         onClick={() => dispatch(mapperActions.selectFrame(frame))}
         onMouseEnter={() => dispatch(mapperActions.hoverFrame(frame))}
