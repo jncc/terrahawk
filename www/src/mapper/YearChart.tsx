@@ -51,7 +51,7 @@ export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate
   return (
     <div ref={ref} className="max-w-4xl m-auto px-2 mb-4 border-2 border-gray-300 rounded-xl p-3">
 
-      <div className="mb-1">
+      <div className="mb-1 pt-1">
         <VictoryChart width={width} height={22} padding={{left: 20, right: 10}} domainPadding={{x: 5, y: 10}} 
           domain={{x: [1, 366]}}
         >

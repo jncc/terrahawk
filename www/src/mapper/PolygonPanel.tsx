@@ -48,7 +48,7 @@ export let PolygonPanel = () => {
 let makeHeaderBar = (dispatch: Dispatch<AnyAction>, selectedPolygon: Poly) => {
 
   return (
-    <div className="flex-none  mb-2">
+    <div className="flex-none  mb-3 pb-3 border-b-2 border-gray-300 ">
       <div className="flex items-center space-x-3">
         <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
         <div className="text-lg leading-tight">
@@ -128,7 +128,7 @@ let makeChartTitle = (data: MonthStats[] | undefined, indexname: Indexname, stat
   return (
     <div className="flex justify-center items-center gap-3 pt-1 pb-2 text-gray-900">
       <div><FontAwesomeIcon icon={getIndexnameIcon(indexname)} className="text-gray-400" /></div>
-      <div className="italic">
+      <div className="text-sm italic">
         Monthly {statistic} {indexname} <span className="">({indexnames[indexname].description})</span> compared with {maxCfCount} similar polygons
       </div>
       <div className="flex items-center gap-1 little-label-text  ">

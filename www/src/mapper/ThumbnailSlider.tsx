@@ -64,7 +64,8 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
             </div> */}
 
         </div>
-        <div className="flex-none">
+        <div className="flex">
+          <Toggle label="Low bandwidth" position="left" checked={useProxy} onChange={() => dispatch(mapperActions.toggleProxy())} />
           <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
         </div>
       </div>

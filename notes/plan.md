@@ -318,7 +318,7 @@ Sprint 19 (to November 26)
   - explore any gotchas with integration
   - plan for async loading
   - polygon coords Vs geojson
-- [ ] 🎁 Show charts/graphs and related stats for selected polygon {pm}
+- [x] 🎁 Show charts/graphs and related stats for selected polygon {pm}
 - [x] 🎁 Implement suitable base map for *MVP* {pm}
 - [x] 🎁 Implement thumbnails {pm, cj}
   - there is a working prototype made by {cj}...
@@ -342,30 +342,37 @@ Sprint 20 (to December 10; *MVP* release)
 Sprint 21 (to January 7th)
 --------------------------
 
+- [ ] ~~Book science / data science talks~~ {uw, pr}
+- [ ] ~~Add back map controls (zoom, polygon toggle)~~ {pm}
+- [ ] ~~Slightly improve the index dropdown (description-first)~~ {pm, ih}
+- [ ] ~~Process some S1 stats on Jasmin to flush any issues~~ {ih}
+- [x] 🎁 Thumbnail proxy! 🥳 {cj, pm}
+- [x] Styling of capture points {pm}
+
+Next sprint
+-----------
+
 - [ ] Book science / data science talks {uw, pr}
+- [ ] De-duplicate thumbnail code {cj}
 - [ ] Add back map controls (zoom, polygon toggle) {pm}
 - [ ] Slightly improve the index dropdown (description-first) {pm, ih}
 - [ ] Process some S1 stats on Jasmin to flush any issues {ih}
-- [ ] Guidance / help modal? {pm, ih}
-
-Stretch-targets / next sprint
------------------------------
-
 - [ ] Fix polygon selection {pm}
 - [ ] Support index thumbnails {pm}
-- [ ] Styling of capture points {pm}
-- [ ] 🐞 Fix hover ineffiency {pm}
+- [ ] 🐞 Fix hover inefficiency {pm}
 - [ ] Look into Leaflet tooltip Z-order {pm}
 
 Upcoming sprints
 ----------------
 
 - [ ] Respond to go-live issues {pm}
+- [ ] Guidance / help modal? {pm, ih}
 - [ ] Report write-up / design documentation {pm, ih, pr}
-- [ ] Process seasonal stats {pm, fm}
 - [ ] Filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
 - [ ] Download data (as CSV or shapefile)
 - [ ] Seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
+
+- [ ] Process seasonal stats {pm, fm}
 
 Stats data workstream
 ---------------------
