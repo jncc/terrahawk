@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { useStateSelector } from '../state/hooks'
 
-import { getPolygonOutline, getThumbnail, getReprojectedCoordinates } from '../thumbnails/thumbnailGenerator'
+import { getPolygonOutline, getThumbnail, getReprojectedCoordinates, getBoundingBoxWithBuffer } from 'thumbnail-generator/src/thumbnailGenerator'
 
 export let ThumbnailFullsize = (props: {frame: string, showOutline: boolean}) => {
 
@@ -19,7 +19,11 @@ export let ThumbnailFullsize = (props: {frame: string, showOutline: boolean}) =>
 
   useEffect(() => {
     if (!loaded && selectedPolygon) {
-      getThumbnail(props.frame, selectedPolygon.polyid, reprojectedCoords, 'trueColour').then((src: string) => setSrc(src))
+      let bbox = getBoundingBoxWithBuffer(reprojectedCoords, 0.05)
+      getThumbnail(props.frame, bbox, 'trueColour').then((canvas) => {
+        let imgSrc = canvas.toDataURL('image/png')
+        setSrc(imgSrc)
+      })
       setLoaded(true)
     }
   }, [loaded])

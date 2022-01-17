@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 
 import { Poly, SimpleDate } from './types'
 import { Thumb } from './Thumbnail'
-import { getPolygonOutline, getReprojectedCoordinates } from '../thumbnails/thumbnailGenerator'
+import { getPolygonOutline, getReprojectedCoordinates } from 'thumbnail-generator/src/thumbnailGenerator'
 import { height, width } from './helpers/thumbnailHelper'
 import { frameworks } from '../frameworks'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'

@@ -3234,10 +3234,10 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-geotiff@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/geotiff/-/geotiff-1.0.8.tgz#b5f21b51927a2118a9bd20751cae433a047040df"
-  integrity sha512-3YA6NpGuuXF+WwwgA7moSHIw1U0XHxBY8W5bjjoSGBCVuw6s+DOgt7Z95Y3bf5k19RHixv6zW8KpW/yrRno43Q==
+geotiff@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/geotiff/-/geotiff-1.0.9.tgz#a2037c1f672c0a11bfbac8b46bbc56f901e32198"
+  integrity sha512-PY+q1OP8RtQZkx1630pVfC3hEkxFnGW9LwIF/glSzcalyShkrH+W8uM/M4RVY12j4QkDQvRXVKOpU65hq6t0iQ==
   dependencies:
     "@petamoriken/float16" "^3.4.7"
     lerc "^3.0.0"
@@ -4966,11 +4966,6 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
-plotty@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/plotty/-/plotty-0.4.7.tgz#3679b6c36cddb794101e33a864e156616341933c"
-  integrity sha512-pYmY/SiiduIkMWWBOCi/BewQPnbQGwHod661rTN/89/vSiGQrtKb5EiErGaHwLEaSPXsjzs7mGx2BYCYx0da6A==
-
 pointer-symbol@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/pointer-symbol/-/pointer-symbol-1.0.0.tgz#60f9110204ea7a929b62644a21315543cbb3d447"
@@ -6388,6 +6383,10 @@ through@^2.3.6, through@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+
+"thumbnail-generator@link:../thumbnails":
+  version "0.0.0"
+  uid ""
 
 time-stamp@^1.0.1:
   version "1.1.0"

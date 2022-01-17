@@ -1,0 +1,16 @@
+{
+  "name": "thumbnail-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@types/proj4": "^2.5.2",
+    "geotiff": "^1.0.9",
+    "proj4": "^2.7.5"
+  },
+  "devDependencies": {
+    "canvas": "^2.8.0",
+    "typescript": "^4.5.4"
+  }
+}

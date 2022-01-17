@@ -5,7 +5,7 @@ import { fromIntersection } from 'rxjs-web-observers'
 import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getBoundingBoxWithBuffer, getThumbnail } from '../thumbnails/thumbnailGenerator'
+import { getBoundingBoxWithBuffer, getThumbnail } from 'thumbnail-generator/src/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Poly, SimpleDate } from './types'
@@ -65,13 +65,14 @@ export let Thumb = (props: {
   useEffect(() => {
 
     if (load && !loaded) {
+      let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
       if (useProxy) {
-        let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
         let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=trueColour&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
-        getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, 'trueColour', true).then((img) => {
-          setSrc(img)
+        getThumbnail(props.frame, bbox, 'trueColour').then((canvas) => {
+          let imgSrc = canvas.toDataURL('image/png')
+          setSrc(imgSrc)
         })
       } 
     }

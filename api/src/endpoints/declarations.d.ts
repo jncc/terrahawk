@@ -1,0 +1,1 @@
+declare module 'geotiff' // todo: do we really need to do this?

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "node",
+    "lib": ["ES2019"],    // }
+    "module": "commonjs", // } Node v12 https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
+    "target": "ES2019",   // }
+  },
+  "include": [
+    "src/*"
+  ]
+}
