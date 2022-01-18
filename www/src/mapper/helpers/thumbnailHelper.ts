@@ -1,6 +1,6 @@
 
-import { RootState } from "../../state/store"
-import { Indexname } from "../types"
+import { RootState } from '../../state/store'
+import { Indexname } from '../types'
 
 export const height = 100
 export const width  = 100
