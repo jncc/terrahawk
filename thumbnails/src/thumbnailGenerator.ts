@@ -6,7 +6,6 @@ import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailCon
 import { getArdUrl, getIndexUrl } from './urlHelper'
 import { createCanvas } from 'canvas'
 import { renderColorScaleToCanvas, renderWithColourScale } from './colourScaleHelper'
-// import { getCacheItem , setCacheItem } from './cacheHelper'
 
 // bands as they appear in the geotiff image
 const blueBand = 0
@@ -53,26 +52,6 @@ export async function getThumbnail(frameId: string, box: number[], thumbnailType
   let type = thumbnailConfig[thumbnailType]
   return await getRequestedTypeOfThumbnail(frameId, box, type)
 }
-// export async function getThumbnail(frameId: string, polygonId: string, box: number[], thumbnailType: string, useCache: boolean = true) {
-
-//   let thumbnailString = ''
-//   let type = thumbnailConfig[thumbnailType]
-  
-  // if (useCache) {
-  //   let thumbnailKey = `thumbs_${frameId}_${polygonId}_${type.text}`
-  //   let cachedValue = getCacheItem(thumbnailKey)
-  //   if (cachedValue && cachedValue != null) {
-  //     thumbnailString = cachedValue
-  //   } else {
-  //     thumbnailString = await getThumbnailString(frameId, coordinates, type)
-  //     setCacheItem(thumbnailKey, thumbnailString)
-  //   }
-  // } else {
-    // thumbnailString = await getRequestedTypeOfThumbnail(frameId, box, type)
-  // }
-
-//   return thumbnailString
-// }
 
 export function getReprojectedCoordinates(coordinates : number[][][][], toProjection : string, fromProjection : string = 'WGS84') {
   let targetProjDefinition = projections[toProjection.toLowerCase()]
@@ -117,7 +96,6 @@ async function getRequestedTypeOfThumbnail(frameId : string, box: number[], type
 }
 
 async function generateRGBThumbnail(url : string, box : number[], satellite : string) {
-  // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
@@ -143,7 +121,6 @@ async function generateRGBThumbnail(url : string, box : number[], satellite : st
 }
 
 async function generateIndexThumbnail(url : string, box : number[], domain : number[], colourScaleName : string) {
-  // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
@@ -213,9 +190,7 @@ function drawRGBImage(data : any, satellite : string) {
       }
     }
   }
-
-  // let canvasImage = canvas.toDataURL('image/png')
-  // return canvasImage
+  
   return canvas
 }
 

@@ -5,11 +5,12 @@ import { fromIntersection } from 'rxjs-web-observers'
 import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getBoundingBoxWithBuffer, getThumbnail } from 'thumbnail-generator/src/thumbnailGenerator'
+import { getBoundingBoxWithBuffer, getThumbnail } from 'thumbnail-generator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Poly, SimpleDate } from './types'
 import { height, width } from './helpers/thumbnailHelper'
+import { getCacheItem , setCacheItem } from './helpers/cacheHelper'
 
 export let Thumb = (props: {
   frame:        string,
@@ -70,11 +71,8 @@ export let Thumb = (props: {
         let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=trueColour&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
-        getThumbnail(props.frame, bbox, 'trueColour').then((canvas) => {
-          let imgSrc = canvas.toDataURL('image/png')
-          setSrc(imgSrc)
-        })
-      } 
+        getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, 'trueColour').then((imgSrc) => setSrc(imgSrc))
+      }
     }
 
   }, [load, loaded])
@@ -127,4 +125,20 @@ export let Thumb = (props: {
 
     </div>
   )
+}
+
+async function getThumbnailWithCache(frameId: string, polygonId: string, box: number[], thumbnailType: string) {
+  let thumbnailString = ''
+
+  let thumbnailKey = `thumbs_${frameId}_${polygonId}_${thumbnailType}`
+  let cachedValue = getCacheItem(thumbnailKey)
+  if (cachedValue && cachedValue != null) {
+    thumbnailString = cachedValue
+  } else {
+    let canvas = await getThumbnail(frameId, box, thumbnailType)
+    thumbnailString = canvas.toDataURL('image/png')
+    setCacheItem(thumbnailKey, thumbnailString)
+  }
+
+  return thumbnailString
 }

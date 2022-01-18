@@ -1,4 +1,4 @@
-import { getThumbnail } from 'thumbnail-generator/src/thumbnailGenerator'
+import { getThumbnail } from 'thumbnail-generator'
 import { parseArgs } from './thumbArgParser'
 
 export const getThumb = async (input: any) => {

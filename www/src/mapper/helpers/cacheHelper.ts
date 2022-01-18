@@ -1,4 +1,4 @@
-import { thumbnailCacheLimit } from './config'
+export const thumbnailCacheLimit = 50
 
 var sessionStorage = window.sessionStorage
 
