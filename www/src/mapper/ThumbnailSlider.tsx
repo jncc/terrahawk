@@ -17,6 +17,8 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // selectedPolygon can't be undefined in this component
   let showOutlines = useStateSelector(s => s.mapper.showOutlines)
   let useProxy = useStateSelector(s => s.mapper.useProxy)
+  let thumbType = useStateSelector(s => s.mapper.thumbType)
+  let indexname = useStateSelector(s => s.mapper.query.indexname)
   
   // do calcs common to all the thumbnails up here in the slider
   let nativeCoords = useMemo(() => getReprojectedCoordinates(selectedPolygon.geojson.coordinates, frameworks[framework].srs),
@@ -33,39 +35,46 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   return (
     <>
       <div className="flex overflow-y-auto pb-2 pt-1 mb-1">
-        {props.framesWithDate.map(x => <Thumb key={x.frame} frame={x.frame} date={x.date} nativeCoords={nativeCoords} outlineSvg={outline}/>)}
+        {props.framesWithDate.map(x => <Thumb
+          key={x.frame + indexname + thumbType} // force a rerender when we need to reload the thumbnail
+          frame={x.frame}
+          date={x.date}
+          thumbType={thumbType}
+          indexname={indexname}
+          nativeCoords={nativeCoords}
+          outlineSvg={outline}/>)
+        }
       </div>
       <div className="flex gap-4">
-        <div className="flex-grow"></div>
-        <div className="flex-none flex items-center text-sm">
-
-            {/* <div>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  className="form-radio"
-                  name="thumbnailtype"
-                  value="colour"
-                  checked
-                />
-                <span className="ml-2">Colour</span>
-              </label>
-            </div>
-            <div>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  className="form-radio"
-                  name="thumbnailtype"
-                  value="index"
-                />
-                <span className="ml-2">Index</span>
-              </label>
-            </div> */}
-
+        <div className="flex-none flex items-center gap-3">
+            <label className="inline-flex items-center cursor-pointer text-sm ">
+              <input
+                type="radio"
+                // className="form-radio"
+                className="cursor-pointer"
+                name="thumbnailtype"
+                value="colour"
+                checked={thumbType === 'colour'}
+                onChange={() => dispatch(mapperActions.toggleThumbType())}
+              />
+              <span className="ml-1">True colour</span>
+            </label>
+            <label className="inline-flex items-center cursor-pointer text-sm ">
+              <input
+                type="radio"
+                // className="form-radio"
+                className="cursor-pointer"
+                name="thumbnailtype"
+                value="index"
+                checked={thumbType === 'index'}
+                onChange={() => dispatch(mapperActions.toggleThumbType())}
+              />
+              <span className="ml-1">Index</span>
+            </label>
         </div>
+        <div className="flex-grow"></div>
         <div className="flex">
-          <Toggle label="Low bandwidth" position="left" checked={useProxy} onChange={() => dispatch(mapperActions.toggleProxy())} />
+          <Toggle label="Boost" position="left" checked={useProxy} onChange={() => dispatch(mapperActions.toggleProxy())} />
           <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
         </div>
       </div>

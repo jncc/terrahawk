@@ -4,7 +4,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import jnccLogo from '../assets/JNCCLogo_Black-340.png'
 import { LeafletMap } from './LeafletMap'
-import { ControlsPanel } from './ControlsPanel'
 import { QueryPanel } from './QueryPanel'
 import { FrameworkPanel } from './FrameworkPanel'
 import { globalActions } from '../global/slice'
@@ -12,7 +11,6 @@ import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { mapperActions } from './slice'
 import { PolygonPanel } from './PolygonPanel'
 import { GazetteerPanel } from './GazetteerPanel'
-import { ThumbnailPanel } from './ThumbnailPanel'
 
 export let Mapper = () => {
 

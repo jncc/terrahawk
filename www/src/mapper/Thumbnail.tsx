@@ -8,15 +8,19 @@ import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { getBoundingBoxWithBuffer, getThumbnail } from 'thumbnail-generator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
-import { Poly, SimpleDate } from './types'
-import { height, width } from './helpers/thumbnailHelper'
+import { Indexname, Poly, SimpleDate } from './types'
+import { height, width, getThumbnailTypeArgument } from './helpers/thumbnailHelper'
 import { getCacheItem , setCacheItem } from './helpers/cacheHelper'
+import { RootState } from '../state/store'
 
 export let Thumb = (props: {
   frame:        string,
   date:         SimpleDate,
   nativeCoords: number[][][][],
-  outlineSvg:   ReactElement}) => {
+  outlineSvg:   ReactElement
+  indexname:    Indexname,
+  thumbType:    RootState['mapper']['thumbType']
+  }) => {
 
   let dispatch = useStateDispatcher()
   let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // can't be undefined down here
@@ -24,6 +28,8 @@ export let Thumb = (props: {
   let selectedFrame   = useStateSelector(s => s.mapper.selectedFrame)
   let showOutlines    = useStateSelector(s => s.mapper.showOutlines)
   let useProxy        = useStateSelector(s => s.mapper.useProxy)
+  // let thumbType       = useStateSelector(s => s.mapper.thumbType)
+  // let indexname       = useStateSelector(s => s.mapper.query.indexname)
 
   let [load, setLoad]         = useState(false)
   let [loaded, setLoaded]     = useState(false)
@@ -35,6 +41,8 @@ export let Thumb = (props: {
   let selectedColor  = selected ? 'border-blue'  : 'border-transparent'
 
   let div = useRef<HTMLDivElement>(null)
+
+  let thumbnailType = getThumbnailTypeArgument(props.thumbType, props.indexname)
 
   // set load to true when the div becomes visible
   useEffect(() => {
@@ -68,14 +76,16 @@ export let Thumb = (props: {
     if (load && !loaded) {
       let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
       if (useProxy) {
-        let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=trueColour&bbox=${JSON.stringify(bbox)}`
+        let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
         getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, 'trueColour').then((imgSrc) => setSrc(imgSrc))
-      }
+      } 
     }
 
   }, [load, loaded])
+
+  useEffect(() => {}, [props.indexname, props.thumbType])
 
   return (
     <div ref={div} className="flex-none">
