@@ -1,7 +1,7 @@
 
 import { Framework } from './mapper/types'
 
-// could dynamically load framework boundaries in the future to avoid packaging them
+// could dynamically load framework boundaries in the future to avoid bundling them
 import liveng0Boundary from './assets/frameworks/liveng0-boundary.json'
 
 export const frameworks: {[framework: string]: Framework} = {
