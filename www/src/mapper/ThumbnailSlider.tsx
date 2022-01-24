@@ -9,6 +9,7 @@ import { frameworks } from '../frameworks'
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
 import { Toggle } from '../components/Toggle'
 import { mapperActions } from './slice'
+import { indexnames } from './helpers/statsHelper'
 
 export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: SimpleDate}[]}) => {
 
@@ -50,7 +51,6 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input
                 type="radio"
-                // className="form-radio"
                 className="cursor-pointer"
                 name="thumbnailtype"
                 value="colour"
@@ -62,14 +62,13 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input
                 type="radio"
-                // className="form-radio"
                 className="cursor-pointer"
                 name="thumbnailtype"
                 value="index"
                 checked={thumbType === 'index'}
                 onChange={() => dispatch(mapperActions.toggleThumbType())}
               />
-              <span className="ml-1">Index</span>
+              <span className="ml-1">Index ({indexnames[indexname].description})</span>
             </label>
         </div>
         <div className="flex-grow"></div>

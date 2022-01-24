@@ -75,7 +75,7 @@ Sprint 3 (to Tues 16 March)
 Sprint 4 (to Tues 30 March)
 ---------------------------
 
-~~- [ ] Add thumbnail code to processing {fm, ih}~~
+- ~~[ ] Add thumbnail code to processing {fm, ih}~~
 - [x] 🎁 (MUST) AoU (Yorkshire) batch processed
 - [x] 🎁 (MUST) PolygonStats shipped manually to AWS Postgres
 - [x] 🎁 (MUST) Demo API in terminal
@@ -160,7 +160,7 @@ Sprint 10 (to July 9)
   - `satellite/index/year/month/day/frame.tif` (each index will have a separate metadata record on CEDA)
 - [x] Big Data work with Bytes {pm, fm}
   - [x] Complete Glue pre-processing to parquet (to match new workflow output)
-  - [x] Partition key generation step (polyid)   
+  - [x] Partition key generation step (polyid)
   - [x] By-month aggregation
   - [x] ~~Example "hardest" query running in <2 seconds~~
   - [x] Example Athena query in Lambda
@@ -184,6 +184,7 @@ Sprint 12 (to August 6)
 
 Sprint 13 (to August 27)
 -------------------------
+
 - [x] 🎁 Generate the "nearest50" neighbours for liveng-0 {pm}
 - [x] 🎁 Re-run *some* test data on Jasmin
   - reprocess at least some S2 Yorkshire data. Do a small batch of it first for {pm} to check.
@@ -339,8 +340,8 @@ Sprint 20 (to December 10; *MVP* release)
 - [x] 🎁 Get all S2 index files into CEDA archive ALMOST DONE {ih, uw}
   - [x] Document this process
 
-Sprint 21 (to January 7th)
---------------------------
+Sprint 21 (to January 7)
+------------------------
 
 - [ ] ~~Book science / data science talks~~ {uw, pr}
 - [ ] ~~Add back map controls (zoom, polygon toggle)~~ {pm}
@@ -349,17 +350,21 @@ Sprint 21 (to January 7th)
 - [x] 🎁 Thumbnail proxy! 🥳 {cj, pm}
 - [x] Styling of capture points {pm}
 
-Next sprint
------------
+Sprint 22 (to January 21)
+-------------------------
 
 - [ ] Book science / data science talks {uw, pr}
 - [ ] De-duplicate thumbnail code {cj}
-- [ ] Add back map controls (zoom, polygon toggle) {pm}
 - [ ] Slightly improve the index dropdown (description-first) {pm, ih}
 - [ ] Process some S1 stats on Jasmin to flush any issues {ih}
-- [ ] Fix polygon selection {pm}
-- [ ] Support index thumbnails {pm}
+- [ ] 🎁 Support index thumbnails {pm}
+- [ ] Add back map controls (zoom, polygon toggle) {pm}
+- [ ] Improve polygon selection {pm}
 - [ ] 🐞 Fix hover inefficiency {pm}
+
+Next sprint
+-----------
+
 - [ ] Look into Leaflet tooltip Z-order {pm}
 
 Upcoming sprints
@@ -371,7 +376,6 @@ Upcoming sprints
 - [ ] Filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
 - [ ] Download data (as CSV or shapefile)
 - [ ] Seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
-
 - [ ] Process seasonal stats {pm, fm}
 
 Stats data workstream
@@ -385,13 +389,13 @@ Stats data workstream
 UI workstream
 -------------
 
-  - [ ] 🎁 Field data in UI {pm}
+- [ ] 🎁 Field data in UI {pm}
 
 App services workstream
 -----------------------
 
 - [ ] 🎁 Field data API prototype {cj} (*this depends on scheduling*)
-  - research & design 
+  - research & design
   - get some data into Postgres
 - [ ] 🎁 Gazetteer {cj}
   - Design & implement backend DB with several datasets
@@ -430,10 +434,6 @@ Backlog
 
 - [ ] Aggregate the rows by month and season (separate output DBs).
   - need to store the frames contributing to the aggregation - can we store them efficiently without normalising??
-
-- [ ]  Database normalisation (storage optimisation)?
-    - `habitat`
-    - `frame`
 
 - [ ] JNCC Gazetteer service https://gazetteer.jncc.gov.uk
   - public, UK-wide gazetteer service for conservation-related sites of interest
@@ -530,6 +530,6 @@ Achievements
 ------------
 
 - "keyboard-first" - you can control map entirely with the keyboard
-- accessibility first - accessibility done from the start. 
+- accessibility first - accessibility done from the start
 - multiple habitat maps (frameworks) supported throughout backend and frontend at the engineering level - could have been deferred but felt important
   - reltively easy to add new habitat maps and new versions of
