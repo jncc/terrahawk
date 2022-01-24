@@ -9,9 +9,6 @@ export let ControlsPanel = () => {
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
 
-  if (!state.zoomedEnoughToShowPolygons)
-    return null
-
   return (
     <div className="z-abovemap absolute bottom-6 right-6 animate-delayedfadein ">
       <div className="bg-white rounded-xl overflow-hidden shadow-xl px-4 py-3 ring-red-500">

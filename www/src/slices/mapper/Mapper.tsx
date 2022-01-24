@@ -11,6 +11,7 @@ import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 import { PolygonPanel } from './PolygonPanel'
 import { GazetteerPanel } from './GazetteerPanel'
+import { ControlsPanel } from './ControlsPanel'
 
 export let Mapper = () => {
 
@@ -29,13 +30,20 @@ export let Mapper = () => {
     </div>
     {/* unless on large screen, hide the mapper components */} 
     <div className="hidden xl:block">
-      {!zoomedEnoughToShowPolygons && makePleaseZoomInMessage()}
-      <GazetteerPanel />
-      <QueryPanel />
-      <FrameworkPanel />
-      <PolygonPanel />
-      {/* <ControlsPanel /> */}
-      {/* <ThumbnailPanel /> */}
+      {!zoomedEnoughToShowPolygons &&
+      <>
+        {makePleaseZoomInMessage()}
+        <GazetteerPanel />
+      </>
+      }
+      {zoomedEnoughToShowPolygons &&
+      <>
+        <QueryPanel />
+        <FrameworkPanel />
+        <PolygonPanel />
+        <ControlsPanel />      
+      </>
+      }
       <LeafletMap />
     </div>
   </>

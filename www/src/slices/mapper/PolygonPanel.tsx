@@ -20,11 +20,11 @@ import { Dispatch, AnyAction } from 'redux'
 export let PolygonPanel = () => {
 
   let dispatch = useStateDispatcher()
-  let {selectedPolygon, selectedPolygonStats, zoomedEnoughToShowPolygons, query, selectedFrame} = useStateSelector(s => s.mapper)
+  let {selectedPolygon, selectedPolygonStats, query, selectedFrame} = useStateSelector(s => s.mapper)
 
   useHotkeys('esc', () => { dispatch(mapperActions.selectPolygon(undefined)) })
 
-  let show = selectedPolygon && zoomedEnoughToShowPolygons
+  let show = selectedPolygon
 
   if (!show) return null
   let showClasses = show ? `opacity-100` : `translate-x-full opacity-0`
@@ -33,7 +33,7 @@ export let PolygonPanel = () => {
     <div className={`z-abovemap absolute top-6 right-6 bottom-6 left-[50%] transform transition-opacity ${showClasses}`}>
       <div className="w-full h-full bg-white rounded-xl shadow-xl px-4 py-2.5">
         
-        {selectedPolygon && zoomedEnoughToShowPolygons &&
+        {selectedPolygon &&
         <div className="flex flex-col h-full">
           {makeHeaderBar(dispatch, selectedPolygon)}
           {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query, selectedFrame)}

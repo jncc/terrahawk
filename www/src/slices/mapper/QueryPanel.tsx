@@ -17,9 +17,6 @@ export let QueryPanel = () => {
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
 
-  if (!state.zoomedEnoughToShowPolygons)
-    return null
-
   return (
     <div className="z-abovemap absolute top-6 left-6 w-56 animate-delayedfadein">
       <div className="bg-white rounded-xl overflow-hidden shadow-xl px-4 py-2">
