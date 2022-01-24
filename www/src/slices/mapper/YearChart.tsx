@@ -3,12 +3,12 @@ import React from 'react'
 import { VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryArea, VictoryLabel  } from 'victory'
 import useDimensions from 'use-element-dimensions'
 
-import { useStateDispatcher, useStateSelector } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { getStatValues } from './helpers/statsHelper'
 import { mapperActions } from './slice'
 
 import { MonthStats, SimpleDate, Statistic, StatValues } from './types'
-import { getDayOfYear } from '../utility/dateUtility'
+import { getDayOfYear } from '../../utility/dateUtility'
 
 export let YearChart = (props: {year: string, data: MonthStats[], framesWithDate: {frame: string, date: SimpleDate}[], statistic: Statistic}) => {
 

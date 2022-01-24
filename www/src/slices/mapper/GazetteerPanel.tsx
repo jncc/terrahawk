@@ -2,7 +2,7 @@
 import React from 'react'
 import { SearchIcon } from '@heroicons/react/outline'
 
-import { useStateDispatcher, useStateSelector } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 
 export let GazetteerPanel = () => {
 

@@ -1,5 +1,5 @@
 
-import { Framework } from './mapper/types'
+import { Framework } from './slices/mapper/types'
 
 // could dynamically load framework boundaries in the future to avoid bundling them
 import liveng0Boundary from './assets/frameworks/liveng0-boundary.json'

@@ -1,10 +1,10 @@
 
 import React from 'react'
-import { Alert } from './global/Alert'
-import { Loader } from './global/Loader'
+import { Alert } from './slices/global/Alert'
+import { Loader } from './slices/global/Loader'
 
-import { Mapper } from './mapper/Mapper'
-import { PolygonTooltipForDev } from './mapper/PolygonTooltip'
+import { Mapper } from './slices/mapper/Mapper'
+import { PolygonTooltipForDev } from './slices/mapper/PolygonTooltip'
 
 export function App() {
 

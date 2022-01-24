@@ -2,7 +2,7 @@
 import React from 'react'
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 
-import { useStateDispatcher, useStateSelector } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 import { Indexname, Statistic } from './types'
 import { indexnames, statistics } from './helpers/statsHelper'

@@ -1,5 +1,5 @@
 
-import { Bounds } from '../mapper/types'
+import { Bounds } from '../slices/mapper/types'
 import { roundTo3Decimals } from './numberUtility'
 
 export type Bbox = {

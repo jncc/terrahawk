@@ -3,10 +3,10 @@ import { configureStore } from '@reduxjs/toolkit'
 import { combineEpics } from 'redux-observable'
 import { createEpicMiddleware } from 'redux-observable'
 
-import { globalReducer } from '../global/slice'
-import { globalEpics } from '../global/epics'
-import { mapperReducer } from '../mapper/slice'
-import { mapperEpics } from '../mapper/epics'
+import { globalReducer } from '../slices/global/slice'
+import { globalEpics } from '../slices/global/epics'
+import { mapperReducer } from '../slices/mapper/slice'
+import { mapperEpics } from '../slices/mapper/epics'
 
 let epics = combineEpics(
   globalEpics,

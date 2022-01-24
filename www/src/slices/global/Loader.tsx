@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useStateSelector } from '../state/hooks'
+import { useStateSelector } from '../../state/hooks'
 
 export let Loader = () => {
 

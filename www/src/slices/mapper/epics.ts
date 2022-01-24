@@ -3,7 +3,7 @@ import { of, concat } from 'rxjs'
 import { map, filter, switchMap, catchError, } from 'rxjs/operators'
 import { combineEpics, ofType, StateObservable } from 'redux-observable'
 
-import { RootState } from '../state/store'
+import { RootState } from '../../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
 import { fetchPolygons, fetchChoropleth, fetchPolygon } from './api'

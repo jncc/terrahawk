@@ -13,7 +13,7 @@ Tech list
   - NBR 🔥
   - NDMI 💦
   - NDVI 🌿
-  - NDWI 🌊  
+  - NDWI 🌊
 - Habitat map
   - Living England
 

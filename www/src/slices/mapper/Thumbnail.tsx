@@ -4,14 +4,14 @@ import { GlobeIcon } from '@heroicons/react/outline'
 import { fromIntersection } from 'rxjs-web-observers'
 import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
-import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getBoundingBoxWithBuffer, getThumbnail } from '../thumbnails/thumbnailGenerator'
+import { useStateDispatcher, useStateSelector } from '../../state/hooks'
+import { getBoundingBoxWithBuffer, getThumbnail } from '../../thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Indexname, Poly, SimpleDate } from './types'
 import { height, width, getThumbnailTypeArgument } from './helpers/thumbnailHelper'
 import { getCacheItem , setCacheItem } from './helpers/cacheHelper'
-import { RootState } from '../state/store'
+import { RootState } from '../../state/store'
 
 export let Thumb = (props: {
   frame:        string,

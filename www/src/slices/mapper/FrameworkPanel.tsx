@@ -2,8 +2,8 @@
 import React from 'react'
 import { MapIcon } from '@heroicons/react/outline'
 
-import { frameworks } from '../frameworks'
-import { useStateSelector } from '../state/hooks'
+import { frameworks } from '../../frameworks'
+import { useStateSelector } from '../../state/hooks'
 
 export let FrameworkPanel = () => {
 

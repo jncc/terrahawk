@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-import { useStateDispatcher, useStateSelector } from '../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 
 export let ControlsPanel = () => {

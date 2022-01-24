@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { ChoroplethItem, isChoroplethItem, ChoroplethNone, Poly, Statistic } from './types'
-import { roundTo1Decimal } from '../utility/numberUtility'
+import { roundTo1Decimal } from '../../utility/numberUtility'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 
 // replace the 'white' (no change) color with default text-gray-400

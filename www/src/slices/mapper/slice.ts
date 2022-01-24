@@ -2,8 +2,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats, SimpleDate } from './types'
-import { frameworks } from '../frameworks'
-import { last } from '../utility/arrayUtility'
+import { frameworks } from '../../frameworks'
+import { last } from '../../utility/arrayUtility'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
 let defaultFramework = frameworks['liveng0']

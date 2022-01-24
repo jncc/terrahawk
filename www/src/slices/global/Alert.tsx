@@ -2,7 +2,7 @@
 import { ExclamationIcon } from '@heroicons/react/solid'
 import React from 'react'
 
-import { useStateSelector } from '../state/hooks'
+import { useStateSelector } from '../../state/hooks'
 
 export let Alert = () => {
 

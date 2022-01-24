@@ -4,8 +4,8 @@ import { ajax } from 'rxjs/ajax'
 import { map  } from 'rxjs/operators'
 import LRUCache from 'lru-cache'
 
-import { RootState } from '../state/store'
-import { bboxToWkt, getBboxFromBounds } from '../utility/geospatialUtility'
+import { RootState } from '../../state/store'
+import { bboxToWkt, getBboxFromBounds } from '../../utility/geospatialUtility'
 import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery, MonthStats
        } from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
