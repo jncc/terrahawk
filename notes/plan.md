@@ -353,7 +353,7 @@ Sprint 21 (to January 7)
 Sprint 22 (to January 21)
 -------------------------
 
-- [ ] ~~Book science / data science talks {uw, pr}~
+- [ ] ~~Book science / data science talks {uw, pr}~~
 - [ ] ~~De-duplicate thumbnail code {cj} in progress~~
 - [ ] ~~Process some S1 stats on Jasmin to flush any issues {ih}~~
 - [x] 🎁 Support index thumbnails {pm}
