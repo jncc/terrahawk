@@ -10,6 +10,7 @@ import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Indexname, Poly, SimpleDate } from './types'
 import { height, width, getThumbnailTypeArgument } from './helpers/thumbnailHelper'
+import { getCacheItem , setCacheItem } from './helpers/cacheHelper'
 import { RootState } from '../state/store'
 
 export let Thumb = (props: {
@@ -73,14 +74,12 @@ export let Thumb = (props: {
   useEffect(() => {
 
     if (load && !loaded) {
+      let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
       if (useProxy) {
-        let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
         let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
-        getThumbnail(props.frame, selectedPolygon.polyid, props.nativeCoords, thumbnailType, true).then((img) => {
-          setSrc(img)
-        })
+        getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, 'trueColour').then((imgSrc) => setSrc(imgSrc))
       } 
     }
 
@@ -136,4 +135,20 @@ export let Thumb = (props: {
 
     </div>
   )
+}
+
+async function getThumbnailWithCache(frameId: string, polygonId: string, box: number[], thumbnailType: string) {
+  let thumbnailString = ''
+
+  let thumbnailKey = `thumbs_${frameId}_${polygonId}_${thumbnailType}`
+  let cachedValue = getCacheItem(thumbnailKey)
+  if (cachedValue && cachedValue != null) {
+    thumbnailString = cachedValue
+  } else {
+    let canvas = await getThumbnail(frameId, box, thumbnailType)
+    thumbnailString = canvas.toDataURL('image/png')
+    setCacheItem(thumbnailKey, thumbnailString)
+  }
+
+  return thumbnailString
 }

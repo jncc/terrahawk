@@ -1,13 +1,11 @@
 import { fromUrl } from 'geotiff'
-import * as proj4 from 'proj4'
+import proj4 from 'proj4'
 
 import { Scale, ThumbnailType, ColourScale } from './types'
 import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailConfig, projections } from './config'
 import { getArdUrl, getIndexUrl } from './urlHelper'
-import { createCanvas } from 'canvas'
-import { integer } from 'aws-sdk/clients/cloudfront'
 import { renderColorScaleToCanvas, renderWithColourScale } from './colourScaleHelper'
-// import { getCacheItem , setCacheItem } from './cacheHelper'
+import { createCanvas } from 'canvas'
 
 // bands as they appear in the geotiff image
 const blueBand = 0
@@ -54,26 +52,6 @@ export async function getThumbnail(frameId: string, box: number[], thumbnailType
   let type = thumbnailConfig[thumbnailType]
   return await getRequestedTypeOfThumbnail(frameId, box, type)
 }
-// export async function getThumbnail(frameId: string, polygonId: string, box: number[], thumbnailType: string, useCache: boolean = true) {
-
-//   let thumbnailString = ''
-//   let type = thumbnailConfig[thumbnailType]
-  
-  // if (useCache) {
-  //   let thumbnailKey = `thumbs_${frameId}_${polygonId}_${type.text}`
-  //   let cachedValue = getCacheItem(thumbnailKey)
-  //   if (cachedValue && cachedValue != null) {
-  //     thumbnailString = cachedValue
-  //   } else {
-  //     thumbnailString = await getThumbnailString(frameId, coordinates, type)
-  //     setCacheItem(thumbnailKey, thumbnailString)
-  //   }
-  // } else {
-    // thumbnailString = await getRequestedTypeOfThumbnail(frameId, box, type)
-  // }
-
-//   return thumbnailString
-// }
 
 export function getReprojectedCoordinates(coordinates : number[][][][], toProjection : string, fromProjection : string = 'WGS84') {
   let targetProjDefinition = projections[toProjection.toLowerCase()]
@@ -118,7 +96,6 @@ async function getRequestedTypeOfThumbnail(frameId : string, box: number[], type
 }
 
 async function generateRGBThumbnail(url : string, box : number[], satellite : string) {
-  // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
@@ -144,7 +121,6 @@ async function generateRGBThumbnail(url : string, box : number[], satellite : st
 }
 
 async function generateIndexThumbnail(url : string, box : number[], domain : number[], colourScaleName : string) {
-  // let thumbnailBbox = getBoundingBoxWithBuffer(coordinates, thumbnailBuffer)
   let tiff = await fromUrl(url)
   let image = await tiff.getImage()
   let bbox = await image.getBoundingBox()
@@ -158,14 +134,8 @@ async function generateIndexThumbnail(url : string, box : number[], domain : num
   let thumbnailPixelHeight = data.height
   let thumbnailPixelWidth = data.width
 
-
-
-
-  // let canvas = document.createElement('canvas')
   let canvas = createCanvas(thumbnailPixelWidth, thumbnailPixelHeight)
   let colourScaleCanvas = createCanvas(0, 0)
-
-
 
   let colourScale : ColourScale | undefined = colourScales.find(scale => scale.name == colourScaleName)
   if (colourScale) {
@@ -173,9 +143,6 @@ async function generateIndexThumbnail(url : string, box : number[], domain : num
   }
 
   renderWithColourScale(canvas, colourScaleCanvas, -9999, data[0], thumbnailPixelHeight, thumbnailPixelWidth, domain)
-
-  // let canvasImage = canvas.toDataURL('image/png')
-  // return canvasImage
 
   return canvas
 }
@@ -186,17 +153,7 @@ function drawRGBImage(data : any, satellite : string) {
 
   let canvas = createCanvas(thumbnailPixelWidth, thumbnailPixelHeight)
 
-
-
-
   let ctx = canvas.getContext('2d')
-  // let canvas = document.createElement('canvas')
-  // canvas.width = thumbnailPixelWidth
-  // canvas.height = thumbnailPixelHeight
-
-
-
-
 
   if (ctx) {
     let totalPixelCount = 0
@@ -233,9 +190,7 @@ function drawRGBImage(data : any, satellite : string) {
       }
     }
   }
-
-  // let canvasImage = canvas.toDataURL('image/png')
-  // return canvasImage
+  
   return canvas
 }
 

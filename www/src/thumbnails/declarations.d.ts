@@ -1,2 +1,2 @@
 declare module 'geotiff'
-declare module 'plotty'
+declare module 'proj4'

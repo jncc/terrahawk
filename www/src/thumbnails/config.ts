@@ -10,11 +10,11 @@ export const projections : Dictionary<string> = {
   tm65: '+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=1.000035 +x_0=200000 +y_0=250000 +ellps=mod_airy +towgs84=482.5,-130.6,564.6,-1.042,-0.214,-0.631,8.15 +units=m +no_defs'
 }
 
-export const thumbnailCacheLimit = 50
 export const thumbnailBuffer = 0.05 // percent to add around the edge
 
 export const thumbnailConfig : Dictionary<any> = {
   trueColour: {
+    text: 'trueColour',
     rgbDomains: {
       red: [0, 256],
       green: [0, 256],
@@ -23,6 +23,7 @@ export const thumbnailConfig : Dictionary<any> = {
     colourScale: 'rgb'
   },
   falseColour: {
+    text: 'falseColour',
     rgbDomains: {
       red: [-20, 20],
       green: [-30, 20],
@@ -31,30 +32,37 @@ export const thumbnailConfig : Dictionary<any> = {
     colourScale: 'rgb'
   },
   rvi: {
+    text: 'RVI',
     domain: [1, 1.6],
     colourScale: 'rvi'
   },
   rviv: {
+    text: 'RVIv',
     domain: [0, 4],
     colourScale: 'rviv'
   },
   ndmi: {
+    text: 'NDMI',
     domain: [-1, 1],
     colourScale: 'ndmi'
   },
   ndvi: {
+    text: 'NDVI',
     domain: [-1, 1],
     colourScale: 'ndvi'
   },
   ndwi: {
+    text: 'NDWI',
     domain: [-1, 1],
     colourScale: 'ndwi'
   },
   evi: {
+    text: 'EVI',
     domain: [-2, 3],
     colourScale: 'evi'
   },
   nbr: {
+    text: 'NBR',
     domain: [-1, 1],
     colourScale: 'nbr'
   }
