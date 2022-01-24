@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { useStateSelector } from '../state/hooks'
 
-import { getPolygonOutline, getThumbnail, getReprojectedCoordinates, getBoundingBoxWithBuffer } from 'thumbnail-generator'
+import { getPolygonOutline, getThumbnail, getReprojectedCoordinates, getBoundingBoxWithBuffer } from '../thumbnails/thumbnailGenerator'
 
 export let ThumbnailFullsize = (props: {frame: string, showOutline: boolean}) => {
 

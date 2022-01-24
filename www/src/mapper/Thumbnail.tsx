@@ -5,7 +5,7 @@ import { fromIntersection } from 'rxjs-web-observers'
 import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../state/hooks'
-import { getBoundingBoxWithBuffer, getThumbnail } from 'thumbnail-generator'
+import { getBoundingBoxWithBuffer, getThumbnail } from '../thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Indexname, Poly, SimpleDate } from './types'

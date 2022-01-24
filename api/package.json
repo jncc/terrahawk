@@ -17,9 +17,10 @@
     "aws-sdk": "^2.941.0",
     "dotenv": "^10.0.0",
     "express-async-handler": "1.1.4",
+    "geotiff": "^1.0.9",
     "pg": "^8.5.1",
     "pg-format": "1.0.4",
-    "thumbnail-generator": "link:../thumbnails/"
+    "proj4": "^2.7.5"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.72",
@@ -27,6 +28,7 @@
     "@types/express": "4.17.11",
     "@types/pg": "7.14.11",
     "@types/pg-format": "1.0.1",
+    "canvas": "^2.9.0",
     "cors": "2.8.5",
     "express": "4.17.1",
     "rimraf": "3.0.2",

@@ -4,8 +4,8 @@ import proj4 from 'proj4'
 import { Scale, ThumbnailType, ColourScale } from './types'
 import { ardUrlBase, colourScales, indicesUrlBase, thumbnailBuffer, thumbnailConfig, projections } from './config'
 import { getArdUrl, getIndexUrl } from './urlHelper'
-import { createCanvas } from 'canvas'
 import { renderColorScaleToCanvas, renderWithColourScale } from './colourScaleHelper'
+import { createCanvas } from 'canvas'
 
 // bands as they appear in the geotiff image
 const blueBand = 0
