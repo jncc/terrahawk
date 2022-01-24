@@ -10,6 +10,7 @@ import { getLookups } from '../endpoints/lookups'
 import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
 import { getThumb } from '../endpoints/thumb'
+import { getNpms } from '../endpoints/npms'
 
 if (env.NODE_ENV === 'development') {
 
@@ -56,6 +57,11 @@ if (env.NODE_ENV === 'development') {
         let result = await getThumb(req.query)
         res.setHeader('Content-Type', 'image/png')
         res.send(result)
+    }))
+
+    app.get('/npms', asyncHandler(async(req, res) => {
+        let result = await getNpms(req.query)
+        res.json(result)
     }))
 
     app.listen(8000, () => {

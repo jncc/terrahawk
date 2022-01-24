@@ -10,6 +10,7 @@ import { getAthena } from '../endpoints/athena'
 import { getChoropleth } from '../endpoints/choropleth'
 import { getPolygon } from '../endpoints/polygon'
 import { getThumb } from '../endpoints/thumb'
+import { getNpms } from '../endpoints/npms'
 
 export let helloHandler: APIGatewayProxyHandler = async (event) => {
 
@@ -68,6 +69,10 @@ export let thumbHandler: APIGatewayProxyHandler = async (event) => {
       body: result.toString('base64'), // somehow this lets you return binary media, see https://docs.aws.amazon.com/apigateway/latest/developerguide/lambda-proxy-binary-media.html
       isBase64Encoded: true
     }
+}
+
+export let npmsHandler: APIGatewayProxyHandler = async (event) => {
+  return success(await getNpms(event.queryStringParameters))
 }
 
 let success = (data: any) => {
