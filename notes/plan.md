@@ -353,19 +353,29 @@ Sprint 21 (to January 7)
 Sprint 22 (to January 21)
 -------------------------
 
-- [ ] Book science / data science talks {uw, pr}
-- [ ] De-duplicate thumbnail code {cj}
-- [ ] Slightly improve the index dropdown (description-first) {pm, ih}
-- [ ] Process some S1 stats on Jasmin to flush any issues {ih}
-- [ ] 🎁 Support index thumbnails {pm}
-- [ ] Add back map controls (zoom, polygon toggle) {pm}
-- [ ] Improve polygon selection {pm}
-- [ ] 🐞 Fix hover inefficiency {pm}
+- [ ] ~~Book science / data science talks {uw, pr}~
+- [ ] ~~De-duplicate thumbnail code {cj} in progress~~
+- [ ] ~~Process some S1 stats on Jasmin to flush any issues {ih}~~
+- [x] 🎁 Support index thumbnails {pm}
+- [x] Start work on Field Data {cj}
+- [x] Investigating CEDA slowness {pm, cj, uw}
+
+Next sprint (to February 7)
+---------------------------
+
+- [ ] De-duplicate thumbnail code {cj} in progress
+- [ ] Work on Glue stuff for handover {pm, fm}
+- [ ] Knowledgeshare dev session on everything top-to-bottom, esp. Glue {pm, fm, cj, md}
+- [ ] Source material for reporting {pm}
+- [ ] Add back map controls (zoom, polygon toggle) {pm, cj}
+- [ ] Improve polygon selection {pm, cj}
+- [ ] 🐞 Fix hover inefficiency {pm stretch}
 
 Next sprint
 -----------
 
 - [ ] Look into Leaflet tooltip Z-order {pm}
+- [ ] Slightly improve the index dropdown (description-first) {pm, ih}
 
 Upcoming sprints
 ----------------
