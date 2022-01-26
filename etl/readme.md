@@ -22,7 +22,17 @@ Diagram
                                           |
                       s3://...stats-data/compared-monthly-nearest50/parquet/
                       🏢stats_compared_monthly_nearest50
+Creating a new database
+-----------------------
+AWS Glue Catalog --> Databases --> create new
 
+Creating buckets
+----------------
+The following buckets are required
+
+- `jncc-habmon-alpha-working` - a scratch area for athena to save results from queries
+- `jncc-habmon-alpha-stats-raw `- the raw data that gets uploaded from the jasmin workflow
+- `jncc-habmon-alpha-stats-data` - the glue processed data and lookup data.
 
 Setting up 🏢raw_stats 
 ----------------------

@@ -11,6 +11,12 @@ Job properties to set for new jobs
 - timeout: (60 minutes, to avoid accidentally spending $$$)
 - tags (if necessary)
 
+Role
+-----
+Create a new role with AWSGlueService and AWSS3FullAccess policies
+
+https://docs.aws.amazon.com/glue/latest/dg/create-an-iam-role.html
+
 Glue catalog tables need to have new partitions loaded manually
 ---------------------------------------------------------------
 
