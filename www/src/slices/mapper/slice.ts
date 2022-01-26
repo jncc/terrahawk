@@ -35,6 +35,18 @@ let slice = createSlice({
     toggleNpmsData: (state) => {
       state.showNpmsData = !state.showNpmsData
     },
+    mapZoomIn: (state) => {
+      if (state.zoom < 18) { // highest zoom level
+        state.zoom++
+        console.log(state.zoom)
+      }
+    },
+    mapZoomOut: (state) => {
+      if (state.zoom > 7) { // zoom level
+        state.zoom--
+        console.log(state.zoom)
+      }
+    },
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
       state.zoomedEnoughToShowPolygons = state.zoom >= frameworks[state.query.framework].polygonZoomThreshold

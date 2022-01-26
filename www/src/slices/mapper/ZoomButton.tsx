@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 
 export let ZoomButton = (props: {
-  buttonType: string
+  buttonType: string,
+  onClick: () => void
   }) => {
 
   let dispatch = useStateDispatcher()
@@ -24,7 +25,7 @@ export let ZoomButton = (props: {
 
   return (
     <div className="inline bg-white rounded-xl overflow-hidden shadow-md px-3 py-2 my-2 mr-1">
-      <button className="btn btn-light" aria-label={label} type="button">
+      <button className="btn btn-light" aria-label={label} type="button" onClick={props.onClick}>
         <FontAwesomeIcon icon={icon} className="text-gray-400" />
       </button>
     </div>

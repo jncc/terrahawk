@@ -15,8 +15,8 @@ export let ControlsPanel = () => {
 
   return (
     <>
-      <ZoomButton buttonType="in" />
-      <ZoomButton buttonType="out" />
+      <ZoomButton buttonType="in" onClick={() => dispatch(mapperActions.mapZoomIn())}/>
+      <ZoomButton buttonType="out" onClick={() => dispatch(mapperActions.mapZoomOut())}/>
 
       <OverlayToggle
         label="Polygons"
