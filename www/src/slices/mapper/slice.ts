@@ -13,6 +13,7 @@ let slice = createSlice({
   name: 'mapper',
   initialState: {
     showPolygons: true,
+    showNpmsData: true,
     zoom: defaultFramework.defaultZoom,
     zoomedEnoughToShowPolygons: false,
     query: defaultQuery,
@@ -30,6 +31,9 @@ let slice = createSlice({
   reducers: {
     togglePolygons: (state) => {
       state.showPolygons = !state.showPolygons
+    },
+    toggleNpmsData: (state) => {
+      state.showNpmsData = !state.showNpmsData
     },
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
