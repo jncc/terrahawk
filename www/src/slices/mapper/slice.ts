@@ -38,13 +38,11 @@ let slice = createSlice({
     mapZoomIn: (state) => {
       if (state.zoom < 18) { // highest zoom level
         state.zoom++
-        console.log(state.zoom)
       }
     },
     mapZoomOut: (state) => {
-      if (state.zoom > 7) { // zoom level
+      if (state.zoom > 7) { // lowest zoom level
         state.zoom--
-        console.log(state.zoom)
       }
     },
     mapZoomChanged: (state, a: PayloadAction<number>) => {

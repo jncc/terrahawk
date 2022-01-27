@@ -2,7 +2,6 @@
 import React from 'react'
 
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
-import { mapperActions } from './slice'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
@@ -24,10 +23,9 @@ export let ZoomButton = (props: {
   }
 
   return (
-    <div className="inline bg-white rounded-xl overflow-hidden shadow-md px-3 py-2 my-2 mr-1">
-      <button className="btn btn-light" aria-label={label} type="button" onClick={props.onClick}>
-        <FontAwesomeIcon icon={icon} className="text-gray-400" />
-      </button>
-    </div>
+    <button className="inline bg-white rounded-xl overflow-hidden shadow-md px-3 py-2 my-2 mr-1 hover:bg-gray-100"
+      aria-label={label} type="button" onClick={props.onClick}>
+      <FontAwesomeIcon icon={icon} className="text-gray-400" />
+    </button>
   )
 }

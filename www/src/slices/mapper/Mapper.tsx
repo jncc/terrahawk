@@ -11,7 +11,8 @@ import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 import { PolygonPanel } from './PolygonPanel'
 import { GazetteerPanel } from './GazetteerPanel'
-import { ControlsPanel } from './ControlsPanel'
+import { MapControlsPanel } from './MapControlsPanel'
+import { OverlayControlsPanel } from './OverlayControlsPanel'
 
 export let Mapper = () => {
 
@@ -36,16 +37,23 @@ export let Mapper = () => {
         <GazetteerPanel />
       </>
       }
+      
       {zoomedEnoughToShowPolygons &&
       <>
-        <QueryPanel />
-        <PolygonPanel />
-        <div className="z-abovemap absolute bottom-6 left-6 animate-delayedfadein ">
-          <ControlsPanel />   
+        <div className="z-abovemap absolute top-4 left-6 animate-delayedfadein">
           <FrameworkPanel />
         </div>
+        <div className="z-abovemap absolute top-24 left-6 w-56 animate-delayedfadein">
+          <QueryPanel />
+        </div>
+        <div className="z-abovemap absolute top-96 left-6 animate-delayedfadein">
+          <OverlayControlsPanel />
+        </div>
+        <PolygonPanel />
       </>
       }
+      <MapControlsPanel />
+      
       <LeafletMap />
     </div>
   </>
