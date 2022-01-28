@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-export let Toggle = (props: {label: string, position: 'left'|'right', checked: boolean, onChange: () => void}) => {
+export let Toggle = (props: {label: string, position: 'left'|'right', checked: boolean, onChange: () => void, title: string}) => {
 
   // let [checked, setChecked] = useState(checked)
   {/* https://medium.com/front-end-weekly/build-a-css-only-toggle-switch-using-tailwindcss-d2739882934         */ }
@@ -10,7 +10,7 @@ export let Toggle = (props: {label: string, position: 'left'|'right', checked: b
   let hover  = props.checked ? 'peer-hover:bg-gray-500' : 'peer-hover:bg-gray-300'
 
   return (
-    <label className="cursor-pointer text-sm relative flex justify-between items-center group p-2">
+    <label className="cursor-pointer text-sm relative flex items-center group p-2" title={props.title}>
       {props.position === 'left' && props.label}
       <input
         type="checkbox"

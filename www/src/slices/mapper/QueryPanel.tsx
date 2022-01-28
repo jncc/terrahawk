@@ -18,6 +18,7 @@ export let QueryPanel = () => {
   let state = useStateSelector(s => s.mapper)
 
   return (
+    <div className="z-abovemap relative w-56 animate-delayedfadein mb-2">
     <div className="bg-white rounded-xl overflow-hidden shadow-md px-4 py-2">
 
       <div className="mb-0.5">
@@ -139,6 +140,7 @@ export let QueryPanel = () => {
 */}
       </div>
 
+    </div>
     </div>
   )
 }
