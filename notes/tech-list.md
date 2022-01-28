@@ -29,15 +29,9 @@ Tech list
 - Partitioning
   - path
   - 10k grid pic
-- Parquet *efficient CSV files"
-
-
-
+- Parquet "efficient CSV files"
 - Maths!
   - Z-score
-- 
-- 
-- 
 - 
 - AWS Lamda & API Gateway
 
