@@ -6,8 +6,8 @@ import LRUCache from 'lru-cache'
 
 import { RootState } from '../../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../../utility/geospatialUtility'
-import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery, MonthStats
-       } from './types'
+import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery,
+  FieldDataQueryResult, MonthStats} from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 // polygons
@@ -114,6 +114,18 @@ if (!state.selectedPolygon)
       })
     )
   }
+}
+
+// field data
+// --------
+
+export let fetchFieldData = (query: RootState['mapper']['query']): Observable<FieldDataQueryResult> => {
+
+  let params = { type: "npms" }
+  
+  return api('npms', params).pipe(
+    map(r =>( { fieldData: r.response.data }))
+  )
 }
 
 let api = (endpoint: string, params: any) => {

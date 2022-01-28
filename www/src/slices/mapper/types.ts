@@ -42,6 +42,18 @@ export type PolygonsQueryResult = {
   params: { framework: string }
 }
 
+export type FieldData = {
+  sampleId: string,
+  date: Date,
+  latitude: number,
+  longitude: number,
+  surveyName: string
+}
+
+export type FieldDataQueryResult = {
+  fieldData: FieldData[]
+}
+
 export type ChoroplethKeyParams = Pick<Query,
   | 'framework'
   | 'indexname'

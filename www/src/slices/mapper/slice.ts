@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats, SimpleDate } from './types'
+import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../../frameworks'
 import { last } from '../../utility/arrayUtility'
 import { getFramesWithDate } from './helpers/frameHelpers'
@@ -19,6 +19,7 @@ let slice = createSlice({
     query: defaultQuery,
     polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
+    fieldData: undefined as FieldData[] | undefined,
     selectedPolygon: undefined as Poly | undefined,
     previousSelectedPolygon: undefined as Poly | undefined,
     selectedPolygonStats: undefined as MonthStats[] | undefined,
@@ -83,6 +84,9 @@ let slice = createSlice({
     },
     fetchChoroplethCompleted: (state, a: PayloadAction<ChoroplethQueryResult>) => {
       state.choropleth = a.payload
+    },
+    fetchFieldDataCompleted: (state, a: PayloadAction<FieldDataQueryResult>) => {
+      state.fieldData = a.payload.fieldData
     },
     selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
       // the new value is `undefined` if deselecting

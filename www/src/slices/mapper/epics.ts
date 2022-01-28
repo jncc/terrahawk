@@ -6,7 +6,7 @@ import { combineEpics, ofType, StateObservable } from 'redux-observable'
 import { RootState } from '../../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
-import { fetchPolygons, fetchChoropleth, fetchPolygon } from './api'
+import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchFieldData } from './api'
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
@@ -65,8 +65,26 @@ let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) =
   )
 )
 
+let fetchFieldDataEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+  ofType(
+    mapperActions.mapZoomChanged.type,
+    mapperActions.mapCenterChanged.type,
+  ),
+  filter(() => state$.value.mapper.zoomedEnoughToShowPolygons),
+  switchMap(() =>
+    concat(
+      of(globalActions.startLoading('fieldData')),
+      fetchFieldData(state$.value.mapper.query).pipe(
+        map(result => mapperActions.fetchFieldDataCompleted(result)),
+        catchError(e => of(globalActions.errorOccurred(e.message)))),
+      of(globalActions.stopLoading('fieldData')),
+    )
+  )
+)
+
 export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
   fetchChoroplethEpic,
   fetchPolygonStatsEpic,
+  fetchFieldDataEpic
 )

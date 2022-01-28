@@ -19,11 +19,11 @@ export let OverlayControlsPanel = () => {
         checked={state.showPolygons}
         onChange={() => dispatch(mapperActions.togglePolygons())}/>
 
-      {/* <OverlayToggle
+      <OverlayToggle
         label="NPMS data"
         position="left"
         checked={state.showNpmsData}
-        onChange={() => dispatch(mapperActions.toggleNpmsData())}/> */}
+        onChange={() => dispatch(mapperActions.toggleNpmsData())}/>
     </>
   )
 }
