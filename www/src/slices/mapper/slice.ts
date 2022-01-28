@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../../frameworks'
-import { last } from '../../utility/arrayUtility'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
 let defaultFramework = frameworks['liveng0']
@@ -36,12 +35,12 @@ let slice = createSlice({
       state.showNpmsData = !state.showNpmsData
     },
     mapZoomIn: (state) => {
-      if (state.zoom < 18) { // highest zoom level
+      if (state.zoom < frameworks[state.query.framework].maxZoom) {
         state.zoom++
       }
     },
     mapZoomOut: (state) => {
-      if (state.zoom > 7) { // lowest zoom level
+      if (state.zoom > frameworks[state.query.framework].minZoom) {
         state.zoom--
       }
     },

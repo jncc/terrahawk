@@ -31,7 +31,8 @@ export let LeafletMap = () => {
   useEffect(() => {
     
     map = L.map('leaflet-map', {
-      minZoom: 7,
+      minZoom: framework.minZoom,
+      maxZoom: framework.maxZoom,
       zoomControl: false,
       attributionControl: false,
       maxBounds: new LatLngBounds(framework.maxBounds.southWest, framework.maxBounds.northEast)

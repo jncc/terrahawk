@@ -8,6 +8,8 @@ export type Framework = {
   boundary: any
   maxBounds: Bounds
   defaultZoom: number
+  maxZoom: number
+  minZoom: number
   polygonZoomThreshold: number
   defaultQuery: {
     framework: string
