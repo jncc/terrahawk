@@ -154,6 +154,12 @@ functions:
           method: GET
     memorySize: 1024
     timeout: 30
+  npms:
+    handler: built/host/aws.npmsHandler
+    events:
+      - httpApi:
+          path: /npms
+          method: GET
     
 
 # plugins:
