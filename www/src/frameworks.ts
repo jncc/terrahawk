@@ -11,6 +11,8 @@ export const frameworks: {[framework: string]: Framework} = {
     boundary: liveng0Boundary,
     maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
     defaultZoom: 9,
+    maxZoom: 18,
+    minZoom: 7,
     // defaultZoom: 13,
     polygonZoomThreshold: 13,
     defaultQuery: {

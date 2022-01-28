@@ -3,8 +3,8 @@ import React from 'react'
 
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
-
-import { OverlayToggle } from './OverlayToggle'
+import { Toggle } from '../../components/Toggle'
+import { Panel } from './Panel'
 
 export let OverlayControlsPanel = () => {
 
@@ -13,17 +13,25 @@ export let OverlayControlsPanel = () => {
 
   return (
     <>
-      <OverlayToggle
-        label="Polygons"
-        position="left"
-        checked={state.showPolygons}
-        onChange={() => dispatch(mapperActions.togglePolygons())}/>
-
-      <OverlayToggle
+    <Panel extraClasses="inline-block relative px-2 py-1">
+      <Toggle
         label="NPMS data"
-        position="left"
+        position="right"
         checked={state.showNpmsData}
-        onChange={() => dispatch(mapperActions.toggleNpmsData())}/>
+        onChange={() => dispatch(mapperActions.toggleNpmsData())}
+        title="Show NPMS data on the map"
+      />
+    </Panel>
+    <br />
+    <Panel extraClasses="inline-block relative px-2 py-1">
+      <Toggle
+        label="Polygons"
+        position="right"
+        checked={state.showPolygons}
+        onChange={() => dispatch(mapperActions.togglePolygons())}
+        title="Show polygons on the map"
+      />      
+    </Panel>
     </>
   )
 }

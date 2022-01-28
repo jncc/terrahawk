@@ -51,7 +51,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input
                 type="radio"
-                className="cursor-pointer"
+                className="custom-ring cursor-pointer"
                 name="thumbnailtype"
                 value="colour"
                 checked={thumbType === 'colour'}
@@ -62,7 +62,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input
                 type="radio"
-                className="cursor-pointer"
+                className="custom-ring cursor-pointer"
                 name="thumbnailtype"
                 value="index"
                 checked={thumbType === 'index'}
@@ -73,8 +73,16 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
         </div>
         <div className="flex-grow"></div>
         <div className="flex">
-          <Toggle label="Boost" position="left" checked={useProxy} onChange={() => dispatch(mapperActions.toggleProxy())} />
-          <Toggle label="Outlines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
+          <Toggle label="Boost" title="Faster image loading"
+            position="left"
+            checked={useProxy}
+            onChange={() => dispatch(mapperActions.toggleProxy())}
+          />
+          <Toggle label="Outlines" title="Show polygon boundary lines"
+            position="left"
+            checked={showOutlines}
+            onChange={() => dispatch(mapperActions.toggleOutlines())}
+          />
         </div>
       </div>
     </>

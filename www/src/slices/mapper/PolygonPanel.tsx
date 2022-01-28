@@ -16,6 +16,7 @@ import { zeroPad } from '../../utility/numberUtility'
 import { indexnames } from './helpers/statsHelper'
 import { getIndexnameIcon } from './helpers/iconHelper'
 import { Dispatch, AnyAction } from 'redux'
+import { Panel } from './Panel'
 
 export let PolygonPanel = () => {
 
@@ -30,25 +31,21 @@ export let PolygonPanel = () => {
   let showClasses = show ? `opacity-100` : `translate-x-full opacity-0`
 
   return (
-    <div className={`z-abovemap absolute top-6 right-6 bottom-6 left-[50%] transform transition-opacity ${showClasses}`}>
-      <div className="w-full h-full bg-white rounded-xl shadow-xl px-4 py-2.5">
-        
-        {selectedPolygon &&
-        <div className="flex flex-col h-full">
-          {makeHeaderBar(dispatch, selectedPolygon)}
-          {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query, selectedFrame)}
-        </div>
-        }
-
+    <Panel extraClasses={`absolute top-6 right-6 bottom-6 left-[50%] transform transition-opacity ${showClasses} px-4 py-2.5`}>
+      {selectedPolygon &&
+      <div className="flex flex-col h-full">
+        {makeHeaderBar(dispatch, selectedPolygon)}
+        {selectedPolygonStats && makeLoadedPolygonDetails(selectedPolygonStats, query, selectedFrame)}
       </div>
-    </div>
+      }
+    </Panel>
   )
 }
 
 let makeHeaderBar = (dispatch: Dispatch<AnyAction>, selectedPolygon: Poly) => {
 
   return (
-    <div className="flex-none  mb-3 pb-3 border-b-2 border-gray-300 ">
+    <div className="flex-none mb-3 pb-3 border-b-2 border-gray-300 ">
       <div className="flex items-center space-x-3">
         <LocationMarkerIcon className="h-7 w-7 text-gray-400"/>
         <div className="text-lg leading-tight">

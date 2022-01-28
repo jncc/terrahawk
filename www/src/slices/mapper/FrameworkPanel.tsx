@@ -4,6 +4,7 @@ import { MapIcon } from '@heroicons/react/outline'
 
 import { frameworks } from '../../frameworks'
 import { useStateSelector } from '../../state/hooks'
+import { Panel } from './Panel'
 
 export let FrameworkPanel = () => {
 
@@ -11,8 +12,7 @@ export let FrameworkPanel = () => {
   let framework = frameworks[query.framework]
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md pl-4 pr-6 py-2 my-2" >
-
+    <Panel extraClasses="absolute bottom-4 left-6 min-w-[14rem] pl-4 pr-6 py-2 my-2">
       <div className="flex items-center space-x-3">
         <MapIcon className="h-7 w-7 text-gray-400"/>
         <div className="leading-tight">
@@ -25,7 +25,6 @@ export let FrameworkPanel = () => {
           </div>
         </div>
       </div>
-
-    </div>
+    </Panel>
   )
 }
