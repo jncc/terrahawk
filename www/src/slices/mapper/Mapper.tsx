@@ -46,7 +46,7 @@ export let Mapper = () => {
         <div className="z-abovemap absolute top-24 left-6 w-56 animate-delayedfadein">
           <QueryPanel />
         </div>
-        <div className="z-abovemap absolute top-96 left-6 animate-delayedfadein">
+        <div className="z-abovemap absolute top-[22rem] left-6 animate-delayedfadein">
           <OverlayControlsPanel />
         </div>
         <PolygonPanel />
