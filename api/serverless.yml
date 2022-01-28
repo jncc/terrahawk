@@ -159,7 +159,7 @@ functions:
     events:
       - httpApi:
           path: /npms
-          method: GET
+          method: POST
     
 
 # plugins:

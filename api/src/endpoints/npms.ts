@@ -2,7 +2,7 @@
 
 import { query } from '../db'
 
-// example: GET /npms
+// example: POST /npms
 
 export const getNpms = async (args: any) => {
 

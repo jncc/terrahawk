@@ -14,11 +14,13 @@ import { AnyAction, Dispatch } from '@reduxjs/toolkit'
 import 'leaflet-active-area'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
+type CustomFieldDataLayer = L.GeoJSON & { sampleId: string }
 
 let map: L.Map
 let bboxRectangle: L.Rectangle
 let polyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 let selectedPolyLayerGroup: L.LayerGroup<CustomPolygonLayer>
+let fieldDataLayerGroup: L.LayerGroup<CustomFieldDataLayer>
 
 export let LeafletMap = () => {
 
@@ -52,6 +54,9 @@ export let LeafletMap = () => {
     // polygon layer group
     polyLayerGroup = L.layerGroup()
     selectedPolyLayerGroup = L.layerGroup().addTo(map)
+
+    // field data layer group
+    fieldDataLayerGroup = L.layerGroup()
 
     // listen for zoom changes
     map.on('zoomend', () => {
@@ -153,6 +158,29 @@ export let LeafletMap = () => {
     state.query.statistic // statistic values are all in the same choropleth item object - simply redraw when this changes 
   ])
 
+  // react to change of `field data`
+  useEffect(() => {
+    if (state.showNpmsData && state.zoomedEnoughToShowPolygons)
+    fieldDataLayerGroup.getLayers()
+      .filter((l: any) => !state.fieldData?.find(f => f.sampleId === l.sampleId))
+      .forEach(l => {
+        fieldDataLayerGroup.removeLayer(l)
+        l.remove()
+      })
+      
+    // add layers for field data in state.fieldData not already on the map
+    if (state.fieldData) {
+      state.fieldData.filter(f =>
+        !(fieldDataLayerGroup.getLayers() as CustomFieldDataLayer[]).find(l => l.sampleId === f.sampleId)
+      ).forEach(f => {
+        let position = new L.LatLng(f.latitude, f.longitude)
+        let layer = L.marker(position)
+      
+        layer.addTo(fieldDataLayerGroup)
+      })
+    }
+  }, [state.fieldData])
+
   // react to changes of `showPolygons` and `zoomedEnoughToShowPolygons`
   useEffect(() => {
     if (state.showPolygons && state.zoomedEnoughToShowPolygons)
@@ -162,6 +190,15 @@ export let LeafletMap = () => {
       setTimeout(() => polyLayerGroup.remove(), 50)
     
   }, [state.showPolygons, state.zoomedEnoughToShowPolygons])
+
+  // react to changes of `showNpmsData` and `zoomedEnoughToShowPolygons`
+  useEffect(() => {
+    if (state.showNpmsData && state.zoomedEnoughToShowPolygons)
+      setTimeout(() => fieldDataLayerGroup.addTo(map), 50)
+    else
+      setTimeout(() => fieldDataLayerGroup.remove(), 50)
+    
+  }, [state.showNpmsData, state.zoomedEnoughToShowPolygons])
 
   // listen for selection / deselection of polygon
   useEffect(() => {

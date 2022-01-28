@@ -59,8 +59,9 @@ if (env.NODE_ENV === 'development') {
         res.send(result)
     }))
 
-    app.get('/npms', asyncHandler(async(req, res) => {
-        let result = await getNpms(req.query)
+    app.post('/npms', asyncHandler(async(req, res) => {
+        
+        let result = await getNpms(req.body)
         res.json(result)
     }))
 
