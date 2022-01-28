@@ -6,6 +6,7 @@ import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 import { Indexname, Statistic } from './types'
 import { indexnames, statistics } from './helpers/statsHelper'
+import { Panel } from './Panel'
 
 const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021]
 const months = [
@@ -18,9 +19,7 @@ export let QueryPanel = () => {
   let state = useStateSelector(s => s.mapper)
 
   return (
-    <div className="z-abovemap relative w-56 animate-delayedfadein mb-2">
-    <div className="bg-white rounded-xl overflow-hidden shadow-md px-4 py-2">
-
+    <Panel extraClasses="relative w-56 mb-2 px-4 py-2">
       <div className="mb-0.5">
         <label htmlFor="indexname-select" className="little-label-text  mb-1">Index</label>
         <select
@@ -139,8 +138,8 @@ export let QueryPanel = () => {
         </div>
 */}
       </div>
+    </Panel>
 
-    </div>
-    </div>
+
   )
 }
