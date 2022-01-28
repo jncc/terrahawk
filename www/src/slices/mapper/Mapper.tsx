@@ -37,22 +37,17 @@ export let Mapper = () => {
         <GazetteerPanel />
       </>
       }
-      
       {zoomedEnoughToShowPolygons &&
       <>
         <div className="absolute top-6 left-6">
           <QueryPanel />
           <OverlayControlsPanel />
         </div>
-
         <PolygonPanel />
       </>
       }
-
-      <div className="z-abovemap absolute bottom-4 left-6 animate-delayedfadein">
-        <FrameworkPanel />
-      </div>
       <MapControlsPanel />
+      <FrameworkPanel />
       <LeafletMap />
     </div>
   </>

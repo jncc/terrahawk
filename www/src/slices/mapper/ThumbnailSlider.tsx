@@ -73,8 +73,16 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
         </div>
         <div className="flex-grow"></div>
         <div className="flex">
-          <Toggle label="Boost" title="Quicker image loading" position="left" checked={useProxy} onChange={() => dispatch(mapperActions.toggleProxy())} />
-          <Toggle label="Outlines" title="Show polygon boundary lines" position="left" checked={showOutlines} onChange={() => dispatch(mapperActions.toggleOutlines())} />
+          <Toggle label="Boost" title="Faster image loading"
+            position="left"
+            checked={useProxy}
+            onChange={() => dispatch(mapperActions.toggleProxy())}
+          />
+          <Toggle label="Outlines" title="Show polygon boundary lines"
+            position="left"
+            checked={showOutlines}
+            onChange={() => dispatch(mapperActions.toggleOutlines())}
+          />
         </div>
       </div>
     </>
