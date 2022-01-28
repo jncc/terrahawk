@@ -68,6 +68,11 @@ export let LeafletMap = () => {
 
   }, [])
 
+  // react to change of `zoom`
+  useEffect(() => {
+    map.setZoom(state.zoom)
+  }, [state.zoom])
+
   // react to change of `query.center` (position change)
   useEffect(() => {
 
