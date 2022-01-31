@@ -3,7 +3,7 @@ import L, { LatLngBounds } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
 import { frameworks } from '../../frameworks'
-import { isChoroplethItem, Poly } from './types'
+import { FieldData, isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
@@ -14,7 +14,7 @@ import { AnyAction, Dispatch } from '@reduxjs/toolkit'
 import 'leaflet-active-area'
 
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
-type CustomFieldDataLayer = L.GeoJSON & { sampleId: string }
+type CustomFieldDataLayer = L.GeoJSON & { fieldData: FieldData }
 
 let map: L.Map
 let bboxRectangle: L.Rectangle
@@ -160,9 +160,10 @@ export let LeafletMap = () => {
 
   // react to change of `field data`
   useEffect(() => {
+    
     if (state.showNpmsData && state.zoomedEnoughToShowPolygons)
     fieldDataLayerGroup.getLayers()
-      .filter((l: any) => !state.fieldData?.find(f => f.sampleId === l.sampleId))
+      .filter((l: any) => !state.fieldData?.find(f => f.sampleid === l.sampleId))
       .forEach(l => {
         fieldDataLayerGroup.removeLayer(l)
         l.remove()
@@ -171,12 +172,47 @@ export let LeafletMap = () => {
     // add layers for field data in state.fieldData not already on the map
     if (state.fieldData) {
       state.fieldData.filter(f =>
-        !(fieldDataLayerGroup.getLayers() as CustomFieldDataLayer[]).find(l => l.sampleId === f.sampleId)
+        !(fieldDataLayerGroup.getLayers() as CustomFieldDataLayer[]).find(l => l.fieldData.sampleid === f.sampleid)
       ).forEach(f => {
         let position = new L.LatLng(f.latitude, f.longitude)
-        let layer = L.marker(position)
+        let marker = L.marker(position)
+
+        let colour = 'gray'
+        if (f.match.toLowerCase() === 'yes') {
+          colour = 'green'
+        } else if (f.match.toLowerCase() === 'no') {
+          colour = 'red'
+        }
+
+        const markerHtmlStyles = `
+          background-color: ${colour};
+          width: 3rem;
+          height: 3rem;
+          display: block;
+          left: -1.5rem;
+          top: -1.5rem;
+          position: relative;
+          border-radius: 3rem 3rem 0;
+          transform: rotate(45deg);
+          border: 1px solid #FFFFFF`
+
+        let icon = L.divIcon({
+          html: `<span style="${markerHtmlStyles}" />`
+        })
+
+        marker.setIcon(icon)
+        marker.bindPopup(`<h1>${f.surveyname} - ${f.sampleid}</h1>
+          <h2>${f.date}</h2><br />
+          <b>Broad habitat type:</b> ${f.broadhabitat}<br />
+          <b>Fine habitat type:</b> ${f.finehabitat}<br />
+          <b>Habitat condition:</b> ${f.habitatcondition}<br />
+          <b>Management:</b> ${f.management}<br />
+          <b>Species:</b> ${f.species}<br />
+          <b>Structure:</b> ${f.structure}<br />
+          <b>Other:</b> ${f.other}<br />
+          <b>Match:</b> ${f.match}<br />`)
       
-        layer.addTo(fieldDataLayerGroup)
+        marker.addTo(fieldDataLayerGroup)
       })
     }
   }, [state.fieldData])

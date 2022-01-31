@@ -59,20 +59,21 @@ export let statsHandler: APIGatewayProxyHandler = async (event) => {
 }
 
 export let thumbHandler: APIGatewayProxyHandler = async (event) => {
-    let result = await getThumb(event.queryStringParameters)
+  let result = await getThumb(event.queryStringParameters)
 
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'image/png',
-      },
-      body: result.toString('base64'), // somehow this lets you return binary media, see https://docs.aws.amazon.com/apigateway/latest/developerguide/lambda-proxy-binary-media.html
-      isBase64Encoded: true
-    }
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'image/png',
+    },
+    body: result.toString('base64'), // somehow this lets you return binary media, see https://docs.aws.amazon.com/apigateway/latest/developerguide/lambda-proxy-binary-media.html
+    isBase64Encoded: true
+  }
 }
 
 export let npmsHandler: APIGatewayProxyHandler = async (event) => {
-  return success(await getNpms(event.queryStringParameters))
+  let body = JSON.parse(event.body ?? "{}")
+  return success(await getNpms(body))
 }
 
 let success = (data: any) => {

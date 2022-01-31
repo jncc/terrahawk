@@ -121,8 +121,15 @@ if (!state.selectedPolygon)
 
 export let fetchFieldData = (query: RootState['mapper']['query']): Observable<FieldDataQueryResult> => {
 
-  let params = { type: "npms" }
+  let bounds = getBoundsOfBboxRectangle(query.center)
+
+  let params = {
+    framework: query.framework,
+    bbox: bboxToWkt(getBboxFromBounds(bounds))
+  }
   
+  console.log(params)
+
   return api('npms', params).pipe(
     map(r =>( { fieldData: r.response.data }))
   )

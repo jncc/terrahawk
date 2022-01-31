@@ -44,12 +44,27 @@ export type PolygonsQueryResult = {
   params: { framework: string }
 }
 
+export type FieldDataQuery = Pick<Query,
+  | 'framework'
+> & {
+  bbox: string
+}
+
 export type FieldData = {
-  sampleId: string,
+  sampleid: string,
   date: Date,
   latitude: number,
   longitude: number,
-  surveyName: string
+  surveyname: string,
+  broadhabitat: string,
+  finehabitat: string,
+  classsystem: string,
+  habitatcondition: string,
+  management: string,
+  species: string,
+  structure: string,
+  other: string,
+  match: string
 }
 
 export type FieldDataQueryResult = {
