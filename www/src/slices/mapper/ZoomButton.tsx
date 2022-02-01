@@ -1,10 +1,8 @@
 
 import React from 'react'
 
-import { useStateDispatcher, useStateSelector } from '../../state/hooks'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 
 export let ZoomButton = (props: {
     buttonType: string,

@@ -13,6 +13,11 @@ import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpe
 import { AnyAction, Dispatch } from '@reduxjs/toolkit'
 import 'leaflet-active-area'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMapMarkerAlt, faClipboardList } from '@fortawesome/free-solid-svg-icons'
+
+import ReactDOMServer from 'react-dom/server'
+
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 type CustomFieldDataLayer = L.GeoJSON & { fieldData: FieldData }
 
@@ -57,6 +62,60 @@ export let LeafletMap = () => {
 
     // field data layer group
     fieldDataLayerGroup = L.layerGroup()
+
+    // let position = new L.LatLng(state.query.center.lat, state.query.center.lng)
+    // let marker = L.marker(position)
+
+    // let colour = 'green'
+
+    // let iconHtml = ReactDOMServer.renderToString(
+    //   <span className="block relative w-8 h-8 -left-2">
+    //     <FontAwesomeIcon icon={faMapMarkerAlt} size="3x" color={colour}></FontAwesomeIcon>
+    //   </span>
+    // )
+
+    // let popupHtml = ReactDOMServer.renderToString(
+    //   <div className="fielddata-popup-info">
+    //     <h1>
+    //       <div className="flex">
+    //         <span className="mr-2"><FontAwesomeIcon icon={faClipboardList} size="2x"></FontAwesomeIcon></span>
+    //         NPMS Square plot 10 x 10 m, woodlands - 1916457
+    //       </div>
+    //     </h1>
+    //     <h2>18/06/2016</h2>
+
+    //     <h3>Broad habitat type</h3>
+    //     <p>Broadleaved woodland, hedges and scrub</p>
+        
+    //     <h3>Fine habitat type</h3>
+    //     <p>Dry deciduous woodland</p>
+
+    //     <h3>Habitat condition</h3>
+    //     <p>Presence of positive indicator species</p>
+
+    //     <h3>Management</h3>
+    //     <p></p>
+
+    //     <h3>Species</h3>
+    //     <p>Species: Anthriscus sylvestris 91-100%, Heracleum sphondylium 5-10%, Urtica dioica 51-75%, Rubus fruticosus agg. 1-4%, Galium aparine 91-100%</p>
+
+    //     <h3>Structure</h3>
+    //     <p>Dense tree and/or shrub cover, Vegetation height: Over two-thirds of the area 31-100cm</p>
+
+    //     <h3>Other</h3>
+    //     <p></p>
+    //   </div>
+    // )
+
+    // let icon = L.divIcon({
+    //   className: '', // stops the white box appearing
+    //   html: iconHtml
+    // })
+    
+    // marker.setIcon(icon)
+    // marker.bindPopup(popupHtml)
+  
+    // marker.addTo(map)
 
     // listen for zoom changes
     map.on('zoomend', () => {
@@ -184,33 +243,80 @@ export let LeafletMap = () => {
           colour = 'red'
         }
 
-        const markerHtmlStyles = `
-          background-color: ${colour};
-          width: 3rem;
-          height: 3rem;
-          display: block;
-          left: -1.5rem;
-          top: -1.5rem;
-          position: relative;
-          border-radius: 3rem 3rem 0;
-          transform: rotate(45deg);
-          border: 1px solid #FFFFFF`
+        let iconHtml = ReactDOMServer.renderToString(
+          <span className="block relative w-8 h-8 -left-2">
+            <FontAwesomeIcon icon={faMapMarkerAlt} size="3x" color={colour}></FontAwesomeIcon>
+          </span>
+        )
+
+        let popupHtml = ReactDOMServer.renderToString(
+          <div className="fielddata-popup-info">
+            <h1>
+              <div className="flex">
+                <span className="mr-2"><FontAwesomeIcon icon={faClipboardList} size="2x"></FontAwesomeIcon></span>
+                NPMS Square plot 10 x 10 m, woodlands - 1916457
+              </div>
+            </h1>
+            <h2>{f.date}</h2>
+
+            {f.broadhabitat &&
+            <>
+              <h3>Broad habitat type</h3>
+              <p>{f.broadhabitat}</p>
+            </>
+            }
+            
+            {f.finehabitat &&
+            <>
+              <h3>Fine habitat type</h3>
+              <p>{f.finehabitat}</p>
+            </>
+            }
+
+            {f.habitatcondition && 
+            <>
+              <h3>Habitat condition</h3>
+              <p>{f.habitatcondition}</p>
+            </>
+            }
+            
+            {f.management &&
+            <>
+              <h3>Management</h3>
+              <p>{f.management}</p>
+            </>
+            }
+
+            {f.species &&
+            <>
+              <h3>Species</h3>
+              <p>{f.species}</p>
+            </>
+            }
+
+            {f.structure &&
+            <>
+              <h3>Structure</h3>
+              <p>{f.structure}</p>
+            </>
+            }
+            
+            {f.other &&
+            <>
+              <h3>Other</h3>
+              <p>{f.other}</p>
+            </>
+            }
+          </div>
+        )
 
         let icon = L.divIcon({
-          html: `<span style="${markerHtmlStyles}" />`
+          className: '', // stops the white box appearing
+          html: iconHtml
         })
-
+        
         marker.setIcon(icon)
-        marker.bindPopup(`<h1>${f.surveyname} - ${f.sampleid}</h1>
-          <h2>${f.date}</h2><br />
-          <b>Broad habitat type:</b> ${f.broadhabitat}<br />
-          <b>Fine habitat type:</b> ${f.finehabitat}<br />
-          <b>Habitat condition:</b> ${f.habitatcondition}<br />
-          <b>Management:</b> ${f.management}<br />
-          <b>Species:</b> ${f.species}<br />
-          <b>Structure:</b> ${f.structure}<br />
-          <b>Other:</b> ${f.other}<br />
-          <b>Match:</b> ${f.match}<br />`)
+        marker.bindPopup(popupHtml)
       
         marker.addTo(fieldDataLayerGroup)
       })
