@@ -230,6 +230,7 @@ export let LeafletMap = () => {
       
     // add layers for field data in state.fieldData not already on the map
     if (state.fieldData) {
+      console.log("field data change")
       state.fieldData.filter(f =>
         !(fieldDataLayerGroup.getLayers() as CustomFieldDataLayer[]).find(l => l.fieldData.sampleid === f.sampleid)
       ).forEach(f => {
@@ -239,8 +240,6 @@ export let LeafletMap = () => {
         let colour = 'gray'
         if (f.match.toLowerCase() === 'yes') {
           colour = 'green'
-        } else if (f.match.toLowerCase() === 'no') {
-          colour = 'red'
         }
 
         let iconHtml = ReactDOMServer.renderToString(
@@ -254,10 +253,17 @@ export let LeafletMap = () => {
             <h1>
               <div className="flex">
                 <span className="mr-2"><FontAwesomeIcon icon={faClipboardList} size="2x"></FontAwesomeIcon></span>
-                NPMS Square plot 10 x 10 m, woodlands - 1916457
+                {f.classsystem} {f.finehabitat}
               </div>
             </h1>
             <h2>{f.date}</h2>
+
+            {f.finehabitat &&
+            <>
+              <h3>Fine habitat type</h3>
+              <p>{f.finehabitat}</p>
+            </>
+            }
 
             {f.broadhabitat &&
             <>
@@ -265,11 +271,18 @@ export let LeafletMap = () => {
               <p>{f.broadhabitat}</p>
             </>
             }
-            
-            {f.finehabitat &&
+
+            {f.classsystem &&
             <>
-              <h3>Fine habitat type</h3>
-              <p>{f.finehabitat}</p>
+              <h3>Classification system</h3>
+              <p>{f.classsystem}</p>
+            </>
+            }
+
+            {f.surveyname &&
+            <>
+              <h3>Survey</h3>
+              <p>{f.surveyname}</p>
             </>
             }
 
@@ -321,7 +334,7 @@ export let LeafletMap = () => {
         marker.addTo(fieldDataLayerGroup)
       })
     }
-  }, [state.fieldData])
+  }, [state.fieldData.map(f => f.sampleid).join(',')])
 
   // react to changes of `showPolygons` and `zoomedEnoughToShowPolygons`
   useEffect(() => {
