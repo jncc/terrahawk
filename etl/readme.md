@@ -6,35 +6,38 @@ Diagram
 --------
 
         s3://...stats-raw/parquet/   (written to S3 from Jasmin)
-        🏢raw_stats
+        🏢 raw_stats
               |                  **there is also an equivalent `seasonally` branch!**
-       💥aggregate-monthly         
+       💥 aggregate-monthly         
               |
     s3://...stats-data/aggregated-monthly/parquet/      
-    🏢stats_aggregated_monthly                         
+    🏢 stats_aggregated_monthly                         
                             \         s3://...stats-data/neighbours/nearest50/parquet/
-                             \        🏢stats_neighbours_nearest50
+                             \        🏢 stats_neighbours_nearest50
                               \           |
                                \          |     s3://...stats-data/partitions-lg/parquet/
-                                \         |     🏢stats_partitions
+                                \         |     🏢 stats_partitions
                                  \        |        /
-                             💥compare-monthly-nearest50
+                             💥 compare-monthly-nearest50
                                           |
                       s3://...stats-data/compared-monthly-nearest50/parquet/
-                      🏢stats_compared_monthly_nearest50
+                      🏢 stats_compared_monthly_nearest50
+
 Creating a new database
 -----------------------
+
 AWS Glue Catalog --> Databases --> create new
 
 Creating buckets
 ----------------
+
 The following buckets are required
 
 - `jncc-habmon-alpha-working` - a scratch area for athena to save results from queries
-- `jncc-habmon-alpha-stats-raw `- the raw data that gets uploaded from the jasmin workflow
+- `jncc-habmon-alpha-stats-raw` - the raw data that gets uploaded from the jasmin workflow
 - `jncc-habmon-alpha-stats-data` - the glue processed data and lookup data.
 
-Setting up 🏢raw_stats 
+Setting up 🏢raw_stats
 ----------------------
 
 Use AWS Athena to make tables in the AWS Glue catalog.

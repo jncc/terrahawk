@@ -360,16 +360,19 @@ Sprint 22 (to January 21)
 - [x] Start work on Field Data {cj}
 - [x] Investigating CEDA slowness {pm, cj, uw}
 
-Next sprint (to February 7)
+Sprint 23 (to February 7)
 ---------------------------
 
-- [ ] De-duplicate thumbnail code {cj} in progress
-- [ ] Work on Glue stuff for handover {pm, fm}
-- [ ] Knowledgeshare dev session on everything top-to-bottom, esp. Glue {pm, fm, cj, md}
-- [ ] Source material for reporting {pm}
-- [ ] Add back map controls (zoom, polygon toggle) {pm, cj}
-- [ ] Improve polygon selection {pm, cj}
-- [ ] 🐞 Fix hover inefficiency {pm stretch}
+- [x] De-duplicate thumbnail code {cj} in progress - now identical but not actually de-duped due to build issues
+- [x] Work on Glue stuff for handover {pm, fm}
+- [x] Knowledgeshare dev session on everything top-to-bottom, esp. Glue {pm, fm, cj, md}
+- [x] Source material for reporting {pm}
+- [x] Add back map controls (zoom, polygon toggle) {pm, cj}
+- [ ] ~~Improve polygon selection {pm, cj}~~
+- [ ] ~~🐞 Fix hover inefficiency {pm stretch}~~
+- [x] Field data start {cj}
+  - [x] Demo API endpoint for sample field data {cj}
+  - [x] Initial UI work {cj}
 
 Next sprint
 -----------
@@ -413,6 +416,11 @@ App services workstream
 
 Backlog
 -------
+
+- [ ] De-duplicate thumbnail code
+
+- [ ] Improve polygon selection {pm, cj}
+- [ ] 🐞 Fix hover inefficiency {pm stretch}
 
 - [ ] Update all `useStateSelector` usages to select only the variables needed
 
