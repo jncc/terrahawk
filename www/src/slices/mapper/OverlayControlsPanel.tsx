@@ -5,11 +5,15 @@ import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 import { Toggle } from '../../components/Toggle'
 import { Panel } from './Panel'
+import { getMarkerColour } from './helpers/fieldDataHelper'
+import { LegendEntry } from './LegendEntry'
+import { getColour } from './helpers/choroplethHelpers'
 
 export let OverlayControlsPanel = () => {
 
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
+
 
   return (
     <>
@@ -22,31 +26,10 @@ export let OverlayControlsPanel = () => {
         title="Show field data on the map"
       />
       {state.showNpmsData &&
-      <>
-        <div className="block mr-1">
-          <svg className="inline mx-1" width={20} height={20}>
-            <circle
-              cx={10}
-              cy={10}
-              r={6}
-              fill="green"
-            />
-          </svg>
-          <span className="text-sm">Same habitat</span>
-        </div>
-        <div className="block mr-1 mb-2">
-          <svg className="inline mx-1" width={20} height={20}>
-          <circle
-            cx={10}
-            cy={10}
-            r={6}
-            fill="gray"
-          />
-          </svg>
-          <span className="text-sm">Different habitat</span>
-        </div>
-      </>
-
+      <div className="mb-1">
+        <LegendEntry colour={getMarkerColour(true)} opacity={1} text="Same habitat" />
+        <LegendEntry colour={getMarkerColour(false)} opacity={1} text="Different habitat" />
+      </div>
       }
     </Panel>
     <br />
@@ -57,7 +40,14 @@ export let OverlayControlsPanel = () => {
         checked={state.showPolygons}
         onChange={() => dispatch(mapperActions.togglePolygons())}
         title="Show polygons on the map"
-      />      
+      />
+      {state.showPolygons &&
+      <div className="mb-1">
+        <LegendEntry colour={getColour(2.1)} opacity={0.6} text="High change" />
+        <LegendEntry colour={getColour(1.1)} opacity={0.6} text="Moderate change" />
+        <LegendEntry colour={getColour(0)} opacity={0.6} text="No change" />
+      </div>
+      }
     </Panel>
     </>
   )

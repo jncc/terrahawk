@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import { frameworks } from '../../frameworks'
 import { FieldData, isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
+import { getMarkerColour } from './helpers/fieldDataHelper'
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { mapperActions } from './slice'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
@@ -230,21 +231,17 @@ export let LeafletMap = () => {
       
     // add layers for field data in state.fieldData not already on the map
     if (state.fieldData) {
-      console.log("field data change")
       state.fieldData.filter(f =>
         !(fieldDataLayerGroup.getLayers() as CustomFieldDataLayer[]).find(l => l.fieldData.sampleid === f.sampleid)
       ).forEach(f => {
         let position = new L.LatLng(f.latitude, f.longitude)
         let marker = L.marker(position)
 
-        let colour = 'gray'
-        if (f.match.toLowerCase() === 'yes') {
-          colour = 'green'
-        }
+        let colour = getMarkerColour(f.match.toLowerCase() === 'yes')
 
         let iconHtml = ReactDOMServer.renderToString(
           <span className="block relative w-8 h-8 -left-2">
-            <FontAwesomeIcon icon={faMapMarkerAlt} size="3x" color={colour}></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faMapMarkerAlt} size="3x" color={colour} stroke="black" stroke-width="5"></FontAwesomeIcon>
           </span>
         )
 
