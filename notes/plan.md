@@ -377,15 +377,20 @@ Sprint 23 (to February 7)
 Next sprint
 -----------
 
+- [ ] Report write up {cj, fm, ih, pr}
+- [ ] Add Google analytics to site {cj}
+- [ ] Improve usability of field data {cj}
+- [ ] Finishing off Scottish change detection {fm}
 - [ ] Look into Leaflet tooltip Z-order {pm}
 - [ ] Slightly improve the index dropdown (description-first) {pm, ih}
 
 Upcoming sprints
 ----------------
 
+- [ ] New liveng spatial framework
+- [ ] Make Athena accessible for data analysts
 - [ ] Respond to go-live issues {pm}
 - [ ] Guidance / help modal? {pm, ih}
-- [ ] Report write-up / design documentation {pm, ih, pr}
 - [ ] Filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
 - [ ] Download data (as CSV or shapefile)
 - [ ] Seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
