@@ -79,7 +79,7 @@ export let Thumb = (props: {
         let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
-        getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, 'trueColour').then((imgSrc) => setSrc(imgSrc))
+        getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, thumbnailType).then((imgSrc) => setSrc(imgSrc))
       } 
     }
 
