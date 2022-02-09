@@ -127,8 +127,6 @@ export let fetchFieldData = (query: RootState['mapper']['query']): Observable<Fi
     framework: query.framework,
     bbox: bboxToWkt(getBboxFromBounds(bounds))
   }
-  
-  console.log(params)
 
   return api('npms', params).pipe(
     map(r =>( { fieldData: r.response.data }))

@@ -1,7 +1,8 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone, FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate } from './types'
+import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
+  FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
