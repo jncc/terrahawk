@@ -140,6 +140,5 @@ export let QueryPanel = () => {
       </div>
     </Panel>
 
-
   )
 }

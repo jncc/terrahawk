@@ -2,9 +2,11 @@
 Tech list
 =========
 
+Earth Observation (EO)
+----------------------
+
 - Satellite
   - Sentinel 1, Sentinel 2
-  - licence
 - Analysis-ready data
   - JNCC Simple ARD Service
   - Size?
@@ -14,14 +16,29 @@ Tech list
   - NDMI 💦
   - NDVI 🌿
   - NDWI 🌊
-- Habitat map
+
+Domain data
+-----------
+
+- Habitat maps
   - Living England
+
+Processing
 
 - JASMIN *supercomputer*
   - STFC
 
-- Not RDBMS
-  - numbers
+- QGIS
+
+Database
+--------
+
+- Postgres, Postgis
+- AWS RDS
+
+'Big data' storage
+------------------
+
 - AWS S3
 - AWS Glue *Apache Spark*
   - "Big Data"
@@ -32,23 +49,15 @@ Tech list
 - Parquet "efficient CSV files"
 - Maths!
   - Z-score
-- 
-- AWS Lamda & API Gateway
 
-- 
-- 
+- AWS Lamda & API Gateway
 - Node
-- 
-- Vite *Webpack is dead*
-  - Non-bundler
-  - 0 dev build time
-- Tailwind CSS *sliced bread*
-- Victory charts *Nate Silver*
-- 
-- React, Redux *so much better*
-- Rxjs *race-conditions in data access*
-- Typescript *Anders pic*
-- 
+- Typescript
+- Vite bundler/non-bundler
+- Tailwind CSS
+- Victory charts
+- React, Redux toolkit
+- Rx.js *solves race-conditions in data access*
+
 - Geotiff.js
-  - thumbs pic
-  - C02 to pre-generate
+  - thumbs

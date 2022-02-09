@@ -360,29 +360,37 @@ Sprint 22 (to January 21)
 - [x] Start work on Field Data {cj}
 - [x] Investigating CEDA slowness {pm, cj, uw}
 
-Next sprint (to February 7)
+Sprint 23 (to February 7)
 ---------------------------
 
-- [ ] De-duplicate thumbnail code {cj} in progress
-- [ ] Work on Glue stuff for handover {pm, fm}
-- [ ] Knowledgeshare dev session on everything top-to-bottom, esp. Glue {pm, fm, cj, md}
-- [ ] Source material for reporting {pm}
-- [ ] Add back map controls (zoom, polygon toggle) {pm, cj}
-- [ ] Improve polygon selection {pm, cj}
-- [ ] 🐞 Fix hover inefficiency {pm stretch}
+- [x] De-duplicate thumbnail code {cj} in progress - now identical but not actually de-duped due to build issues
+- [x] Work on Glue stuff for handover {pm, fm}
+- [x] Knowledgeshare dev session on everything top-to-bottom, esp. Glue {pm, fm, cj, md}
+- [x] Source material for reporting {pm}
+- [x] Add back map controls (zoom, polygon toggle) {pm, cj}
+- [ ] ~~Improve polygon selection {pm, cj}~~
+- [ ] ~~🐞 Fix hover inefficiency {pm stretch}~~
+- [x] Field data start {cj}
+  - [x] Demo API endpoint for sample field data {cj}
+  - [x] Initial UI work {cj}
 
 Next sprint
 -----------
 
+- [ ] Report write up {cj, fm, ih, pr}
+- [ ] Add Google analytics to site {cj}
+- [ ] Improve usability of field data {cj}
+- [ ] Finishing off Scottish change detection {fm}
 - [ ] Look into Leaflet tooltip Z-order {pm}
 - [ ] Slightly improve the index dropdown (description-first) {pm, ih}
 
 Upcoming sprints
 ----------------
 
+- [ ] New liveng spatial framework
+- [ ] Make Athena accessible for data analysts
 - [ ] Respond to go-live issues {pm}
 - [ ] Guidance / help modal? {pm, ih}
-- [ ] Report write-up / design documentation {pm, ih, pr}
 - [ ] Filter by habitat (can be done in a couple of ways; probably should be an extra spatial API call)
 - [ ] Download data (as CSV or shapefile)
 - [ ] Seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
@@ -413,6 +421,11 @@ App services workstream
 
 Backlog
 -------
+
+- [ ] De-duplicate thumbnail code
+
+- [ ] Improve polygon selection {pm, cj}
+- [ ] 🐞 Fix hover inefficiency {pm stretch}
 
 - [ ] Update all `useStateSelector` usages to select only the variables needed
 
