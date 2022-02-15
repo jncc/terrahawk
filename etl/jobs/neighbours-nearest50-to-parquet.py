@@ -31,7 +31,7 @@ neighbours_nearest50 = glueContext.getSink(
 )
 
 neighbours_nearest50.setCatalogInfo(
-    catalogDatabase="statsdb", catalogTableName="neighbours-nearest50"
+    catalogDatabase="statsdb", catalogTableName="neighbours_nearest50"
 )
 
 neighbours_nearest50.setFormat("glueparquet")
