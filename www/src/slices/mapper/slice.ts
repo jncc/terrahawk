@@ -27,7 +27,7 @@ let slice = createSlice({
     hoveredFrame: undefined as string | undefined,
     showOutlines: true,
     useProxy: true,
-    thumbType: 'colour' as 'colour' | 'index',
+    thumbType: 'index' as 'colour' | 'index',
   },
   reducers: {
     togglePolygons: (state) => {

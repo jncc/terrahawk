@@ -1,5 +1,5 @@
 export const ardUrlBase = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/data'
-export const indicesUrlBase = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/indices'
+export const indicesUrlBase = 'https://gws-access.jasmin.ac.uk/public/defra_eo/change-detection/indices'
 
 interface Dictionary<T> {
   [Key: string]: T
