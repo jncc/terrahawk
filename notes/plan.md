@@ -377,8 +377,8 @@ Sprint 23 (to February 7)
 Next sprint
 -----------
 
-- [ ] Report write up {cj, fm, ih, pr}
-- [ ] Add Google analytics to site {cj}
+- [x] Report write up {cj, fm, ih, pr}
+- [x] Add Google analytics to site {cj}
 - [ ] Improve usability of field data {cj}
 - [ ] Finishing off Scottish change detection {fm}
 - [ ] Look into Leaflet tooltip Z-order {pm}
@@ -395,6 +395,14 @@ Upcoming sprints
 - [ ] Download data (as CSV or shapefile)
 - [ ] Seasonal data (slightly more tricky than assumed; needs ~one sprint to implement top-to-bottom)
 - [ ] Process seasonal stats {pm, fm}
+
+England upscaling tasks
+-----------------------
+
+- [ ] Divide data into manageable chunks for processing {ih, cj}
+- [ ] Try one chunk and QA the stats {cj, ih, fm}
+  - [ ] ETL changes for new spatial framework + nearest neighbours {cj, fm}
+- [ ] Add framework configuration to frontend {cj}
 
 Stats data workstream
 ---------------------
