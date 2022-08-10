@@ -1,0 +1,12 @@
+[general]
+workingFolder = /folder
+
+[postgres]
+host = localhost
+database = dbname
+username = user
+password = password
+
+[s3]
+targetBucket = bucketName
+frameworkPartition = partitionName
