@@ -52,7 +52,7 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
     CREATE EXTERNAL TABLE IF NOT EXISTS statsdb.neighbours_nearest50_csv (
       `polyid` string,
       `neighbour` string, 
-      `segment` string
+      `zone` string
     )
     PARTITIONED BY (
       `framework` string
@@ -75,7 +75,7 @@ WITH (
     parquet_compression = 'SNAPPY',
     partitioned_by = ARRAY[ 'framework' ],
     external_location = 's3://jncc-habmon-alpha-stats-data/neighbours/nearest50/parquet'
-) AS SELECT polyid, neighbour, segment, framework FROM neighbours_nearest50_csv
+) AS SELECT polyid, neighbour, zone, framework FROM neighbours_nearest50_csv
 
 
 -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
