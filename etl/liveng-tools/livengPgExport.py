@@ -19,19 +19,19 @@ def exportTable(connection, tableName):
     csvPath = os.path.join(parser.get('general', 'workingFolder'), csvfile)
 
     cur = connection.cursor(cursor_factory=RealDictCursor)
-    query = f"SELECT polyid, neighbour, segment FROM public.{tableName}"
+    query = f"SELECT polyid, neighbour, zone FROM public.{tableName}"
 
 
     with open(csvPath, 'w', newline='\n') as file:
         log.info(f"Writing data from {tableName} to {csvPath}")
         writer = csv.writer(file)
 
-        writer.writerow(["polyid", "neighbour", "segment"])
+        writer.writerow(["polyid", "neighbour", "zone"])
 
         cur.execute(query)
         i = 0
         for row in cur:
-            writer.writerow([row["polyid"], row["neighbour"], row["segment"]])
+            writer.writerow([row["polyid"], row["neighbour"], row["zone"]])
             i = i + 1
                
     log.info(f"Wrote {i} lines from {tableName} to {csvPath}")
