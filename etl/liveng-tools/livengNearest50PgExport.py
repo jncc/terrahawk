@@ -40,7 +40,7 @@ def exportTable(connection, tableName):
 
 def main():
     # read in config
-    parser.read('livengPgExport.cfg')
+    parser.read('livengNearest50PgExport.cfg')
     # read in list of tables matching pattern
     connectionString = f"dbname={parser.get('postgres', 'database')} user={parser.get('postgres', 'username')}"
     if parser.get('postgres', 'password') != "":
