@@ -12,6 +12,7 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
   ofType(
     mapperActions.mapZoomChanged.type,
     mapperActions.mapCenterChanged.type,
+    mapperActions.alterQueryFramework.type
   ),
   filter(() => state$.value.mapper.zoomedEnoughToShowPolygons),
   switchMap(() =>
@@ -28,6 +29,7 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
 let fetchChoroplethEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
     mapperActions.fetchPolygonsCompleted.type,
+    mapperActions.alterQueryFramework.type,
     mapperActions.alterQueryIndexname.type,
     mapperActions.alterQueryYearFrom.type,
     mapperActions.alterQueryMonthFrom.type,

@@ -3,12 +3,14 @@ import React from 'react'
 import { MapIcon } from '@heroicons/react/outline'
 
 import { frameworks } from '../../frameworks'
-import { useStateSelector } from '../../state/hooks'
+import { useStateDispatcher, useStateSelector } from '../../state/hooks'
+import { mapperActions } from './slice'
 import { Panel } from './Panel'
 
 export let FrameworkPanel = () => {
-
+  let dispatch = useStateDispatcher()
   let query = useStateSelector(s => s.mapper.query)
+
   let framework = frameworks[query.framework]
 
   return (
@@ -16,15 +18,27 @@ export let FrameworkPanel = () => {
       <div className="flex items-center space-x-3">
         <MapIcon className="h-7 w-7 text-gray-400"/>
         <div className="leading-tight">
-          <div>{framework.name}</div>
+          {/* <div>{framework.name}</div>
           <div className="flex gap-2 items-center">
             <div className="little-label-text ">{query.framework}</div>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-1 w-7 " stroke="#ff7800">
               <line x1="0" y1="3" x2="60" y2="3" strokeWidth="3" strokeDasharray="5 5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
+          </div> */}
+          <div>
+            <select
+              name="frameworkname" id="frameworkname-select"
+              defaultValue={query.framework}
+              onChange={e => dispatch(mapperActions.alterQueryFramework(e.target.value))}
+              >
+              {
+                Object.entries(frameworks).map(([name, framework]) => <option key={name} value={name} selected={name==query.framework}>{`${framework.name}`}</option>)
+              }
+            </select>
           </div>
         </div>
       </div>
+      
     </Panel>
   )
 }

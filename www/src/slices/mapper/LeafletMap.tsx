@@ -27,6 +27,7 @@ let bboxRectangle: L.Rectangle
 let polyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 let selectedPolyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 let fieldDataLayerGroup: L.LayerGroup<CustomFieldDataLayer>
+let frameworkBoundary: L.GeoJSON
 
 export let LeafletMap = () => {
 
@@ -55,7 +56,7 @@ export let LeafletMap = () => {
     }).addTo(map)
   
     // framework boundary
-    L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
+    frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
 
     // polygon layer group
     polyLayerGroup = L.layerGroup()
@@ -79,6 +80,12 @@ export let LeafletMap = () => {
     map.setView(state.query.center, state.zoom)
 
   }, [])
+
+  // redraw boundary for change of `framework`
+  useEffect(() => {
+    frameworkBoundary.remove()
+    frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
+  }, [state.query.framework])
 
   // react to change of `zoom`
   useEffect(() => {
