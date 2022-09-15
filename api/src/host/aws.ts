@@ -12,6 +12,9 @@ import { getPolygon } from '../endpoints/polygon'
 import { getThumb } from '../endpoints/thumb'
 import { getNpms } from '../endpoints/npms'
 
+import { getChoroplethDev } from '../endpoints/choroplethDev'
+import { getPolygonDev } from '../endpoints/polygonDev'
+
 export let helloHandler: APIGatewayProxyHandler = async (event) => {
 
   console.log('helloHandler received event', event)
@@ -74,6 +77,17 @@ export let thumbHandler: APIGatewayProxyHandler = async (event) => {
 export let npmsHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
   return success(await getNpms(body))
+}
+
+
+export let choroplethDevHandler: APIGatewayProxyHandler = async (event) => {
+  let body = JSON.parse(event.body ?? "{}")
+  return success(await getChoroplethDev(body))
+}
+
+export let polygonDevHandler: APIGatewayProxyHandler = async (event) => {
+  let body = JSON.parse(event.body ?? "{}")
+  return success(await getPolygonDev(body))
 }
 
 let success = (data: any) => {

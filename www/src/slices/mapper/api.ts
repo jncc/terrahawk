@@ -63,7 +63,7 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
     polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct
   }
 
-  let api$ = api('choropleth', params).pipe(
+  let api$ = api('choroplethDev', params).pipe(
     map(r => {
       // todo: this "no data" impl. is a bit gnarly
       let dataItems = r.response as ChoroplethItem[]
@@ -106,7 +106,7 @@ if (!state.selectedPolygon)
   if (cached) {
     return of(cached)
   } else {
-    return api('polygon', params).pipe(
+    return api('polygonDev', params).pipe(
       map(r => {
         let result =  r.response
         statsCache.set(cacheKey, result)
