@@ -52,7 +52,8 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
       `season` string, 
       `habitat` string, 
       `gridsquare` string, 
-      `frame` string, 
+      `frame` string,
+      `frameworkzone` string,
       `platform` string, 
       `mean` double, 
       `sd` double, 
@@ -63,8 +64,8 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
       `q3` double)
     PARTITIONED BY ( 
       `framework` string, 
-      `year` int, 
-      `month` int)
+      `year` string, 
+      `month` string)
     ROW FORMAT DELIMITED 
       FIELDS TERMINATED BY ',' 
     STORED AS INPUTFORMAT 
@@ -94,7 +95,8 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
       `season` string, 
       `habitat` string, 
       `gridsquare` string, 
-      `frame` string, 
+      `frame` string,
+      `frameworkzone` string, 
       `platform` string, 
       `mean` float, 
       `sd` float, 

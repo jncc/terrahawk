@@ -7,7 +7,7 @@ tsc/
 *.log
 .serverless/
 built/
-
+etl/geojson-conversion/data/
 #python virtual environments
 ################################
 *.venv
