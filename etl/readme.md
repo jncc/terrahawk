@@ -107,8 +107,8 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
       `q3` float)
     PARTITIONED BY (
       `framework` string, 
-      `year` int, 
-      `month` int)
+      `year` string, 
+      `month` string)
     ROW FORMAT SERDE 
       'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
     STORED AS INPUTFORMAT 
