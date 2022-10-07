@@ -9,7 +9,7 @@ Generate the lookup data for our `nearest50` anomoly detection method.
     select a.polyid, b.polyid as neighbour
     -- into framework_liveng0_nearest50 -- produce an output table (and don't forget to add a PK constraint manually)
     from framework_liveng0 a
-    inner join lateral -- fancy!
+    inner join lateral -- fancy! (enables the sub query to reference the columns in the outer query)
       (select c.polyid
        from framework_liveng0 c
        where c.habitat = a.habitat
