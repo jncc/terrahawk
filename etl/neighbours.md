@@ -9,7 +9,7 @@ Generate the lookup data for our `nearest50` anomoly detection method.
     select a.polyid, b.polyid as neighbour
     -- into framework_liveng0_nearest50 -- produce an output table (and don't forget to add a PK constraint manually)
     from framework_liveng0 a
-    inner join lateral -- fancy!
+    inner join lateral -- fancy! (enables the sub query to reference the columns in the outer query)
       (select c.polyid
        from framework_liveng0 c
        where c.habitat = a.habitat
@@ -51,7 +51,8 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
 
     CREATE EXTERNAL TABLE IF NOT EXISTS statsdb.neighbours_nearest50_csv (
       `polyid` string,
-      `neighbour` string 
+      `neighbour` string, 
+      `zone` string
     )
     PARTITIONED BY (
       `framework` string
@@ -68,14 +69,19 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
 
 Convert to Parquet:
 
-    CREATE TABLE statsdb.neighbours_nearest50_LIVENG0_DELETEME
-    WITH (
-        format = 'PARQUET',
-        parquet_compression = 'SNAPPY',
-        external_location = 's3://jncc-habmon-alpha-stats-data/neighbours/nearest50/parquet/framework=liveng0'
-    ) AS SELECT polyid, neighbour FROM neighbours_nearest50_csv
+CREATE TABLE statsdb.neighbours_nearest50
+WITH (
+    format = 'PARQUET',
+    parquet_compression = 'SNAPPY',
+    partitioned_by = ARRAY[ 'framework' ],
+    external_location = 's3://jncc-habmon-alpha-stats-data/neighbours/nearest50/parquet'
+) AS SELECT polyid, neighbour, zone, framework FROM neighbours_nearest50_csv
 
-Make the final table:
+
+-- 👉 load partitions (DON'T FORGET or you'll get zero results)!
+    MSCK REPAIR TABLE neighbours_nearest50;
+
+Obselete -- Make the final table:
 
     CREATE EXTERNAL TABLE statsdb.neighbours_nearest50 (
         `polyid` string,

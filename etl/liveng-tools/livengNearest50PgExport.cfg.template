@@ -1,0 +1,8 @@
+[general]
+workingFolder = /folder
+
+[postgres]
+host = localhost
+database = dbname
+username = user
+password = password
