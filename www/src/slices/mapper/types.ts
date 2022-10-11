@@ -8,6 +8,7 @@ export type Framework = {
   boundary: any
   maxBounds: Bounds
   defaultZoom: number
+  bboxPadding: {latPad: number, lngPad: number}
   maxZoom: number
   minZoom: number
   polygonZoomThreshold: number
@@ -21,7 +22,8 @@ export type Framework = {
     yearTo: number
     monthTo: number
   }
-  availableDates: {from: {year: number, month: number}, to: {year: number, month: number}}
+  availableDates: {from: {year: number, month: number}, to: {year: number, month: number}},
+  availableIndices: Indexname[]
 }
 
 export type Query = Framework['defaultQuery']

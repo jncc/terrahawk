@@ -98,12 +98,13 @@ export let LeafletMap = () => {
     if (bboxRectangle) {
       bboxRectangle.remove()
     }
-    let bounds = getBoundsOfBboxRectangle(state.query.center)
+    
+    let bounds = getBoundsOfBboxRectangle(state.query.center, state.query.framework)
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
       bboxRectangleStyle).addTo(map)
 
-  }, [state.query.center])
+  }, [state.query.center, state.query.framework])
 
   // react to change of `polygons`
   // (sync the polygons on the leaflet map with the polygons in state)

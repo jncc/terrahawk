@@ -16,7 +16,7 @@ import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 export let fetchPolygons = (query: RootState['mapper']['query']): Observable<PolygonsQueryResult> => {
 
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
-    let bounds = getBoundsOfBboxRectangle(query.center)
+    let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
     return {
       framework: query.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds))
@@ -121,7 +121,7 @@ if (!state.selectedPolygon)
 
 export let fetchFieldData = (query: RootState['mapper']['query']): Observable<FieldDataQueryResult> => {
 
-  let bounds = getBoundsOfBboxRectangle(query.center)
+  let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
 
   let params = {
     framework: query.framework,

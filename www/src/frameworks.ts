@@ -12,6 +12,7 @@ export const frameworks: {[framework: string]: Framework} = {
     boundary: liveng0Boundary,
     maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
     defaultZoom: 9,
+    bboxPadding: {latPad: 0.03, lngPad: 0.06},
     maxZoom: 18,
     minZoom: 7,
     // defaultZoom: 13,
@@ -27,7 +28,8 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}}
+    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}},
+    availableIndices: ['EVI', 'NBR', 'NDMI', 'NDVI', 'NDWI']
   }
   ,
   liveng1: {
@@ -39,6 +41,7 @@ export const frameworks: {[framework: string]: Framework} = {
     maxZoom: 18,
     minZoom: 7,
     // defaultZoom: 13,
+    bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
       framework: 'liveng1',
@@ -50,6 +53,7 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}}
+    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}},
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
 }

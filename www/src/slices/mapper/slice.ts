@@ -6,7 +6,7 @@ import { Poly, ChoroplethItem, Framework, Indexname, PolygonsQueryResult, Chorop
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
-let defaultFramework = frameworks['liveng1']
+let defaultFramework = frameworks['liveng0']
 let defaultQuery = defaultFramework.defaultQuery
 
 let slice = createSlice({
