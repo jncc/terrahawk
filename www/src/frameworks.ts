@@ -29,7 +29,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
     },
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}},
-    availableIndices: ['EVI', 'NBR', 'NDMI', 'NDVI', 'NDWI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
   ,
   liveng1: {
