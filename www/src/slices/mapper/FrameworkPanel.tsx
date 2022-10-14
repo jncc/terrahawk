@@ -23,7 +23,7 @@ export let FrameworkPanel = () => {
             className="bg-white hover:bg-gray-200 p-0.5"
             >
             {
-              Object.entries(frameworks).map(([name, framework]) => <option key={name} value={name} selected={name==query.framework}>{`${framework.name}`}</option>)
+              Object.entries(frameworks).map(([name, framework]) => <option key={name} value={name}>{`${framework.name}`}</option>)
             }
           </select>
 
