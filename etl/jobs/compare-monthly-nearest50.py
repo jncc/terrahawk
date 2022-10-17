@@ -131,7 +131,7 @@ sink = glueContext.getSink(
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_5")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_6")
 sink.setFormat("glueparquet")
 sink.writeFrame(repartitioned)
 

@@ -28,7 +28,7 @@ export const getPolygon = async (input: any) => {
 
     let sql = format(`
         select *
-        from monthly_nearest50_5 s
+        from monthly_nearest50_6 s
         where
             framework=%L
             and indexname=%L
