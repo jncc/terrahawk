@@ -12,7 +12,7 @@ export let FrameworkPanel = () => {
   let query = useStateSelector(s => s.mapper.query)
 
   return (
-    <Panel extraClasses="absolute bottom-4 left-6 min-w-[14rem] pl-4 pr-6 py-2 my-2">
+    <Panel extraClasses="absolute bottom-4 left-6 min-w-[14rem] pl-4 pr-6 py-2 my-1">
       <div className="flex items-center space-x-3">
         <MapIcon className="h-7 w-7 text-gray-400"/>
         <div className="leading-tight">            
