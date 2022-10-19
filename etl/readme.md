@@ -66,18 +66,16 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
       `framework` string, 
       `year` string, 
       `month` string)
-    ROW FORMAT DELIMITED 
-      FIELDS TERMINATED BY ',' 
-    STORED AS INPUTFORMAT 
-      'org.apache.hadoop.mapred.TextInputFormat' 
-    OUTPUTFORMAT 
-      'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
-    LOCATION
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+    WITH SERDEPROPERTIES (
+      'separatorChar'=',',
+      'quoteChar'='"'
+    )
+    LOCATION 
       's3://jncc-habmon-alpha-stats-raw/csv/'
     TBLPROPERTIES (
-      'classification'='csv',
-      'skip.header.line.count'='1', 
-      'delimiter'=',');
+      'skip.header.line.count'='1'
+    );
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
     MSCK REPAIR TABLE raw_stats_csv;
@@ -86,6 +84,7 @@ We write CSV as well as Parquet for our convenience. Parquet is currently hard t
     select * 
     from raw_stats_csv
     limit 100;
+
 
     CREATE EXTERNAL TABLE `raw_stats`(
       `indexname` string, 
