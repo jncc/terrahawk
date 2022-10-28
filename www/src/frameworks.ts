@@ -37,7 +37,7 @@ export const frameworks: {[framework: string]: Framework} = {
     srs: `osgb`,
     boundary: liveng1Boundary,
     maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
-    defaultZoom: 9,
+    defaultZoom: 8,
     maxZoom: 18,
     minZoom: 7,
     // defaultZoom: 13,
@@ -53,7 +53,7 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}},
+    availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
 }
