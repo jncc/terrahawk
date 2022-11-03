@@ -30,14 +30,14 @@ export let getPolygonsImpl = async (q: { framework: string, bbox: string }) => {
           partition,
           habitat,
           ST_AsGeoJSON(geometry_4326, 6) as geojson
-        from framework_liveng0
+        from framework_${q.framework}
         where ST_Intersects(ST_GeomFromText($1, 4326), geometry_4326)
-        limit 2001
+        limit 3001
         `
     
     let polygonRows = await query(sql, [q.bbox]) // todo add framework
 
-    if (polygonRows.rows.length === 2001)
+    if (polygonRows.rows.length === 3001)
       throw 'Too many polygons. Was the bounding box too big?'
 
     return polygonRows.rows.map(r => ({

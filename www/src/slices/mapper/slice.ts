@@ -1,12 +1,12 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
+import { Poly, ChoroplethItem, Framework, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
   FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate } from './types'
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
-let defaultFramework = frameworks['liveng0']
+let defaultFramework = frameworks['liveng1']
 let defaultQuery = defaultFramework.defaultQuery
 
 let slice = createSlice({
@@ -52,6 +52,9 @@ let slice = createSlice({
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
+    },
+    alterQueryFramework: (state, a: PayloadAction<string>) => {
+      state.query.framework = a.payload
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload

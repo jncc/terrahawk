@@ -22,7 +22,7 @@ job.init(args['JOB_NAME'], args)
 
 aggregated = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "aggregated_monthly",
+  table_name = "aggregated_monthly_test",
   transformation_ctx = "aggregated"
 )
 
@@ -124,14 +124,14 @@ repartitioned = DynamicFrame.fromDF(repartitioned_dataframe, glueContext, "repar
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/monthly-nearest50-6/parquet/",
+    path = "s3://jncc-habmon-alpha-stats-data/testing/monthly-nearest50/parquet/",
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "indexname", "poly_partition"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_6")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_test")
 sink.setFormat("glueparquet")
 sink.writeFrame(repartitioned)
 

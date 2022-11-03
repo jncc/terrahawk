@@ -22,10 +22,12 @@ job.init(args['JOB_NAME'], args)
 
 raw = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "raw_stats",
+  table_name = "raw_stats_test",
   transformation_ctx = "raw"
   )
 
+# Deduplicates rows which have the same date, index and polyid 
+# by choosing the first gridref ordered alphabetically
 aggregateSql = '''
     select
         count(*) as count,
@@ -67,14 +69,14 @@ aggregated = sparkSqlQuery(
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/aggregated-monthly/",
+    path = "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/",
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "year", "month"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "aggregated_monthly")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "aggregated_monthly_test")
 sink.setFormat("glueparquet")
 sink.writeFrame(aggregated)
 

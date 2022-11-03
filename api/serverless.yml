@@ -160,6 +160,18 @@ functions:
       - httpApi:
           path: /npms
           method: POST
+  choroplethDev:
+    handler: built/host/aws.choroplethDevHandler
+    events:
+      - httpApi:
+          path: /choroplethDev
+          method: POST
+  polygonDev:
+    handler: built/host/aws.polygonDevHandler
+    events:
+      - httpApi:
+          path: /polygonDev
+          method: POST
     
 
 # plugins:

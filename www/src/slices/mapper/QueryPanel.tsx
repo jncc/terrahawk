@@ -7,8 +7,9 @@ import { mapperActions } from './slice'
 import { Indexname, Statistic } from './types'
 import { indexnames, statistics } from './helpers/statsHelper'
 import { Panel } from './Panel'
+import { frameworks } from '../../frameworks'
 
-const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021]
+const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
 const months = [
   [1, 'Jan'], [2, 'Feb'], [3, 'Mar'], [4, 'Apr'], [5, 'May'], [6, 'Jun'], [7, 'Jul'], [8, 'Aug'], [9, 'Sep'], [10, 'Oct'], [11, 'Nov'], [12, 'Dec']
 ]
@@ -17,6 +18,8 @@ export let QueryPanel = () => {
 
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
+
+  let indices = frameworks[state.query.framework].availableIndices
 
   return (
     <Panel extraClasses="relative w-56 mb-2 px-4 py-2">
@@ -28,7 +31,7 @@ export let QueryPanel = () => {
           onChange={e => dispatch(mapperActions.alterQueryIndexname(e.target.value as Indexname))}
           className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
           {
-            Object.entries(indexnames).map(([name, info]) => <option key={name} value={name}>{`${name}`} {`(${info.description})`}</option>)
+            indices.map((name) => <option key={name} value={name}>{`${name}`} {`(${indexnames[name].description})`}</option>)
           }
         </select>
       </div>

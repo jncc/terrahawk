@@ -14,7 +14,7 @@ import { parseArgs } from "./choroplethArgParser"
     }
 */
 
-export const getChoropleth = async (input: any) => {
+export const getChoroplethDev = async (input: any) => {
 
     console.log(`At ${(new Date()).toISOString()} - entering function`)
 
@@ -67,7 +67,7 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
             max(abs(s.z_max)   ) as max_z_max,
             max(abs(s.z_q1)    ) as max_z_q1,
             max(abs(s.z_q3)    ) as max_z_q3
-        from monthly_nearest50_6 s
+        from monthly_nearest50_test s
         where
             framework=%L
             and indexname=%L

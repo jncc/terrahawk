@@ -14,7 +14,7 @@ import { parseArgs } from "./polygonArgParser"
     }
 */
 
-export const getPolygon = async (input: any) => {
+export const getPolygonDev = async (input: any) => {
 
     console.log(`At ${(new Date()).toISOString()} - entering function`)
 
@@ -28,7 +28,7 @@ export const getPolygon = async (input: any) => {
 
     let sql = format(`
         select *
-        from monthly_nearest50_6 s
+        from monthly_nearest50_test s
         where
             framework=%L
             and indexname=%L
