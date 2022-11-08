@@ -70,7 +70,7 @@ export const frameworks: {[framework: string]: Framework} = {
     polygonZoomThreshold: 13,
     defaultQuery: {
       framework: 'habmos_Cairngorms',
-      center: {lat: 54, lng: -1.4},
+      center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
       yearFrom: 2020,
@@ -94,7 +94,7 @@ export const frameworks: {[framework: string]: Framework} = {
     polygonZoomThreshold: 13,
     defaultQuery: {
       framework: 'SpaceInt_Cairngorms',
-      center: {lat: 54, lng: -1.4},
+      center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
       yearFrom: 2020,
