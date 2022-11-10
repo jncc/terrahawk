@@ -57,7 +57,7 @@ export const frameworks: {[framework: string]: Framework} = {
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
-  habmosCairngorms: {
+  habmos_cairngorms: {
     name: `Habitat Map of Scotland: Cairngorms subset`,
     srs: `osgb`,
     boundary: cairngormsBoundary,
@@ -69,7 +69,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'habmos_Cairngorms',
+      framework: 'habmos_cairngorms',
       center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
@@ -81,7 +81,7 @@ export const frameworks: {[framework: string]: Framework} = {
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
-  spaceintCairngorms: {
+  spaceint_cairngorms: {
     name: `Space International: Cairngorms subset`,
     srs: `osgb`,
     boundary: cairngormsBoundary,
@@ -93,7 +93,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'SpaceInt_Cairngorms',
+      framework: 'spaceint_cairngorms',
       center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
