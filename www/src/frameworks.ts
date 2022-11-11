@@ -57,7 +57,7 @@ export const frameworks: {[framework: string]: Framework} = {
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
-  habmos_cairngorms: {
+  habmosCairngorms: {
     name: `Habitat Map of Scotland: Cairngorms subset`,
     srs: `osgb`,
     boundary: cairngormsBoundary,
@@ -81,7 +81,7 @@ export const frameworks: {[framework: string]: Framework} = {
     availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
-  spaceint_cairngorms: {
+  spaceintCairngorms: {
     name: `Space International: Cairngorms subset`,
     srs: `osgb`,
     boundary: cairngormsBoundary,
