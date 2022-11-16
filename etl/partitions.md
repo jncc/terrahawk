@@ -62,14 +62,15 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
     MSCK REPAIR TABLE partitions_csv;
 ```
 
-Convert to Parquet: (Note I used `lg` for "large" 10km-square partitionsm and `sm` for "small" 5km-square partitions as not sure which would perform best.)
+Convert to Parquet:
 
-    CREATE TABLE statsdb.partitions_LIVENG0_DELETEME
+    CREATE TABLE statsdb.partitions_deleteme
     WITH (
         format = 'PARQUET',
         parquet_compression = 'SNAPPY',
-        external_location = 's3://jncc-habmon-alpha-stats-data/partitions-lg/parquet/framework=liveng0/'
-    ) AS SELECT polyid, partition FROM partitions_csv
+        external_location = 's3://jncc-habmon-alpha-stats-data/partitions-temp/parquet/',
+	partitioned_by = ARRAY['framework']
+    ) AS SELECT polyid, partition, zone, framework FROM partitions_csv
 
 Make the final table:
 
