@@ -65,7 +65,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'habmos_cairngorms',
+      framework: 'habmos_Cairngorms',
       center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
@@ -88,7 +88,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'spaceint_cairngorms',
+      framework: 'SpaceInt_Cairngorms',
       center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
