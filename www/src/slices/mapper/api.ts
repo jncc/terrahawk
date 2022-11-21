@@ -58,7 +58,12 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   let needed = state.polygons.polys.filter(p => !cached.find(c => c.polyid === p.polyid))
 
   let params: ChoroplethParams = {
-    ...state.query, // actually some properties (e.g. center) are not needed for this request, but...
+    framework:      frameworks[state.query.framework].defaultQuery.framework, 
+    indexname:      state.query.indexname,
+    yearFrom:       state.query.yearFrom,
+    monthFrom:      state.query.monthFrom,
+    yearTo:         state.query.yearTo,
+    monthTo:        state.query.monthTo,
     polyids:        needed.map(p => p.polyid),
     polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct
   }
