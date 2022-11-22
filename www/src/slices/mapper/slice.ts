@@ -132,3 +132,7 @@ let slice = createSlice({
 
 export let mapperReducer = slice.reducer
 export let mapperActions = slice.actions
+
+export function isCurrentZoomDefault(zoom: number) {
+  return zoom === defaultFramework.defaultZoom
+}
