@@ -65,7 +65,6 @@ export const frameworks: {[framework: string]: Framework} = {
     defaultZoom: 8,
     maxZoom: 18,
     minZoom: 7,
-    // defaultZoom: 13,
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
@@ -89,7 +88,6 @@ export const frameworks: {[framework: string]: Framework} = {
     defaultZoom: 8,
     maxZoom: 18,
     minZoom: 7,
-    // defaultZoom: 13,
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
