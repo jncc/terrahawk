@@ -81,7 +81,7 @@ export const frameworks: {[framework: string]: Framework} = {
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
   spaceintCairngorms: {
-    name: `Space International: Cairngorms subset`,
+    name: `Space Intelligence: Cairngorms subset`,
     srs: `osgb`,
     boundary: cairngormsBoundary,
     maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
