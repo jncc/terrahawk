@@ -29,7 +29,6 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
   ,
@@ -54,7 +53,6 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
   habmosCairngorms: {
@@ -77,7 +75,6 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 10}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
   spaceintCairngorms: {
@@ -100,7 +97,6 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 10}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
 }
