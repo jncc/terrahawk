@@ -7,7 +7,7 @@ import { FieldData, isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 import { getMarkerColour } from './helpers/fieldDataHelper'
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
-import { isCurrentZoomDefault, mapperActions } from './slice'
+import { mapperActions } from './slice'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 import { makePolygonTooltipHtml } from './PolygonTooltip'
 import { bboxRectangleStyle, frameworkBoundaryStyle } from './helpers/styleHelpers'
@@ -84,7 +84,7 @@ export let LeafletMap = () => {
   // redraw boundary for change of `framework`
   useEffect(() => {
     dispatch(mapperActions.selectPolygon(undefined))
-    if (isCurrentZoomDefault(state.zoom)) {
+    if (state.panToNewFramework) {
       map.setView(frameworks[state.query.framework].defaultQuery.center, state.zoom)  
     }    
     frameworkBoundary.remove()

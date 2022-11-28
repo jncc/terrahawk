@@ -16,6 +16,7 @@ let slice = createSlice({
     showNpmsData: false,
     zoom: defaultFramework.defaultZoom,
     zoomedEnoughToShowPolygons: false,
+    panToNewFramework: true,
     query: defaultQuery,
     polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
@@ -49,6 +50,7 @@ let slice = createSlice({
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
       state.zoomedEnoughToShowPolygons = state.zoom >= frameworks[state.query.framework].polygonZoomThreshold
+      state.panToNewFramework = state.zoom === defaultFramework.defaultZoom
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
@@ -132,7 +134,3 @@ let slice = createSlice({
 
 export let mapperReducer = slice.reducer
 export let mapperActions = slice.actions
-
-export function isCurrentZoomDefault(zoom: number) {
-  return zoom === defaultFramework.defaultZoom
-}
