@@ -84,6 +84,9 @@ export let LeafletMap = () => {
   // redraw boundary for change of `framework`
   useEffect(() => {
     dispatch(mapperActions.selectPolygon(undefined))
+    if (state.panToNewFramework) {
+      map.setView(frameworks[state.query.framework].defaultQuery.center, state.zoom)  
+    }    
     frameworkBoundary.remove()
     frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
   }, [state.query.framework])

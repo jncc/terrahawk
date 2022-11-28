@@ -3,7 +3,7 @@ import { Observable, of, merge, EMPTY } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
 import { map  } from 'rxjs/operators'
 import LRUCache from 'lru-cache'
-
+import { frameworks } from '../../frameworks'
 import { RootState } from '../../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../../utility/geospatialUtility'
 import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery,
@@ -18,7 +18,7 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
     let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
     return {
-      framework: query.framework,
+      framework: frameworks[query.framework].defaultQuery.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds))
     }
   }
@@ -58,7 +58,12 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   let needed = state.polygons.polys.filter(p => !cached.find(c => c.polyid === p.polyid))
 
   let params: ChoroplethParams = {
-    ...state.query, // actually some properties (e.g. center) are not needed for this request, but...
+    framework:      frameworks[state.query.framework].defaultQuery.framework, 
+    indexname:      state.query.indexname,
+    yearFrom:       state.query.yearFrom,
+    monthFrom:      state.query.monthFrom,
+    yearTo:         state.query.yearTo,
+    monthTo:        state.query.monthTo,
     polyids:        needed.map(p => p.polyid),
     polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct
   }
@@ -94,7 +99,7 @@ if (!state.selectedPolygon)
   throw 'Shouldn\'t get here - no polygon selected'
 
   let params = {
-    framework:     state.query.framework,
+    framework:     frameworks[state.query.framework].defaultQuery.framework,
     indexname:     state.query.indexname,
     polyid:        state.selectedPolygon.polyid,
     polyPartition: state.selectedPolygon.partition,
@@ -124,7 +129,7 @@ export let fetchFieldData = (query: RootState['mapper']['query']): Observable<Fi
   let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
 
   let params = {
-    framework: query.framework,
+    framework: frameworks[query.framework].defaultQuery.framework,
     bbox: bboxToWkt(getBboxFromBounds(bounds))
   }
 

@@ -4,6 +4,7 @@ import { Framework } from './slices/mapper/types'
 // could dynamically load framework boundaries in the future to avoid bundling them
 import liveng0Boundary from './assets/frameworks/liveng0-boundary.json'
 import liveng1Boundary from './assets/frameworks/liveng1-boundary.json'
+import cairngormsBoundary from './assets/frameworks/cairngorms-boundary.json'
 
 export const frameworks: {[framework: string]: Framework} = {
   liveng0: {
@@ -28,7 +29,6 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2021, month: 7}},
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
   ,
@@ -53,7 +53,50 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableDates: {from: {year: 2015, month: 7}, to: {year: 2022, month: 5}},
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+  },
+  habmosCairngorms: {
+    name: `Habitat Map of Scotland: Cairngorms subset`,
+    srs: `osgb`,
+    boundary: cairngormsBoundary,
+    maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
+    defaultZoom: 8,
+    maxZoom: 18,
+    minZoom: 7,
+    bboxPadding: {latPad: 0.02, lngPad: 0.04},
+    polygonZoomThreshold: 13,
+    defaultQuery: {
+      framework: 'habmos_Cairngorms',
+      center: {lat: 57.1, lng: -3.7},
+      indexname: 'NDVI',
+      statistic: 'mean',
+      yearFrom: 2020,
+      monthFrom: 1,
+      yearTo: 2021,
+      monthTo: 12,
+    },
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+  },
+  spaceintCairngorms: {
+    name: `Space Intelligence: Cairngorms subset`,
+    srs: `osgb`,
+    boundary: cairngormsBoundary,
+    maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
+    defaultZoom: 8,
+    maxZoom: 18,
+    minZoom: 7,
+    bboxPadding: {latPad: 0.02, lngPad: 0.04},
+    polygonZoomThreshold: 13,
+    defaultQuery: {
+      framework: 'SpaceInt_Cairngorms',
+      center: {lat: 57.1, lng: -3.7},
+      indexname: 'NDVI',
+      statistic: 'mean',
+      yearFrom: 2020,
+      monthFrom: 1,
+      yearTo: 2021,
+      monthTo: 12,
+    },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
 }
