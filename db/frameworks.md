@@ -47,9 +47,14 @@ Framework `liveng0` (Living England, Yorkshire subset)
         - CREATE_SCHEMA: no
         - DROP_TABLE: if exists
 
-    - Import into Postgres.
+    - Import into Postgres...
 
             psql "user=docker password=docker host=localhost port=5430 dbname=gis" -f /c/Work/liveng0.sql
+            
+    - ...or if connected to the database via psql shell on a Windows machine, import by using \i followed by the path to the file, eg: 
+     
+            \i C:/Users/Martin.Bamford/Documents/habmos_Cairngorms.sql
+                   
 
 - Rename the table to `framework_{framework-identifier}`, e.g. `framework_liveng0`.
 

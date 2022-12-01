@@ -35,37 +35,49 @@ Copy up to S3:
 
 Make a table in Athena: (this will need some tweaks when adding additional future frameworks)
 
+```
     CREATE EXTERNAL TABLE IF NOT EXISTS statsdb.partitions_csv (
-      `polyid` string,
-      `partition` string 
+      `polyid` string, 
+      `partition` string, 
+      `zone` string
     )
     PARTITIONED BY (
       `framework` string
     )
-    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-    WITH SERDEPROPERTIES (
-      'serialization.format' = ',',
-      'field.delim' = ','
-    ) LOCATION 's3://jncc-habmon-alpha-stats-data/partitions/csv/'
-    TBLPROPERTIES ('has_encrypted_data'='false','skip.header.line.count' = '1');
+    ROW FORMAT SERDE  'org.apache.hadoop.hive.serde2.OpenCSVSerde' 
+    WITH SERDEPROPERTIES ( 
+      'quoteChar'='\"', 
+      'separatorChar'=',') 
+    STORED AS INPUTFORMAT 
+      'org.apache.hadoop.mapred.TextInputFormat' 
+    OUTPUTFORMAT 
+      'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+    LOCATION 
+      's3://jncc-habmon-alpha-stats-data/partitions/csv/'
+    TBLPROPERTIES (
+      'skip.header.line.count'='1'
+    )
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
     MSCK REPAIR TABLE partitions_csv;
+```
 
-Convert to Parquet: (Note I used `lg` for "large" 10km-square partitionsm and `sm` for "small" 5km-square partitions as not sure which would perform best.)
+Convert to Parquet:
 
-    CREATE TABLE statsdb.partitions_LIVENG0_DELETEME
+    CREATE TABLE statsdb.partitions_deleteme
     WITH (
         format = 'PARQUET',
         parquet_compression = 'SNAPPY',
-        external_location = 's3://jncc-habmon-alpha-stats-data/partitions-lg/parquet/framework=liveng0/'
-    ) AS SELECT polyid, partition FROM partitions_csv
+        external_location = 's3://jncc-habmon-alpha-stats-data/partitions-temp/parquet/',
+	partitioned_by = ARRAY['framework']
+    ) AS SELECT polyid, partition, zone, framework FROM partitions_csv
 
 Make the final table:
 
     CREATE EXTERNAL TABLE statsdb.partitions (
-        `polyid` string,
-        `partition` string
+      `polyid` string, 
+      `partition` string, 
+      `zone` string
     )
     PARTITIONED BY (
       `framework` string
@@ -73,7 +85,7 @@ Make the final table:
     ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
     STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
     OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
-    LOCATION 's3://jncc-habmon-alpha-stats-data/partitions-lg/parquet/'
+    LOCATION 's3://jncc-habmon-alpha-stats-data/partitions/parquet/'
     TBLPROPERTIES (
         'has_encrypted_data'='false',
         'parquet.compression'='SNAPPY'
