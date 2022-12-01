@@ -192,3 +192,38 @@ If you add or remove columns from the Athena tables, you may need to do a data m
 5. Rerun the `generate-compare-nearest-50` glue workflow to carry the change through to the final stats tables.
 
     You'll first need to drop the `aggregated_monthly` and `monthly_nearest50_x` tables and clear the data first (in this bucket: `jncc-habmon-alpha-stats-data`). Then trigger the workflow and it should recreate those tables for you.
+    
+Setting parameters for parameterised jobs
+-----------------------------------------
+
+The aggregate-monthly and compare-monthly-nearest50 jobs have been parameterised to allow the same script to be reused for either 
+live or test data and for either England or Scotland data, and additionally to optionally select a specific month of data to aggregate.
+
+The mandatory parameter keys have been specified in the Job Details > Advanced Properties section of the Glue Jobs in Glue Studio, with some default values provided.
+This is purely to document within Glue Studio which parameters are required, and to make it easier if developers need to run these jobs in isolation.
+However, these values will be overridden by the values specified for each job within each of the different workflows for England or Scotland, test or live.
+These values can be seen/changed by clicking on the job within the Workflow Legend and selecting Action > Edit Job Parameters.
+
+Below by way of illustration for each job is a list of the parameters required and the (currently) correct value to use for live England data
+
+aggregate-monthly-parameterised:
+
+- --SOURCE_TABLE_NAME   raw_stats
+- --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/aggregated-monthly/
+- --TARGET_TABLE_NAME   aggregated_monthly
+
+Optionally, either a --YEAR parameter in isolation, or a --YEAR and a --MONTH parameter, can be specified to subset the data that is agggregated.
+If they are not specified, all of the available data in the source location will be processed.  Due to a quirk of Glue Studio, they cannot be specified
+in the Job parameters with blank values, the parameter keys will just get removed when you save the job.  If the subset is not required, just omit the parameters.
+Example:
+- --YEAR        2022
+- --MONTH       08
+
+compare-monthly-nearest50-parameterised:
+
+- --SOURCE_TABLE_NAME   aggregated_monthly
+- --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/monthly-nearest50/parquet/
+- --TARGET_TABLE_NAME   monthly_nearest50_6
+- --FRAMEWORKS          'liveng0', 'liveng1'
+
+
