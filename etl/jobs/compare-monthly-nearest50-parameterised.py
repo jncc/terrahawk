@@ -12,7 +12,7 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+args = getResolvedOptions(sys.argv, ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS'])
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -22,7 +22,7 @@ job.init(args['JOB_NAME'], args)
 
 aggregated = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "aggregated_monthly_test",
+  table_name = args['SOURCE_TABLE_NAME'],
   transformation_ctx = "aggregated"
 )
 
@@ -58,10 +58,11 @@ comparisonsSql = '''
       on a.framework=n.framework and a.polyid=n.polyid
     inner join aggregated b
       on n.neighbour=b.polyid and a.framework=b.framework and a.indexname=b.indexname and a.year=b.year and a.month=b.month
-    --where a.year='2020'
+    where a.framework in ({})
     group by a.framework, a.indexname, a.polyid, a.year, a.month
     order by a.framework, a.indexname, a.polyid, a.year, a.month
 '''
+comparisonsSql = comparisonsSql.format(args['FRAMEWORKS'])
 
 comparisons = sparkSqlQuery(
   glueContext,
@@ -124,14 +125,14 @@ repartitioned = DynamicFrame.fromDF(repartitioned_dataframe, glueContext, "repar
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/testing/monthly-nearest50/parquet/",
+    path = args['TARGET_PATH'],
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "indexname", "poly_partition"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_test")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = args['TARGET_TABLE_NAME'])
 sink.setFormat("glueparquet")
 sink.writeFrame(repartitioned)
 
