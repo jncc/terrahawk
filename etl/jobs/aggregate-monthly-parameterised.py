@@ -12,7 +12,10 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
+optional_params = ['YEAR','MONTH']
+optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
+args = getResolvedOptions(sys.argv, required_params + optional_present)
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -22,12 +25,10 @@ job.init(args['JOB_NAME'], args)
 
 raw = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "raw_stats_test",
+  table_name = args['SOURCE_TABLE_NAME'],
   transformation_ctx = "raw"
   )
 
-# Deduplicates rows which have the same date, index and polyid 
-# by choosing the first gridref ordered alphabetically
 aggregateSql = '''
     select
         count(*) as count,
@@ -54,11 +55,18 @@ aggregateSql = '''
         (select framework, frameworkzone, indexname, year, month, polyid, seasonyear, season, 
             date, frame, platform, habitat, mean, sd, median, min, max, q1, q3,
             row_number() over (partition by date, polyid, indexname order by gridsquare asc ) as partedrownum
-        from raw)
+        from raw {})
     where partedrownum = 1
     group by framework, frameworkzone, polyid, indexname, year, month, seasonyear, season, platform, habitat
     order by framework, year, month
 '''
+
+where_date_clause = ''
+if args.get('YEAR'):
+    where_date_clause += "where year={}".format(args['YEAR'])
+    if args.get('MONTH'):
+        where_date_clause += " and month={}".format(args['MONTH'])
+aggregateSql = aggregateSql.format(where_date_clause)
 
 aggregated = sparkSqlQuery(
   glueContext,
@@ -69,14 +77,14 @@ aggregated = sparkSqlQuery(
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/",
+    path = args['TARGET_PATH'],
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "year", "month"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "aggregated_monthly_test")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = args['TARGET_TABLE_NAME'])
 sink.setFormat("glueparquet")
 sink.writeFrame(aggregated)
 
