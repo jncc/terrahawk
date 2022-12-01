@@ -8,7 +8,7 @@ Diagram
         s3://...stats-raw/parquet/   (written to S3 from Jasmin)
         🏢 raw_stats
               |                  **there is also an equivalent `seasonally` branch!**
-       💥 aggregate-monthly         
+       💥 aggregate-monthly-parameterised         
               |
     s3://...stats-data/aggregated-monthly/parquet/      
     🏢 stats_aggregated_monthly                         
@@ -18,12 +18,12 @@ Diagram
                                \          |     s3://...stats-data/partitions-lg/parquet/
                                 \         |     🏢 stats_partitions
                                  \        |        /
-                             💥 compare-monthly-nearest50
+                             💥 compare-monthly-nearest50-parameterised
                                           |
                       s3://...stats-data/compared-monthly-nearest50/parquet/
                       🏢 stats_compared_monthly_nearest50
 
-Frame level stats are stored in the `raw_stats` table and then grouped by month by the `aggregate-monthly` job. This job will also remove "duplicates" which are made likely due to the fact that the frames overlap by about 10km. The `compare-monthly-nearest50` job then uses the `neighbours_nearest50` table to calculate the monthly means, monthly mins, monthly maxes, etc (cf scores) using the nearest 50 polygons of the same habitat. It will also calculate the Z scores (difference scores) and use the `partitions` table to add the partition ID for each polygon (for querying efficiency). These extra details are added to the original columns and saved to the `monthly_nearest50_x` table.
+Frame level stats are stored in the `raw_stats` table and then grouped by month by the `aggregate-monthly-parameterised` job. This job will also remove "duplicates" which are made likely due to the fact that the frames overlap by about 10km. The `compare-monthly-nearest50-parameterised` job then uses the `neighbours_nearest50` table to calculate the monthly means, monthly mins, monthly maxes, etc (cf scores) using the nearest 50 polygons of the same habitat. It will also calculate the Z scores (difference scores) and use the `partitions` table to add the partition ID for each polygon (for querying efficiency). These extra details are added to the original columns and saved to the `monthly_nearest50_x` table.
 
 Z scores greater than 1 are indicated as yellow on the app, Z scores greater than 2 are indicated as red.
 
