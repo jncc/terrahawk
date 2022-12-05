@@ -29,7 +29,7 @@ raw = glueContext.create_dynamic_frame.from_catalog(
 aggregateSql = '''
     select
         ft.*
-    from (select framework, frameworkzone, indexname, year, month, polyid, seasonyear, season, 
+    from (select framework, frameworkzone, indexname, year, month, polyid, gridsquare, seasonyear, season, 
             date, frame, platform, habitat, mean, sd, median, min, max, q1, q3,
             row_number() over (partition by date, polyid, indexname order by gridsquare asc ) as partedrownum
         from raw r0
