@@ -212,12 +212,12 @@ aggregate-monthly-parameterised:
 - --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/aggregated-monthly/
 - --TARGET_TABLE_NAME   aggregated_monthly
 
-Optionally, either a --YEAR parameter in isolation, or a --YEAR and a --MONTH parameter, can be specified to subset the data that is agggregated.
+Optionally, the --FROM_YEAR_MONTH and --TO_YEAR_MONTH parameters can be specified to subset the data that is agggregated.
 If they are not specified, all of the available data in the source location will be processed.  Due to a quirk of Glue Studio, they cannot be specified
 in the Job parameters with blank values, the parameter keys will just get removed when you save the job.  If the subset is not required, just omit the parameters.
-Example:
-- --YEAR        2022
-- --MONTH       08
+Example (would aggregate 11/21, 12/21, 01/22 and 02/22) :
+- --FROM_YEAR_MONTH        202111
+- --TO_YEAR_MONTH          202202
 
 compare-monthly-nearest50-parameterised:
 
