@@ -13,7 +13,7 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
 required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
-optional_params = ['YEAR','MONTH']
+optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
 optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
 args = getResolvedOptions(sys.argv, required_params + optional_present)
 
@@ -61,12 +61,10 @@ aggregateSql = '''
     order by framework, year, month
 '''
 
-where_date_clause = ''
-if args.get('YEAR'):
-    where_date_clause += "where year={}".format(args['YEAR'])
-    if args.get('MONTH'):
-        where_date_clause += " and month={}".format(args['MONTH'])
-aggregateSql = aggregateSql.format(where_date_clause)
+between_date_clause = ''
+if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
+    between_date_clause += "where year||month >= '{}' and year||month <= '{}'".format(args['FROM_YEAR_MONTH'], args['TO_YEAR_MONTH'])
+aggregateSql = aggregateSql.format(between_date_clause)
 
 aggregated = sparkSqlQuery(
   glueContext,
