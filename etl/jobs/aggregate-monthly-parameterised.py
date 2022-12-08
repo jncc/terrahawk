@@ -51,12 +51,7 @@ aggregateSql = '''
         max(max) as max,
         avg(q1) as q1,
         avg(q3) as q3
-    from
-        (select framework, frameworkzone, indexname, year, month, polyid, seasonyear, season, 
-            date, frame, platform, habitat, mean, sd, median, min, max, q1, q3,
-            row_number() over (partition by date, polyid, indexname order by gridsquare asc ) as partedrownum
-        from raw {})
-    where partedrownum = 1
+    from raw 
     group by framework, frameworkzone, polyid, indexname, year, month, seasonyear, season, platform, habitat
     order by framework, year, month
 '''

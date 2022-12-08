@@ -50,7 +50,7 @@ aggregateSql = '''
         ft.q3
     from (select framework, frameworkzone, indexname, year, month, polyid, seasonyear, season, 
             date, frame, platform, gridsquare, habitat, mean, sd, median, min, max, q1, q3,
-            row_number() over (partition by date, polyid, indexname order by gridsquare asc ) as partedrownum
+            row_number() over (partition by framework, date, polyid, indexname order by gridsquare asc ) as partedrownum
         from raw r0
         where exists (select r1.mean 
                     from raw as r1
