@@ -32,10 +32,11 @@ contexts = {
 }
 
 def get_date_ranges(from_year, from_month, to_year, to_month, months_per_run):
+    if from_year > to_year or (from_year == to_year and from_month > to_month):
+      exit("From year and month {} {} must not be after To year and month {} {}".format(from_year, from_month, to_year, to_month))
     date_ranges = []
     total_months = (to_year - from_year) * 12 + to_month - from_month + 1
     no_runs = math.ceil(total_months / months_per_run)
-    if (no_runs < 1): exit("From and To date ranges not specified correctly") 
     start_year = from_year
     start_month = from_month
     for i in range(no_runs):
@@ -132,6 +133,18 @@ def start_workflow(client, workflow_name):
    )
    return response["RunId"] 
 
+def validate_month(month, arg_name):
+   if not month.isdigit() or not (1 <= int(month) <= 12):
+      exit("Parameter {} must be a number between 1 and 12".format(arg_name))
+
+def validate_year(year, arg_name):
+   if not year.isdigit() or not (2000 <= int(year) <= 2050):
+      exit("Parameter {} must be a number between 2000 and 2050".format(arg_name))
+
+def validate_months_per_run(value, arg_name):
+   if not value.isdigit() or int(value) == 0:
+      exit("Parameter {} must be a postive whole number".format(arg_name))
+
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'CONTEXT', 'FROM_YEAR', 'FROM_MONTH', 'TO_YEAR', 'TO_MONTH', 'MONTHS_PER_RUN'])
 
 sc = SparkContext()
@@ -142,8 +155,12 @@ job.init(args['JOB_NAME'], args)
 
 context = contexts.get(args['CONTEXT'])
 if not context: exit("No context parameters found for supplied parameter " + args['CONTEXT'])
+validate_year(args['FROM_YEAR'], "FROM_YEAR")
+validate_month(args['FROM_MONTH'], "FROM_MONTH")
+validate_year(args['TO_YEAR'], "TO_YEAR")
+validate_month(args['TO_MONTH'], "TO_MONTH")
+validate_months_per_run(args['MONTHS_PER_RUN'], "MONTHS_PER_RUN")
 date_ranges = get_date_ranges(int(args['FROM_YEAR']), int(args['FROM_MONTH']), int(args['TO_YEAR']), int(args['TO_MONTH']), int(args['MONTHS_PER_RUN']))
-if (len(date_ranges) < 1): exit("Date Ranges could not be calculated for the specified parameters")
 
 client = boto3.client('glue')
 aggregation_trigger = get_trigger(client, context["aggregation_trigger_name"])
