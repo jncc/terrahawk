@@ -212,12 +212,12 @@ aggregate-monthly-parameterised:
 - --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/aggregated-monthly/
 - --TARGET_TABLE_NAME   aggregated_monthly
 
-Optionally, either a --YEAR parameter in isolation, or a --YEAR and a --MONTH parameter, can be specified to subset the data that is agggregated.
+Optionally, the --FROM_YEAR_MONTH and --TO_YEAR_MONTH parameters can be specified to subset the data that is agggregated.
 If they are not specified, all of the available data in the source location will be processed.  Due to a quirk of Glue Studio, they cannot be specified
 in the Job parameters with blank values, the parameter keys will just get removed when you save the job.  If the subset is not required, just omit the parameters.
-Example:
-- --YEAR        2022
-- --MONTH       08
+Example (would aggregate 11/21, 12/21, 01/22 and 02/22) :
+- --FROM_YEAR_MONTH        202111
+- --TO_YEAR_MONTH          202202
 
 compare-monthly-nearest50-parameterised:
 
@@ -225,5 +225,23 @@ compare-monthly-nearest50-parameterised:
 - --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/monthly-nearest50/parquet/
 - --TARGET_TABLE_NAME   monthly_nearest50_6
 - --FRAMEWORKS          'liveng0', 'liveng1'
+
+Automation of workflow batches
+------------------------------
+
+Our current m.o. of processing two months worth of data at a time is time consuming to operate manually, as this requires us to move the desired window of data from the staging area into the S3 bucket source location, submit the workflow, wait for it to complete, and then repeat the process for the next window of data.  We have therefore developed a script ('run-change-detection-batches') to automate this process.  Provided all of the data is available in the S3 bucket source location, and given parameters fpr the overall start and end dates to process and the number of months to divide each batch into, the automation script will divide the date ranges into batches as specified and submit the workflow for each date range when the last one has finished.
+
+NB Properties that vary according to the workflow required (Scotland vs England, live vs test) have been defined in the script itself as contexts 'england', 'scotland', 'england_test', 'scotland_test', so the user just has to pass this context parameter into the job, simplifying the parameter list.
+
+Example parameters:
+
+- --CONTEXT             england
+- --FROM_YEAR           2020
+- --FROM_MONTH          11
+- --TO_YEAR             2021
+- --TO_MONTH            02
+- --MONTHS_PER_RUN      2
+
+(With the above parameters, the live england workflow would be submitted twice in series, firstly for Nov-Dec 2020 and then for Jan-Feb 2021)
 
 
