@@ -12,7 +12,10 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
+optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
+optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
+args = getResolvedOptions(sys.argv, required_params + optional_present)
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -22,11 +25,16 @@ job.init(args['JOB_NAME'], args)
 
 raw = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
-  table_name = "raw_stats",
+  table_name = args['SOURCE_TABLE_NAME'],
   transformation_ctx = "raw"
   )
 
-aggregateSql = '''
+between_date_clause = ''
+if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
+    between_date_clause += f"and year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
+
+
+aggregateSql = f'''
     select
         ft.framework, 
         ft.frameworkzone, 
@@ -60,9 +68,10 @@ aggregateSql = '''
                         and r1.frame = r0.frame
                         and r1.mean > 0.1
             )) ft
-    where partedrownum = 1
-        and year = 2019
+    where partedrownum = 1 {between_date_clause}
 '''
+
+
 
 filterQuery = sparkSqlQuery(
   glueContext,
@@ -73,14 +82,14 @@ filterQuery = sparkSqlQuery(
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/raw-stats-clean/",
+    path = args['TARGET_PATH'],
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
     partitionKeys = ["framework", "year", "month"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "raw_stats_clean")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = args['TARGET_TABLE_NAME'])
 sink.setFormat("glueparquet")
 sink.writeFrame(filterQuery)
 
