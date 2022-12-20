@@ -29,7 +29,11 @@ raw = glueContext.create_dynamic_frame.from_catalog(
   transformation_ctx = "raw"
   )
 
-aggregateSql = '''
+between_date_clause = ''
+if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
+    between_date_clause += f"where year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
+
+aggregateSql = f'''
     select
         count(*) as count,
         framework,
@@ -52,14 +56,10 @@ aggregateSql = '''
         avg(q1) as q1,
         avg(q3) as q3
     from raw 
+    {between_date_clause}
     group by framework, frameworkzone, polyid, indexname, year, month, seasonyear, season, platform, habitat
     order by framework, year, month
 '''
-
-between_date_clause = ''
-if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
-    between_date_clause += "where year||month >= '{}' and year||month <= '{}'".format(args['FROM_YEAR_MONTH'], args['TO_YEAR_MONTH'])
-aggregateSql = aggregateSql.format(between_date_clause)
 
 aggregated = sparkSqlQuery(
   glueContext,

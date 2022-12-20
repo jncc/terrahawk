@@ -33,7 +33,6 @@ between_date_clause = ''
 if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
     between_date_clause += f"and year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
 
-
 aggregateSql = f'''
     select
         ft.framework, 
@@ -70,8 +69,6 @@ aggregateSql = f'''
             )) ft
     where partedrownum = 1 {between_date_clause}
 '''
-
-
 
 filterQuery = sparkSqlQuery(
   glueContext,
