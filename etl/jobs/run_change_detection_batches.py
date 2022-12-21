@@ -11,6 +11,8 @@ from awsglue.job import Job
 contexts = {
     "england": {
         "workflow_name": "generate-compare-nearest-50",
+        "filter_trigger_name": "Run filter raw stats",
+        "filter_job_name": "filter-raw-stats",
         "aggregation_trigger_name": "Run aggregate-monthly",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50",
@@ -18,6 +20,8 @@ contexts = {
     },
     "england_test": {
         "workflow_name": "generate-compare-nearest-50-test",
+        "filter_trigger_name": "Run filter raw stats test",
+        "filter_job_name": "filter-raw-stats",
         "aggregation_trigger_name": "Run Aggregate Monthly Test",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50 test",
@@ -26,6 +30,8 @@ contexts = {
     },
     "scotland": {
         "workflow_name": "generate-compare-nearest-50-scotland",
+        "filter_trigger_name": "Run filter raw stats scotland",
+        "filter_job_name": "filter-raw-stats",
         "aggregation_trigger_name": "Run Aggregate Monthly Scotland",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50 for Scotland",
@@ -33,6 +39,8 @@ contexts = {
     },
     "scotland_test": {
         "workflow_name": "generate-compare-nearest-50-scotland-test",
+        "filter_trigger_name": "Run filter raw stats scotland test",
+        "filter_job_name": "filter-raw-stats",
         "aggregation_trigger_name": "Run Aggregate Monthly Test for Scotland",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50 test for Scotland",
@@ -184,32 +192,27 @@ job.init(args['JOB_NAME'], args)
 
 context = contexts.get(args['CONTEXT'])
 if not context:
-    exit("No context parameters found for supplied parameter " +
-         args['CONTEXT'])
+    exit("No context parameters found for supplied parameter " + args['CONTEXT'])
 validate_year(args['FROM_YEAR'], "FROM_YEAR")
 validate_month(args['FROM_MONTH'], "FROM_MONTH")
 validate_year(args['TO_YEAR'], "TO_YEAR")
 validate_month(args['TO_MONTH'], "TO_MONTH")
 validate_months_per_run(args['MONTHS_PER_RUN'], "MONTHS_PER_RUN")
-date_ranges = get_date_ranges(int(args['FROM_YEAR']), int(args['FROM_MONTH']), int(
-    args['TO_YEAR']), int(args['TO_MONTH']), int(args['MONTHS_PER_RUN']))
+date_ranges = get_date_ranges(int(args['FROM_YEAR']), int(args['FROM_MONTH']),
+    int(args['TO_YEAR']), int(args['TO_MONTH']), int(args['MONTHS_PER_RUN']))
 
 client = boto3.client('glue')
+filter_trigger = get_trigger(client, context["filter_trigger_name"])
 aggregation_trigger = get_trigger(client, context["aggregation_trigger_name"])
-compare_monthly_trigger = get_trigger(
-    client, context["compare_monthly_trigger_name"])
+compare_monthly_trigger = get_trigger(client, context["compare_monthly_trigger_name"])
 check_initial_workflow_availability(client, context["workflow_name"])
 last_run_id = None
 for date_range in date_ranges:
     if last_run_id:
-        await_workflow_run_completion(
-            client, context["workflow_name"], last_run_id)
-    set_triggered_job_params(client, aggregation_trigger,
-                             context["aggregation_job_name"], date_range)
-
-    set_triggered_job_params(client, compare_monthly_trigger,
-                             context["compare_monthly_job_name"], date_range)
-                             
+        await_workflow_run_completion(client, context["workflow_name"], last_run_id)
+    set_triggered_job_params(client, filter_trigger, context["filter_job_name"], date_range)    
+    set_triggered_job_params(client, aggregation_trigger, context["aggregation_job_name"], date_range)
+    set_triggered_job_params(client, compare_monthly_trigger, context["compare_monthly_job_name"], date_range)
     last_run_id = start_workflow(client, context["workflow_name"])
 
 job.commit()
