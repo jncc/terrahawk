@@ -56,7 +56,7 @@ aggregateSql = f'''
         avg(q1) as q1,
         avg(q3) as q3
     from raw 
-    where a.framework in ({args['FRAMEWORKS']}) 
+    where framework in ({args['FRAMEWORKS']}) 
     {between_date_clause}
     group by framework, frameworkzone, polyid, indexname, year, month, seasonyear, season, platform, habitat
     order by framework, year, month
