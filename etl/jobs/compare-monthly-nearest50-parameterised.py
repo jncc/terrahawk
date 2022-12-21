@@ -12,8 +12,6 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS'])
-
 required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
 optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
 optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
@@ -66,7 +64,6 @@ comparisonsSql = f'''
     group by a.framework, a.indexname, a.polyid, a.year, a.month
     order by a.framework, a.indexname, a.polyid, a.year, a.month
 '''
-comparisonsSql = comparisonsSql.format(args['FRAMEWORKS'])
 
 comparisons = sparkSqlQuery(
   glueContext,
