@@ -12,7 +12,7 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
 optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
 optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
 args = getResolvedOptions(sys.argv, required_params + optional_present)
@@ -31,7 +31,7 @@ raw = glueContext.create_dynamic_frame.from_catalog(
 
 between_date_clause = ''
 if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
-    between_date_clause += f"where year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
+    between_date_clause += f"and year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
 
 aggregateSql = f'''
     select
@@ -56,6 +56,7 @@ aggregateSql = f'''
         avg(q1) as q1,
         avg(q3) as q3
     from raw 
+    where a.framework in ({args['FRAMEWORKS']}) 
     {between_date_clause}
     group by framework, frameworkzone, polyid, indexname, year, month, seasonyear, season, platform, habitat
     order by framework, year, month
