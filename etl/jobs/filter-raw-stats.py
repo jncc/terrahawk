@@ -33,7 +33,7 @@ between_date_clause = ''
 if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
     between_date_clause += f"and year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
 
-aggregateSql = f'''
+filterSql = f'''
     select
         ft.framework, 
         ft.frameworkzone, 
@@ -59,20 +59,21 @@ aggregateSql = f'''
             date, frame, platform, gridsquare, habitat, mean, sd, median, min, max, q1, q3,
             row_number() over (partition by framework, date, polyid, indexname order by gridsquare asc ) as partedrownum
         from raw r0
-        where exists (select r1.mean 
+        where (r0.platform = 'S2' and exists (select r1.mean 
                     from raw as r1
                     where r1.indexname = 'NDVI'
                         and r1.polyid = r0.polyid
                         and r1.framework = r0.framework
                         and r1.frame = r0.frame
                         and r1.mean > 0.1
-            )) ft
+            ))
+            or r0.platform != 'S2') ft
     where partedrownum = 1 {between_date_clause}
 '''
 
 filterQuery = sparkSqlQuery(
   glueContext,
-  query = aggregateSql,
+  query = filterSql,
   mapping = {"raw": raw},
   transformation_ctx = "filterQuery")
 
