@@ -29,7 +29,8 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    /* temp */ habitats: ["Arable", "Broadleaved woodland", "Coniferous woodland", "Orchard", "Pastures", "Urban", "Young trees"],
   }
   ,
   liveng1: {
@@ -53,7 +54,8 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    /* temp */ habitats: ["Acid, Calcareous, Neutral Grassland", "Arable and Horticultural", "Bare Ground", "Bare Sand", "Bog"],
   },
   habmosCairngorms: {
     name: `Habitat Map of Scotland: Cairngorms subset`,
@@ -75,7 +77,8 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    /* temp */ habitats: ["C3.21 - Phragmites australis beds", "C3.22 - Schoenoplectus lacutris beds", "C3.24 - Medium-tall non-graminoid swamp communities", "C3.26 - Phalaris arundinacea beds", "C3.29 - Large sedge swamp communities"],
   },
   spaceintCairngorms: {
     name: `Space Intelligence: Cairngorms subset`,
@@ -97,6 +100,7 @@ export const frameworks: {[framework: string]: Framework} = {
       yearTo: 2021,
       monthTo: 12,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    /* temp */ habitats: ["D1 - Raised and blanket bogs", "D2 - Valley mires, poor gfens and transition mires", "D4 - Base-rich fens and calcareous spring mires", "E1 - Dry grasslands", "E2 - Mesic grasslands"],
   }
 }

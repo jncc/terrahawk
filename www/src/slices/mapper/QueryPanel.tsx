@@ -49,6 +49,20 @@ export let QueryPanel = () => {
         </select>
       </div>
 
+      <div className="mb-5">
+        <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label>
+        <select
+          name="habitat" id="habitat-select"
+          /* defaultValue={state.query.statistic} */
+          /* onChange={e => dispatch(mapperActions.alterQueryStatistic(e.target.value as Statistic))} */
+          className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
+          <option></option>
+          {
+            frameworks[state.query.framework].habitats.map(h => <option key={h} value={h}>{h}</option>)
+          }
+        </select>
+      </div>
+
       <div className="">
         <div className="flex items-center gap-2 mb-2">
           <div className="flex-grow little-label-text  ">From</div>

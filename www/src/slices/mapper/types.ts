@@ -22,7 +22,8 @@ export type Framework = {
     yearTo: number
     monthTo: number
   }
-  availableIndices: Indexname[]
+  availableIndices: Indexname[],
+  /* temp */ habitats: string[] 
 }
 
 export type Query = Framework['defaultQuery']
