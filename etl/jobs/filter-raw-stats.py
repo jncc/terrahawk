@@ -67,7 +67,7 @@ filterSql = f'''
                         and r1.frame = r0.frame
                         and r1.mean > 0.1
             ))
-            or r0.platform != 'S2') ft
+            or r0.platform <> 'S2') ft
     where partedrownum = 1 {between_date_clause}
 '''
 
