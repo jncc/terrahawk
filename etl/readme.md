@@ -196,7 +196,7 @@ If you add or remove columns from the Athena tables, you may need to do a data m
 Setting parameters for parameterised jobs
 -----------------------------------------
 
-The aggregate-monthly and compare-monthly-nearest50 jobs have been parameterised to allow the same script to be reused for either 
+The aggregate-monthly, filter-raw-stats and compare-monthly-nearest50 jobs have been parameterised to allow the same script to be reused for either 
 live or test data and for either England or Scotland data, and additionally to optionally select a specific month of data to aggregate.
 
 The mandatory parameter keys have been specified in the Job Details > Advanced Properties section of the Glue Jobs in Glue Studio, with some default values provided.
@@ -206,18 +206,18 @@ These values can be seen/changed by clicking on the job within the Workflow Lege
 
 Below by way of illustration for each job is a list of the parameters required and the (currently) correct value to use for live England data
 
-aggregate-monthly-parameterised:
+filter-raw-stats
 
 - --SOURCE_TABLE_NAME   raw_stats
+- --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/raw-stats-filtered/
+- --TARGET_TABLE_NAME   raw-stats-filtered
+
+aggregate-monthly-parameterised:
+
+- --SOURCE_TABLE_NAME   raw_stats_filtered
 - --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/aggregated-monthly/
 - --TARGET_TABLE_NAME   aggregated_monthly
-
-Optionally, the --FROM_YEAR_MONTH and --TO_YEAR_MONTH parameters can be specified to subset the data that is agggregated.
-If they are not specified, all of the available data in the source location will be processed.  Due to a quirk of Glue Studio, they cannot be specified
-in the Job parameters with blank values, the parameter keys will just get removed when you save the job.  If the subset is not required, just omit the parameters.
-Example (would aggregate 11/21, 12/21, 01/22 and 02/22) :
-- --FROM_YEAR_MONTH        202111
-- --TO_YEAR_MONTH          202202
+- --FRAMEWORKS          'liveng0', 'liveng1'
 
 compare-monthly-nearest50-parameterised:
 
@@ -225,6 +225,13 @@ compare-monthly-nearest50-parameterised:
 - --TARGET_PATH         s3://jncc-habmon-alpha-stats-data/monthly-nearest50/parquet/
 - --TARGET_TABLE_NAME   monthly_nearest50_6
 - --FRAMEWORKS          'liveng0', 'liveng1'
+
+Optionally, the --FROM_YEAR_MONTH and --TO_YEAR_MONTH parameters can be specified on all three jobs to subset the data that is aggregated.
+If they are not specified, all of the available data in the source location will be processed.  Due to a quirk of Glue Studio, they cannot be specified
+in the Job parameters with blank values, the parameter keys will just get removed when you save the job.  If the subset is not required, just omit the parameters.
+Example (would aggregate 11/21, 12/21, 01/22 and 02/22) :
+- --FROM_YEAR_MONTH        202111
+- --TO_YEAR_MONTH          202202
 
 Automation of workflow batches
 ------------------------------
