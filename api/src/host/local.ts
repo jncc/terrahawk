@@ -11,6 +11,7 @@ import { getStats } from '../endpoints/stats'
 import { getAthena } from '../endpoints/athena'
 import { getThumb } from '../endpoints/thumb'
 import { getNpms } from '../endpoints/npms'
+import { getHabitats } from '../endpoints/habitats'
 
 if (env.NODE_ENV === 'development') {
 
@@ -62,6 +63,12 @@ if (env.NODE_ENV === 'development') {
     app.post('/npms', asyncHandler(async(req, res) => {
         
         let result = await getNpms(req.body)
+        res.json(result)
+    }))
+
+    app.post('/habitats', asyncHandler(async(req, res) => {
+
+        let result = await getHabitats(req.body) // req.body for POST
         res.json(result)
     }))
 
