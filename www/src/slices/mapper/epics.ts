@@ -12,7 +12,8 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
   ofType(
     mapperActions.mapZoomChanged.type,
     mapperActions.mapCenterChanged.type,
-    mapperActions.alterQueryFramework.type
+    mapperActions.alterQueryFramework.type,
+    mapperActions.alterHabitatid.type
   ),
   filter(() => state$.value.mapper.zoomedEnoughToShowPolygons),
   switchMap(() =>

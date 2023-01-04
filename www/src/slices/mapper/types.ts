@@ -21,6 +21,7 @@ export type Framework = {
     monthFrom: number
     yearTo: number
     monthTo: number
+    habitatid: number| null 
   }
   availableIndices: Indexname[],
   /* temp */ habitats: Habitat[] 
@@ -32,6 +33,7 @@ export type PolygonsQuery = Pick<Query,
   | 'framework'
 > & {
   bbox: string
+  habitatid?: number
 }
 
 export type Habitat = {
