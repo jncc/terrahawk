@@ -21,6 +21,16 @@ export function parseFramework(args: Args) {
     return args.framework
 }
 
+export function parseHabitatid(args: Args) {
+    if (!args.habitatid) {
+        return null
+    }
+    if (!Number.isInteger(args.habitatid)) {
+        throw `Expected 'habitatid' to be an integer.`
+    }
+    return args.habitatid as number
+}
+
 export function parseIndexname(args: Args) {
     if (!args.indexname) {
         throw `Expected 'indexname'.`
