@@ -30,7 +30,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
-    /* temp */ habitats: ["Arable", "Broadleaved woodland", "Coniferous woodland", "Orchard", "Pastures", "Urban", "Young trees"],
+    /* temp */ habitats: [{"id":1, "habitat":"Arable"}, {"id":2, "habitat":"Broadleaved woodland"}, {"id":3, "habitat":"Coniferous woodland"}, {"id":4, "habitat":"Orchard"}, {"id":5, "habitat":"Pastures"}, {"id":6, "habitat":"Urban"}, {"id":7, "habitat":"Young trees"}],
   }
   ,
   liveng1: {
@@ -55,7 +55,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
-    /* temp */ habitats: ["Acid, Calcareous, Neutral Grassland", "Arable and Horticultural", "Bare Ground", "Bare Sand", "Bog"],
+    /* temp */ habitats: [{"id":1, "habitat":"Acid"}, {"id":2, "habitat":"Calcareous"}, {"id":3, "habitat":"Neutral Grassland"}, {"id":4, "habitat":"Arable and Horticultural"}, {"id":5, "habitat":"Bare Ground"}, {"id":6, "habitat":"Bare Sand"}, {"id":7, "habitat":"Bog"}],
   },
   habmosCairngorms: {
     name: `Habitat Map of Scotland: Cairngorms subset`,
@@ -78,7 +78,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
-    /* temp */ habitats: ["C3.21 - Phragmites australis beds", "C3.22 - Schoenoplectus lacutris beds", "C3.24 - Medium-tall non-graminoid swamp communities", "C3.26 - Phalaris arundinacea beds", "C3.29 - Large sedge swamp communities"],
+    /* temp */ habitats: [{"id":23778, "habitat":"G - Woodland, forest and other wooded land"}, {"id":23799, "habitat":"G3.4 - [Pinus sylvestris] woodland south of the taiga"}, {"id":23806, "habitat":"F4.2 - H4030 - Dry heaths"}, {"id":23838, "habitat":"F3.16#1 - H5130 - Juniper on heaths"}, {"id":238790, "habitat":"D1.2 - H7130 - Blanket bogs"}],
   },
   spaceintCairngorms: {
     name: `Space Intelligence: Cairngorms subset`,
@@ -101,6 +101,6 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
-    /* temp */ habitats: ["D1 - Raised and blanket bogs", "D2 - Valley mires, poor gfens and transition mires", "D4 - Base-rich fens and calcareous spring mires", "E1 - Dry grasslands", "E2 - Mesic grasslands"],
+    /* temp */ habitats: [{"id":1, "habitat":"D1 - Raised and blanket bogs"}, {"id":2, "habitat":"D2 - Valley mires, poor glens and transition mires"}, {"id":3, "habitat":"D4 - Base-rich fens and calcareous spring mires"}, {"id":4, "habitat":"E1 - Dry grasslands"}, {"id":5, "habitat":"E2 - Mesic grasslands"}],
   }
 }
