@@ -30,6 +30,7 @@ export let getHabitatsImpl = async (q: { framework: string }) => {
          habitat
       from habitats
       where framework = $1
+      order by habitat
       limit 999
       `
 
