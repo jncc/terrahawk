@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Poly, ChoroplethItem, Framework, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
-  FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate } from './types'
+  FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate, Habitat, FrameworkHabitats } from './types'
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
@@ -29,8 +29,12 @@ let slice = createSlice({
     showOutlines: true,
     useProxy: true,
     thumbType: 'index' as 'colour' | 'index',
+    frameworkHabitats: new Map<Framework, Habitat[]>(),  
   },
   reducers: {
+    initialise: () => {
+
+    },
     togglePolygons: (state) => {
       state.showPolygons = !state.showPolygons
     },
@@ -96,6 +100,9 @@ let slice = createSlice({
     },
     fetchFieldDataCompleted: (state, a: PayloadAction<FieldDataQueryResult>) => {
       state.fieldData = a.payload.fieldData
+    },
+    fetchHabitatsCompleted: (state, a: PayloadAction<FrameworkHabitats>) => {
+      state.frameworkHabitats.set(a.payload.framework, a.payload.habitats)
     },
     selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
       // the new value is `undefined` if deselecting

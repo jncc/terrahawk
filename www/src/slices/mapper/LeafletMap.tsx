@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import L, { LatLngBounds } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
+import { enableMapSet } from 'immer';
 import { frameworks } from '../../frameworks'
 import { FieldData, isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
@@ -22,7 +23,7 @@ import ReactDOMServer from 'react-dom/server'
 type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 type CustomFieldDataLayer = L.GeoJSON & { fieldData: FieldData }
 
-let map: L.Map
+let leafletMap: L.Map
 let bboxRectangle: L.Rectangle
 let polyLayerGroup: L.LayerGroup<CustomPolygonLayer>
 let selectedPolyLayerGroup: L.LayerGroup<CustomPolygonLayer>
@@ -31,6 +32,8 @@ let frameworkBoundary: L.GeoJSON
 
 export let LeafletMap = () => {
 
+  enableMapSet();
+
   let state = useStateSelector(s => s.mapper)
   let dispatch = useStateDispatcher()
   
@@ -38,8 +41,8 @@ export let LeafletMap = () => {
 
   // initialize the Leaflet map
   useEffect(() => {
-    
-    map = L.map('leaflet-map', {
+
+    leafletMap = L.map('leaflet-map', {
       minZoom: framework.minZoom,
       maxZoom: framework.maxZoom,
       zoomControl: false,
@@ -48,36 +51,38 @@ export let LeafletMap = () => {
     })
 
     // attribution
-    L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(map)
+    L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(leafletMap)
 
     // base layer
     L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Light_3857/{z}/{x}/{y}.png?key=0vgdXUPqv75LUeDK8Xb4nTwLxMd28ZXe`, {
       attribution: `Contains OS data © Crown copyright and database rights 2021`,
-    }).addTo(map)
+    }).addTo(leafletMap)
   
     // framework boundary
-    frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
+    frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(leafletMap)
 
     // polygon layer group
     polyLayerGroup = L.layerGroup()
-    selectedPolyLayerGroup = L.layerGroup().addTo(map)
+    selectedPolyLayerGroup = L.layerGroup().addTo(leafletMap)
 
     // field data layer group
     fieldDataLayerGroup = L.layerGroup()
 
+    dispatch(mapperActions.initialise())
+
     // listen for zoom changes
-    map.on('zoomend', () => {
-      dispatch(mapperActions.mapZoomChanged(map.getZoom()))
+    leafletMap.on('zoomend', () => {
+      dispatch(mapperActions.mapZoomChanged(leafletMap.getZoom()))
     })
 
     // listen for position changes
-    map.on('moveend', () => {
-      dispatch(mapperActions.mapCenterChanged(map.getCenter()))
+    leafletMap.on('moveend', () => {
+      dispatch(mapperActions.mapCenterChanged(leafletMap.getCenter()))
     })
 
     // setView handily raises the 'moveend' event we've wired up above,
     // so no need to raise an initial event artifically
-    map.setView(state.query.center, state.zoom)
+    leafletMap.setView(state.query.center, state.zoom)
 
   }, [])
 
@@ -85,15 +90,15 @@ export let LeafletMap = () => {
   useEffect(() => {
     dispatch(mapperActions.selectPolygon(undefined))
     if (state.panToNewFramework) {
-      map.setView(frameworks[state.query.framework].defaultQuery.center, state.zoom)  
+      leafletMap.setView(frameworks[state.query.framework].defaultQuery.center, state.zoom)  
     }    
     frameworkBoundary.remove()
-    frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(map)
+    frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(leafletMap)
   }, [state.query.framework])
 
   // react to change of `zoom`
   useEffect(() => {
-    map.setZoom(state.zoom)
+    leafletMap.setZoom(state.zoom)
   }, [state.zoom])
 
   // react to change of `query.center` (position change)
@@ -106,7 +111,7 @@ export let LeafletMap = () => {
     let bounds = getBoundsOfBboxRectangle(state.query.center, state.query.framework)
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
-      bboxRectangleStyle).addTo(map)
+      bboxRectangleStyle).addTo(leafletMap)
 
   }, [state.query.center, state.query.framework])
 
@@ -295,7 +300,7 @@ export let LeafletMap = () => {
   useEffect(() => {
     if (state.showPolygons && state.zoomedEnoughToShowPolygons)
       // showing ~1000 polygons causes a noticeable lag in the UI, so add a short delay
-      setTimeout(() => polyLayerGroup.addTo(map), 50)
+      setTimeout(() => polyLayerGroup.addTo(leafletMap), 50)
     else
       setTimeout(() => polyLayerGroup.remove(), 50)
     
@@ -304,7 +309,7 @@ export let LeafletMap = () => {
   // react to changes of `showNpmsData` and `zoomedEnoughToShowPolygons`
   useEffect(() => {
     if (state.showNpmsData && state.zoomedEnoughToShowPolygons)
-      setTimeout(() => fieldDataLayerGroup.addTo(map), 50)
+      setTimeout(() => fieldDataLayerGroup.addTo(leafletMap), 50)
     else
       setTimeout(() => fieldDataLayerGroup.remove(), 50)
     
@@ -324,14 +329,14 @@ export let LeafletMap = () => {
       // reduce the "active area" https://github.com/Mappy/Leaflet-active-area
       // and pan to the center of the newly-selected polygon
       // @ts-expect-error
-      map.setActiveArea('leaflet-active-area-when-polygon-selected')
+      leafletMap.setActiveArea('leaflet-active-area-when-polygon-selected')
       let layer = L.geoJSON(state.selectedPolygon.geojson, {style: {weight: 5}})
-      map.panTo(layer.getBounds().getCenter())
+      leafletMap.panTo(layer.getBounds().getCenter())
     }
     if (state.previousSelectedPolygon && !state.selectedPolygon) {
       // restore the "active area" (to full screen) with an animation (true, true)
       // @ts-expect-error
-      map.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
+      leafletMap.setActiveArea('leaflet-active-area-when-polygon-not-selected', true, true)
     }
   }, [state.selectedPolygon, state.previousSelectedPolygon])
   

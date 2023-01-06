@@ -6,7 +6,8 @@ import { combineEpics, ofType, StateObservable } from 'redux-observable'
 import { RootState } from '../../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
-import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchFieldData } from './api'
+import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchFieldData, fetchHabitats } from './api'
+import { frameworks } from '../../frameworks'
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
@@ -59,7 +60,7 @@ let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) =
   filter(()  => state$.value.mapper.selectedPolygon !== undefined),
   switchMap(() =>
     concat(
-      of(globalActions.startLoading('polygon')),
+      of(globalActions.startLoading('habitats')),
       fetchPolygon(state$.value.mapper).pipe(
         map(result => mapperActions.fetchPolygonCompleted(result)),
         catchError(e => of(globalActions.errorOccurred(e.message)))),
@@ -85,9 +86,34 @@ let fetchFieldDataEpic = (action$: any, state$: StateObservable<RootState>) => a
   )
 )
 
+let fetchHabitatsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+  ofType(
+    mapperActions.initialise.type,
+  ),
+  switchMap(() =>
+    concat(
+      of(globalActions.startLoading('habitats')),
+      fetchHabitats(frameworks.liveng0).pipe(
+        map(result => mapperActions.fetchHabitatsCompleted(result)),
+        catchError(e => of(globalActions.errorOccurred(e.message)))),
+      fetchHabitats(frameworks.liveng1).pipe(
+        map(result => mapperActions.fetchHabitatsCompleted(result)),
+        catchError(e => of(globalActions.errorOccurred(e.message)))),
+      fetchHabitats(frameworks.habmosCairngorms).pipe(
+        map(result => mapperActions.fetchHabitatsCompleted(result)),
+        catchError(e => of(globalActions.errorOccurred(e.message)))),
+      fetchHabitats(frameworks.spaceintCairngorms).pipe(
+        map(result => mapperActions.fetchHabitatsCompleted(result)),
+        catchError(e => of(globalActions.errorOccurred(e.message)))),        
+      of(globalActions.stopLoading('habitats')),
+    )
+  )
+)
+
 export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
   fetchChoroplethEpic,
   fetchPolygonStatsEpic,
-  fetchFieldDataEpic
+  fetchFieldDataEpic,
+  fetchHabitatsEpic
 )

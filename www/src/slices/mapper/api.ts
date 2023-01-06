@@ -7,7 +7,7 @@ import { frameworks } from '../../frameworks'
 import { RootState } from '../../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../../utility/geospatialUtility'
 import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery,
-  FieldDataQueryResult, MonthStats} from './types'
+  FieldDataQueryResult, MonthStats, HabitatsQuery, FrameworkHabitats, Framework} from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 // polygons
@@ -142,10 +142,26 @@ export let fetchFieldData = (query: RootState['mapper']['query']): Observable<Fi
   )
 }
 
+// habitats
+// --------
+
+export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkHabitats> => {
+
+  let getParamsForFetchHabitats = (requiredFramework: Framework): HabitatsQuery => {
+    return {
+      framework: requiredFramework.defaultQuery.framework.toLowerCase(),
+    }
+  }
+  
+  return api('habitats', getParamsForFetchHabitats(requiredFramework)).pipe(
+    map(r =>( { framework: requiredFramework, habitats: r.response.habitats }))
+  )
+}
+
 let api = (endpoint: string, params: any) => {
   return ajax.post(
-    //`https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/${endpoint}`,
-    `http://localhost:8000/${endpoint}`,
+    `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/${endpoint}`,
+    //`http://localhost:8000/${endpoint}`,
     params,
     { 'Content-Type': 'application/json' }
   )
