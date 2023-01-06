@@ -27,7 +27,7 @@ export const getPolygons = async (args: any) => {
 
 export let getPolygonsImplHabitatSubset = async (q: { framework: string, bbox: string, habitatid: number }) => {
     
-    let sql = getPolygonsQuery(q.framework, `and habitat_id = $2`)
+    let sql = getPolygonsQuery(q.framework, `and f.habitat_id = $2`)
     
     let polygonRows = await query(sql, [q.bbox, q.habitatid])
 
@@ -46,12 +46,13 @@ export let getPolygonsImpl = async (q: { framework: string, bbox: string }) => {
 function getPolygonsQuery(framework: string, filterClause: string) {
    return `
      select
-        polyid,
-        partition,
-        habitat,
-        ST_AsGeoJSON(geometry_4326, 6) as geojson
-     from framework_${framework}
-     where ST_Intersects(ST_GeomFromText($1, 4326), geometry_4326)
+        f.polyid,
+        f.partition,
+        h.habitat,
+        ST_AsGeoJSON(f.geometry_4326, 6) as geojson
+     from framework_${framework} f
+     inner join habitats h on h.id = f.habitat_id
+     where ST_Intersects(ST_GeomFromText($1, 4326), f.geometry_4326)
      ${filterClause}
      limit 3001
      `
