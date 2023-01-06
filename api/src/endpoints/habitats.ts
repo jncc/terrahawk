@@ -23,7 +23,7 @@ export const getHabitats = async (args: any) => {
 }
 
 export let getHabitatsImpl = async (q: { framework: string }) => {
-    
+    // All current frameworks have < 99 habitats but if we ever get a framework with a large number we may need to page or limit this query
     let sql = `
       select
          id,
@@ -31,7 +31,6 @@ export let getHabitatsImpl = async (q: { framework: string }) => {
       from habitats
       where framework = $1
       order by habitat
-      limit 999
       `
 
     let habitatRows = await query(sql, [q.framework])
