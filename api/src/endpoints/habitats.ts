@@ -11,13 +11,13 @@ import { parseArgs } from './habitatsArgParser'
 
 export const getHabitats = async (args: any) => {
 
-    console.log(`At ${(new Date()).toISOString()} - entering function`)
+    console.log(`At ${(new Date()).toISOString()} - entering habitats function`)
 
     let q = parseArgs(args)    
 
     let habitats = await getHabitatsImpl(q)
     
-    console.log(`At ${(new Date()).toISOString()} - got query result`)
+    console.log(`At ${(new Date()).toISOString()} - got habitats query result`)
 
     return { habitats }
 }
