@@ -160,6 +160,12 @@ functions:
       - httpApi:
           path: /npms
           method: POST
+  habitats:
+    handler: built/host/aws.habitatsHandler
+    events:
+      - httpApi:
+          path: /habitats
+          method: POST
   choroplethDev:
     handler: built/host/aws.choroplethDevHandler
     events:
