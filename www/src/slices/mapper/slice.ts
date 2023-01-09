@@ -61,7 +61,7 @@ let slice = createSlice({
     },
     alterQueryFramework: (state, a: PayloadAction<string>) => {
       state.query.framework = a.payload
-      state.query.habitatid = null
+      state.query.habitatid = undefined
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
