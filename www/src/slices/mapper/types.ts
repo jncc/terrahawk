@@ -23,7 +23,7 @@ export type Framework = {
     monthTo: number
     habitatid: number | null 
   }
-  availableIndices: Indexname[],
+  availableIndices: Indexname[]
 }
 
 export type Query = Framework['defaultQuery']

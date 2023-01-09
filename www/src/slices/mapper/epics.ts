@@ -60,7 +60,7 @@ let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) =
   filter(()  => state$.value.mapper.selectedPolygon !== undefined),
   switchMap(() =>
     concat(
-      of(globalActions.startLoading('habitats')),
+      of(globalActions.startLoading('polygon')),
       fetchPolygon(state$.value.mapper).pipe(
         map(result => mapperActions.fetchPolygonCompleted(result)),
         catchError(e => of(globalActions.errorOccurred(e.message)))),
