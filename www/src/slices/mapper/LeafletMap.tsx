@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import L, { LatLngBounds } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-import { enableMapSet } from 'immer';
+import { enableMapSet } from 'immer'
 import { frameworks } from '../../frameworks'
 import { FieldData, isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
@@ -32,7 +32,7 @@ let frameworkBoundary: L.GeoJSON
 
 export let LeafletMap = () => {
 
-  enableMapSet();
+  enableMapSet()
 
   let state = useStateSelector(s => s.mapper)
   let dispatch = useStateDispatcher()
