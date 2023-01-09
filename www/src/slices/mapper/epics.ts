@@ -111,7 +111,3 @@ export let mapperEpics: any = combineEpics(
   fetchFieldDataEpic,
   fetchHabitatsEpic
 )
-function mergeMap(arg0: () => import("rxjs").Observable<{ payload: string; type: string } | { payload: import("./types").FrameworkHabitats; type: string }>): any {
-  throw new Error('Function not implemented.')
-}
-

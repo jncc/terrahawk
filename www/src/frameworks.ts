@@ -30,7 +30,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
       habitatid: null,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
   ,
   liveng1: {
@@ -55,7 +55,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
       habitatid: null,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
   habmosCairngorms: {
     name: `Habitat Map of Scotland: Cairngorms subset`,
@@ -78,7 +78,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
       habitatid: null,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
   spaceintCairngorms: {
     name: `Space Intelligence: Cairngorms subset`,
@@ -101,6 +101,6 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
       habitatid: null,
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI'],
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
 }
