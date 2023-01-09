@@ -12,7 +12,7 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
 optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
 optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
 args = getResolvedOptions(sys.argv, required_params + optional_present)
@@ -33,40 +33,49 @@ between_date_clause = ''
 if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
     between_date_clause += f"and year||month >= '{args['FROM_YEAR_MONTH']}' and year||month <= '{args['TO_YEAR_MONTH']}'"
 
-aggregateSql = f'''
+filterSql = f'''
     select
-        count(*) as count,
-        framework,
-        frameworkzone,
-        indexname,
-        year,
-        month,
-        polyid,
-        seasonyear,
-        season,
-        collect_list(date) as date,
-        collect_list(frame) as frame,
-        platform,
-        habitat,
-        avg(mean) as mean,
-        avg(sd) as sd,
-        avg(median) as median,
-        min(min) as min,
-        max(max) as max,
-        avg(q1) as q1,
-        avg(q3) as q3
-    from raw 
-    where framework in ({args['FRAMEWORKS']}) 
-    {between_date_clause}
-    group by framework, frameworkzone, polyid, indexname, year, month, seasonyear, season, platform, habitat
-    order by framework, year, month
+        ft.framework, 
+        ft.frameworkzone, 
+        ft.indexname, 
+        ft.year, 
+        ft.month, 
+        ft.polyid, 
+        ft.seasonyear, 
+        ft.season, 
+        ft.date, 
+        ft.frame, 
+        ft.platform, 
+        ft.gridsquare, 
+        ft.habitat, 
+        ft.mean, 
+        ft.sd, 
+        ft.median, 
+        ft.min, 
+        ft.max, 
+        ft.q1, 
+        ft.q3
+    from (select framework, frameworkzone, indexname, year, month, polyid, seasonyear, season, 
+            date, frame, platform, gridsquare, habitat, mean, sd, median, min, max, q1, q3,
+            row_number() over (partition by framework, date, polyid, indexname order by gridsquare asc ) as partedrownum
+        from raw r0
+        where (r0.platform = 'S2' and exists (select r1.mean 
+                    from raw as r1
+                    where r1.indexname = 'NDVI'
+                        and r1.polyid = r0.polyid
+                        and r1.framework = r0.framework
+                        and r1.frame = r0.frame
+                        and r1.mean > 0.1
+            ))
+            or r0.platform <> 'S2') ft
+    where partedrownum = 1 {between_date_clause}
 '''
 
-aggregated = sparkSqlQuery(
+filterQuery = sparkSqlQuery(
   glueContext,
-  query = aggregateSql,
+  query = filterSql,
   mapping = {"raw": raw},
-  transformation_ctx = "aggregated")
+  transformation_ctx = "filterQuery")
 
 
 sink = glueContext.getSink(
@@ -80,6 +89,6 @@ sink = glueContext.getSink(
 )
 sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = args['TARGET_TABLE_NAME'])
 sink.setFormat("glueparquet")
-sink.writeFrame(aggregated)
+sink.writeFrame(filterQuery)
 
 job.commit()

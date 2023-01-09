@@ -12,7 +12,10 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS'])
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
+optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
+optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
+args = getResolvedOptions(sys.argv, required_params + optional_present)
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -26,19 +29,17 @@ aggregated = glueContext.create_dynamic_frame.from_catalog(
   transformation_ctx = "aggregated"
 )
 
-# aggregated = glueContext.create_dynamic_frame_from_options(
-#   "s3",
-#   { 'paths': ["s3://jncc-habmon-alpha-stats-data/aggregated-monthly/"], 'groupFiles': 'inPartition', 'groupSize': '10485760' },
-#   format="glueparquet"
-# )
-
 neighbours = glueContext.create_dynamic_frame.from_catalog(
   database = "statsdb",
   table_name = "neighbours_nearest50"
 )
 
+between_date_clause = ''
+if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
+    between_date_clause += f"and a.year||a.month >= '{args['FROM_YEAR_MONTH']}' and a.year||a.month <= '{args['TO_YEAR_MONTH']}'"
+
 # 'cf' ≈ 'compare'
-comparisonsSql = '''
+comparisonsSql = f'''
     select a.framework, a.indexname, a.polyid, a.year, a.month,
       count(*)                        as cf_count,   -- count of contributing polygons
       cast(avg   (b.mean)   as float) as cf_mean,    -- "habitat mean"
@@ -58,11 +59,11 @@ comparisonsSql = '''
       on a.framework=n.framework and a.polyid=n.polyid
     inner join aggregated b
       on n.neighbour=b.polyid and a.framework=b.framework and a.indexname=b.indexname and a.year=b.year and a.month=b.month
-    where a.framework in ({})
+    where a.framework in ({args['FRAMEWORKS']}) 
+    {between_date_clause}
     group by a.framework, a.indexname, a.polyid, a.year, a.month
     order by a.framework, a.indexname, a.polyid, a.year, a.month
 '''
-comparisonsSql = comparisonsSql.format(args['FRAMEWORKS'])
 
 comparisons = sparkSqlQuery(
   glueContext,
