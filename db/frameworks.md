@@ -126,7 +126,38 @@ Framework `liveng0` (Living England, Yorkshire subset)
             where partition = 'SD87'
 
     - It might be useful to add an index on partition. Not necessary for the app, though.
+
+- Extract habitats
+   
+    - Insert framework habitats into separate habitats table
     
+            INSERT into habitats (habitat)
+            (SELECT DISTINCT habitat from framework_habmos_cairngorms)
+            
+    - Set your framework onto the new habitat records
+
+            UPDATE habitats set framework='habmos_cairngorms' where framework IS NULL
+           
+    - Add a new FK column on your framework table
+
+            ALTER TABLE framework_habmos_cairngorms ADD COLUMN habitat_id int
+            
+    - Populate the new FK column with the ids of the records added to the habitats table
+
+           UPDATE framework_habmos_cairngorms
+           SET habitat_id = habitats.id from habitats
+           WHERE framework_habmos_cairngorms.habitat = habitats.habitat and habitats.framework='habmos_cairngorms'
+           
+    - Add a constraint to the new FK column
+          
+           ALTER TABLE framework_habmos_cairngorms
+           ADD FOREIGN KEY (habitat_id) references habitats (id)
+           
+    - Remove the now-redundant habitat text column from the framework table
+
+          ALTER TABLE framework_hambos_cairngorms
+          DROP COLUMN habitat
+          
 - Create a framework boundary
 
     - This isn't currently stored in the database, but a framework has a boundary to display on the mapper.
