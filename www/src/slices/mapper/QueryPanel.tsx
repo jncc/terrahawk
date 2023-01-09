@@ -36,7 +36,7 @@ export let QueryPanel = () => {
         </select>
       </div>
 
-      <div className="mb-5">
+      <div className="mb-0.5">
         <label htmlFor="statistic-select" className="little-label-text  mb-1">Statistic</label>
         <select
           name="statistic" id="statistic-select"
