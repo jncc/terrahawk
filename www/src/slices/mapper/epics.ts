@@ -93,18 +93,12 @@ let fetchHabitatsEpic = (action$: any, state$: StateObservable<RootState>) => ac
   switchMap(() =>
     concat(
       of(globalActions.startLoading('habitats')),
-      fetchHabitats(frameworks.liveng0).pipe(
-        map(result => mapperActions.fetchHabitatsCompleted(result)),
-        catchError(e => of(globalActions.errorOccurred(e.message)))),
-      fetchHabitats(frameworks.liveng1).pipe(
-        map(result => mapperActions.fetchHabitatsCompleted(result)),
-        catchError(e => of(globalActions.errorOccurred(e.message)))),
-      fetchHabitats(frameworks.habmosCairngorms).pipe(
-        map(result => mapperActions.fetchHabitatsCompleted(result)),
-        catchError(e => of(globalActions.errorOccurred(e.message)))),
-      fetchHabitats(frameworks.spaceintCairngorms).pipe(
-        map(result => mapperActions.fetchHabitatsCompleted(result)),
-        catchError(e => of(globalActions.errorOccurred(e.message)))),        
+      ...Object.values(frameworks).map(framework => 
+        fetchHabitats(framework).pipe(
+          map(result => mapperActions.fetchHabitatsCompleted(result)),
+          catchError(e => of(globalActions.errorOccurred(e.message)))
+        )
+      ),        
       of(globalActions.stopLoading('habitats')),
     )
   )
@@ -117,3 +111,7 @@ export let mapperEpics: any = combineEpics(
   fetchFieldDataEpic,
   fetchHabitatsEpic
 )
+function mergeMap(arg0: () => import("rxjs").Observable<{ payload: string; type: string } | { payload: import("./types").FrameworkHabitats; type: string }>): any {
+  throw new Error('Function not implemented.')
+}
+
