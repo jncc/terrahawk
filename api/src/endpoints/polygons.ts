@@ -1,4 +1,5 @@
 
+import { QueryResult } from 'pg'
 import { query } from '../db'
 import { parseArgs } from './polygonsArgParser'
 
@@ -6,7 +7,8 @@ import { parseArgs } from './polygonsArgParser'
     example: POST /polygons
     {
         "framework": "liveng0",
-        "bbox":      "POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))"
+        "bbox":      "POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))",
+        "habitatid":   "23790" 
     }
 */
 
@@ -15,28 +17,48 @@ export const getPolygons = async (args: any) => {
     console.log(`At ${(new Date()).toISOString()} - entering function`)
 
     let q = parseArgs(args)    
-    let polygons = await getPolygonsImpl(q)
+
+    let polygons = q.habitatid ? await getPolygonsImplHabitatSubset(q) : await getPolygonsImpl(q)
     
     console.log(`At ${(new Date()).toISOString()} - got query result`)
 
     return { polygons }
 }
 
-export let getPolygonsImpl = async (q: { framework: string, bbox: string }) => {
-
-    let sql = `
-        select
-          polyid,
-          partition,
-          habitat,
-          ST_AsGeoJSON(geometry_4326, 6) as geojson
-        from framework_${q.framework}
-        where ST_Intersects(ST_GeomFromText($1, 4326), geometry_4326)
-        limit 3001
-        `
+export let getPolygonsImplHabitatSubset = async (q: { framework: string, bbox: string, habitatid: number }) => {
     
-    let polygonRows = await query(sql, [q.bbox]) // todo add framework
+    let sql = getPolygonsQuery(q.framework, `and f.habitat_id = $2`)
+    
+    let polygonRows = await query(sql, [q.bbox, q.habitatid])
 
+    return returnPolygonRows(polygonRows)
+}
+
+export let getPolygonsImpl = async (q: { framework: string, bbox: string }) => {
+    
+    let sql = getPolygonsQuery(q.framework, ``)
+
+    let polygonRows = await query(sql, [q.bbox])
+
+    return returnPolygonRows(polygonRows)
+}
+
+function getPolygonsQuery(framework: string, filterClause: string) {
+   return `
+     select
+        f.polyid,
+        f.partition,
+        h.habitat,
+        ST_AsGeoJSON(f.geometry_4326, 6) as geojson
+     from framework_${framework} f
+     inner join habitats h on h.id = f.habitat_id
+     where ST_Intersects(ST_GeomFromText($1, 4326), f.geometry_4326)
+     ${filterClause}
+     limit 3001
+     `
+}
+
+function returnPolygonRows(polygonRows: QueryResult<any>) {
     if (polygonRows.rows.length === 3001)
       throw 'Too many polygons. Was the bounding box too big?'
 
