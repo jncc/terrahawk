@@ -36,7 +36,7 @@ export let QueryPanel = () => {
         </select>
       </div>
 
-      <div className="mb-5">
+      <div className="mb-0.5">
         <label htmlFor="statistic-select" className="little-label-text  mb-1">Statistic</label>
         <select
           name="statistic" id="statistic-select"
@@ -45,6 +45,19 @@ export let QueryPanel = () => {
           className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
           {
             statistics.map(s => <option key={s} value={s}>{s}</option>)
+          }
+        </select>
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label>
+        <select
+          name="habitat" id="habitat-select"
+          onChange={e => dispatch(mapperActions.alterHabitatid(Number.parseInt(e.target.value)))}
+          className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
+          <option></option>
+          {
+            state.frameworkHabitats.get(frameworks[state.query.framework])?.map(h => <option key={h.id} value={h.id}>{h.habitat}</option>)
           }
         </select>
       </div>

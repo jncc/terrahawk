@@ -6,13 +6,15 @@ import { combineEpics, ofType, StateObservable } from 'redux-observable'
 import { RootState } from '../../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
-import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchFieldData } from './api'
+import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchFieldData, fetchHabitats } from './api'
+import { frameworks } from '../../frameworks'
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
     mapperActions.mapZoomChanged.type,
     mapperActions.mapCenterChanged.type,
-    mapperActions.alterQueryFramework.type
+    mapperActions.alterQueryFramework.type,
+    mapperActions.alterHabitatid.type
   ),
   filter(() => state$.value.mapper.zoomedEnoughToShowPolygons),
   switchMap(() =>
@@ -84,9 +86,28 @@ let fetchFieldDataEpic = (action$: any, state$: StateObservable<RootState>) => a
   )
 )
 
+let fetchHabitatsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+  ofType(
+    mapperActions.initialise.type,
+  ),
+  switchMap(() =>
+    concat(
+      of(globalActions.startLoading('habitats')),
+      ...Object.values(frameworks).map(framework => 
+        fetchHabitats(framework).pipe(
+          map(result => mapperActions.fetchHabitatsCompleted(result)),
+          catchError(e => of(globalActions.errorOccurred(e.message)))
+        )
+      ),        
+      of(globalActions.stopLoading('habitats')),
+    )
+  )
+)
+
 export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
   fetchChoroplethEpic,
   fetchPolygonStatsEpic,
-  fetchFieldDataEpic
+  fetchFieldDataEpic,
+  fetchHabitatsEpic
 )

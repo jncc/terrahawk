@@ -7,7 +7,7 @@ import { frameworks } from '../../frameworks'
 import { RootState } from '../../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../../utility/geospatialUtility'
 import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery,
-  FieldDataQueryResult, MonthStats} from './types'
+  FieldDataQueryResult, MonthStats, HabitatsQuery, FrameworkHabitats, Framework} from './types'
 import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 
 // polygons
@@ -17,10 +17,14 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
 
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
     let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
-    return {
+    let params: PolygonsQuery = {
       framework: frameworks[query.framework].defaultQuery.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds))
     }
+    if (query.habitatid) {
+      params.habitatid = query.habitatid
+    }
+    return params
   }
 
   let keyParams = { framework: query.framework }
@@ -135,6 +139,22 @@ export let fetchFieldData = (query: RootState['mapper']['query']): Observable<Fi
 
   return api('npms', params).pipe(
     map(r =>( { fieldData: r.response.data }))
+  )
+}
+
+// habitats
+// --------
+
+export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkHabitats> => {
+
+  let getParamsForFetchHabitats = (requiredFramework: Framework): HabitatsQuery => {
+    return {
+      framework: requiredFramework.defaultQuery.framework.toLowerCase(),
+    }
+  }
+  
+  return api('habitats', getParamsForFetchHabitats(requiredFramework)).pipe(
+    map(r =>( { framework: requiredFramework, habitats: r.response.habitats }))
   )
 }
 
