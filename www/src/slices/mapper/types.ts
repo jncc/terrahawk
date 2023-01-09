@@ -21,7 +21,7 @@ export type Framework = {
     monthFrom: number
     yearTo: number
     monthTo: number
-    habitatid: number | null 
+    habitatid: number | undefined 
   }
   availableIndices: Indexname[]
 }

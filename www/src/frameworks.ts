@@ -28,7 +28,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthFrom: 1,
       yearTo: 2021,
       monthTo: 12,
-      habitatid: null,
+      habitatid: undefined,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
@@ -53,7 +53,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthFrom: 1,
       yearTo: 2021,
       monthTo: 12,
-      habitatid: null,
+      habitatid: undefined,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
@@ -76,7 +76,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthFrom: 1,
       yearTo: 2021,
       monthTo: 12,
-      habitatid: null,
+      habitatid: undefined,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
@@ -99,7 +99,7 @@ export const frameworks: {[framework: string]: Framework} = {
       monthFrom: 1,
       yearTo: 2021,
       monthTo: 12,
-      habitatid: null,
+      habitatid: undefined,
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
