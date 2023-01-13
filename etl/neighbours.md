@@ -12,7 +12,7 @@ Generate the lookup data for our `nearest50` anomoly detection method.
     inner join lateral -- fancy! (enables the sub query to reference the columns in the outer query)
       (select c.polyid
        from framework_liveng0 c
-       where c.habitat = a.habitat
+       where c.habitat_id = a.habitat_id
          and c.polyid <> a.polyid
          and ST_Distance(c.geometry_4326::geography, a.geometry_4326::geography) < 50000
        order by c.geometry_4326 <-> a.geometry_4326
