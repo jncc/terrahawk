@@ -2,25 +2,6 @@
 Uploading partitioning info
 ===========================
 
-
-TODO: New partitions query
-
-```
-SELECT la.polyid, grd.gridref, la.habitat, la.segmentnumber
-into liveng1_partitions
-FROM liveng_all la 
-inner join osgb100kmgrid_bng_buffered grd 
-	on (ST_OVERLAPS(la.geom, grd.wkb_geometry) or ST_WITHIN(la.geom, grd.wkb_geometry))
-```
-
-TODO: Check query having added index on polyid and gridsquare to liveng_partitions
-```
-SELECT count(DISTINCT la.polyid)
-FROM liveng_all la left join liveng1_partitions lp on la.polyid = lp.polyid
-where lp.polyid is NULL
-```
-
-
 The "partitions" table should really be called "polygon partitions" or similar. It lists which partition value each polygon is in. The polygons are partitioned by an OS gridsquare so that you only ever need to read one or four partitions to read the stats at any map position. (See the 'framework' table in the database scripts for details of how the polygon partition values are generated.)
 
 Dump the `partitions` database table for the framework to a CSV file:
