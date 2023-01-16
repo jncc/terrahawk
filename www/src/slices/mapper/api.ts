@@ -157,8 +157,8 @@ export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkH
 
 let api = (endpoint: string, params: any) => {
   return ajax.post(
-    //`https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/${endpoint}`,
-    `http://localhost:8000/${endpoint}`,
+    `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/${endpoint}`,
+    //`http://localhost:8000/${endpoint}`,
     params,
     { 'Content-Type': 'application/json' }
   )
