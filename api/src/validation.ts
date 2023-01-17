@@ -21,14 +21,20 @@ export function parseFramework(args: Args) {
     return args.framework
 }
 
-export function parseHabitatid(args: Args) {
-    if (!args.habitatid) {
+export function parseHabitatids(args: Args) {
+    if (!args.habitatids || Array.isArray(args.habitatids) && args.habitatids.length < 1) {
         return null
     }
-    if (!Number.isInteger(args.habitatid)) {
-        throw `Expected 'habitatid' to be an integer.`
+    if (Array.isArray(args.habitatids)) {
+        args.habitatids.forEach(function(id){
+           if(id !== parseInt(id, 10)){
+            throw `Expected habitatids array to only contain integers`
+           }
+        })
+    } else {
+        throw `Expected habitatids to be an array`
     }
-    return args.habitatid as number
+    return args.habitatids
 }
 
 export function parseIndexname(args: Args) {

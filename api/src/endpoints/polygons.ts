@@ -8,7 +8,7 @@ import { parseArgs } from './polygonsArgParser'
     {
         "framework": "liveng0",
         "bbox":      "POLYGON((-2.34 54.037, -2.34 54.097, -2.22 54.097, -2.22 54.037, -2.34 54.037))",
-        "habitatid":   "23790" 
+        "habitatids":  [23790, 23791] 
     }
 */
 
@@ -18,18 +18,18 @@ export const getPolygons = async (args: any) => {
 
     let q = parseArgs(args)    
 
-    let polygons = q.habitatid ? await getPolygonsImplHabitatSubset(q) : await getPolygonsImpl(q)
+    let polygons = q.habitatids ? await getPolygonsImplHabitatSubset(q) : await getPolygonsImpl(q)
     
     console.log(`At ${(new Date()).toISOString()} - got query result`)
 
     return { polygons }
 }
 
-export let getPolygonsImplHabitatSubset = async (q: { framework: string, bbox: string, habitatid: number }) => {
+export let getPolygonsImplHabitatSubset = async (q: { framework: string, bbox: string, habitatids: Array<number> }) => {
     
-    let sql = getPolygonsQuery(q.framework, `and f.habitat_id = $2`)
+    let sql = getPolygonsQuery(q.framework, `and f.habitat_id = ANY($2::int[])`)
     
-    let polygonRows = await query(sql, [q.bbox, q.habitatid])
+    let polygonRows = await query(sql, [q.bbox, q.habitatids])
 
     return returnPolygonRows(polygonRows)
 }

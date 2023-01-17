@@ -61,7 +61,7 @@ let slice = createSlice({
     },
     alterQueryFramework: (state, a: PayloadAction<string>) => {
       state.query.framework = a.payload
-      state.query.habitatid = undefined
+      state.query.habitatids = []
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
@@ -82,7 +82,7 @@ let slice = createSlice({
       state.query.monthTo = a.payload
     },
     alterHabitatid: (state, a: PayloadAction<number>) => {
-      state.query.habitatid = a.payload
+      state.query.habitatids = a.payload ? [a.payload] : []
     },
     incrementQueryPeriodByOneMonth: (state) => {
       state.query.monthFrom = state.query.monthFrom + 1

@@ -17,14 +17,11 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
 
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
     let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
-    let params: PolygonsQuery = {
+    return {
       framework: frameworks[query.framework].defaultQuery.framework,
-      bbox: bboxToWkt(getBboxFromBounds(bounds))
+      bbox: bboxToWkt(getBboxFromBounds(bounds)),
+      habitatids: query.habitatids
     }
-    if (query.habitatid) {
-      params.habitatid = query.habitatid
-    }
-    return params
   }
 
   let keyParams = { framework: query.framework }
@@ -161,6 +158,7 @@ export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkH
 let api = (endpoint: string, params: any) => {
   return ajax.post(
     `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/${endpoint}`,
+    //`http://localhost:8000/${endpoint}`,
     params,
     { 'Content-Type': 'application/json' }
   )
