@@ -29,7 +29,7 @@ let slice = createSlice({
     showOutlines: true,
     useProxy: true,
     thumbType: 'index' as 'colour' | 'index',
-    frameworkHabitats: new Map<Framework, Habitat[]>(),  
+    frameworkHabitats: new Map<Framework, Habitat[]>(),
   },
   reducers: {
     initialise: () => {
@@ -80,9 +80,6 @@ let slice = createSlice({
     },
     alterQueryMonthTo: (state, a: PayloadAction<number>) => {
       state.query.monthTo = a.payload
-    },
-    alterHabitatid: (state, a: PayloadAction<number>) => {
-      state.query.habitatids = a.payload ? [a.payload] : []
     },
     incrementQueryPeriodByOneMonth: (state) => {
       state.query.monthFrom = state.query.monthFrom + 1
@@ -139,7 +136,18 @@ let slice = createSlice({
     },
     toggleThumbType: (state) => {
       state.thumbType = state.thumbType === 'colour' ? 'index' : 'colour' 
-    }
+    },
+    toggleSelectedHabitats: (state, a: PayloadAction<number>) => {
+      const oldHabitatIds = [...state.query.habitatids]
+      if (oldHabitatIds.includes(a.payload)) {
+        state.query.habitatids = oldHabitatIds.filter(item => item !== a.payload)
+      } else {
+        state.query.habitatids.push(a.payload)
+      }  
+    },
+    reloadPolygons: () => {
+
+    },
   },
 })
 

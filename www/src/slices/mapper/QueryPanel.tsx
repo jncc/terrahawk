@@ -8,6 +8,7 @@ import { Indexname, Statistic } from './types'
 import { indexnames, statistics } from './helpers/statsHelper'
 import { Panel } from './Panel'
 import { frameworks } from '../../frameworks'
+import { MultiSelectDropdown} from '../../components/MultiSelectDropdownComponent'
 
 const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
 const months = [
@@ -20,6 +21,22 @@ export let QueryPanel = () => {
   let state = useStateSelector(s => s.mapper)
 
   let indices = frameworks[state.query.framework].availableIndices
+
+  function toggleSelectedHabitats (habitatid: number) {
+    dispatch(mapperActions.toggleSelectedHabitats(habitatid))
+  }
+
+  function reloadPolygons () {
+    dispatch(mapperActions.reloadPolygons())
+  }
+
+  function getFrameworkHabitatsArray() {
+    let frameworkHabitats = state.frameworkHabitats.get(frameworks[state.query.framework]);
+    if (frameworkHabitats) {
+      return frameworkHabitats;
+    }
+    return [];
+  }
 
   return (
     <Panel extraClasses="relative w-56 mb-2 px-4 py-2">
@@ -50,17 +67,15 @@ export let QueryPanel = () => {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label>
-        <select
-          name="habitat" id="habitat-select"
-          onChange={e => dispatch(mapperActions.alterHabitatid(Number.parseInt(e.target.value)))}
-          className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
-          <option></option>
-          {
-            state.frameworkHabitats.get(frameworks[state.query.framework])?.map(h => <option key={h.id} value={h.id}>{h.habitat}</option>)
-          }
-        </select>
-      </div>
+        <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label> 
+        <div id="habitat-select">     
+          <MultiSelectDropdown
+            options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat};})} 
+            selected={state.query.habitatids} 
+            toggleOption={toggleSelectedHabitats}
+            applyFunction={reloadPolygons} />
+        </div>
+      </div>  
 
       <div className="">
         <div className="flex items-center gap-2 mb-2">
