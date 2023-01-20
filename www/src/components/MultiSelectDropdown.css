@@ -18,6 +18,10 @@
     overflow-y: scroll;
 }
 
+.c-multi-select-dropdown__option{
+    margin-left: 5px;
+}
+
 .c-multi-select-dropdown__button{
     background-color: #4CAF50; /* Green */
     border: none;
