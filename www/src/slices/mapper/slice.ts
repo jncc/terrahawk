@@ -137,12 +137,21 @@ let slice = createSlice({
     toggleThumbType: (state) => {
       state.thumbType = state.thumbType === 'colour' ? 'index' : 'colour' 
     },
-    toggleSelectedHabitats: (state, a: PayloadAction<number>) => {
+    toggleSelectedHabitat: (state, a: PayloadAction<number>) => {
       const oldHabitatIds = [...state.query.habitatids]
       if (oldHabitatIds.includes(a.payload)) {
         state.query.habitatids = oldHabitatIds.filter(item => item !== a.payload)
       } else {
         state.query.habitatids.push(a.payload)
+      }  
+    },
+    toggleSelectAllHabitats: (state, a: PayloadAction<boolean>) => {
+      if (a.payload) {
+        const allFrameworkHabitatIds = 
+          state.frameworkHabitats.get(frameworks[state.query.framework])?.map((x: Habitat) => {return x.id})
+        state.query.habitatids = allFrameworkHabitatIds ? allFrameworkHabitatIds : []  
+      } else {
+        state.query.habitatids = []
       }  
     },
     reloadPolygons: () => {

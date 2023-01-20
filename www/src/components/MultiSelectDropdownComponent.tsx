@@ -17,7 +17,7 @@ function apply (applyFunction: Function) {
     applyFunction()
  }
 
-export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Array<number>, toggleOption: Function, applyFunction: Function}) => {
+export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Array<number>, toggleItemFunction: Function, toggleAllFunction: Function, applyFunction: Function}) => {
 
     return (
           <div className="c-multi-select-dropdown">
@@ -27,15 +27,20 @@ export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Arra
               <img src={dropdown} onClick={() => toggleOptionsDisplayed ()}/>
           </div>
           <ul className="c-multi-select-dropdown__options">
-              {props.options.map(option => {
-                  const isSelected = props.selected.includes(option.id);
-                  return (
-                      <li key={option.id} onClick={() => props.toggleOption(option.id)}>
-                          <input type="checkbox" checked={isSelected} readOnly></input>
-                          <span>{option.title}</span>
-                      </li>
-                  )
-              })}
+            <li className="c-multi-select-dropdown__option" key='0' 
+                onClick={() => props.toggleAllFunction((document.getElementById("selectAllCheckbox") as HTMLInputElement).checked)}>
+                <input id="selectAllCheckbox" type="checkbox" readOnly></input>
+                <span>Select All</span>
+            </li>   
+            {props.options.map(option => {
+                const isSelected = props.selected.includes(option.id);
+                return (
+                    <li key={option.id} onClick={() => props.toggleItemFunction(option.id)}>
+                        <input type="checkbox" checked={isSelected} readOnly></input>
+                        <span>{option.title}</span>
+                    </li>
+                )
+            })}
           </ul>
       </div>
     )

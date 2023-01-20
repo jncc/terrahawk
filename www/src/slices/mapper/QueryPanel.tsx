@@ -22,8 +22,12 @@ export let QueryPanel = () => {
 
   let indices = frameworks[state.query.framework].availableIndices
 
-  function toggleSelectedHabitats (habitatid: number) {
-    dispatch(mapperActions.toggleSelectedHabitats(habitatid))
+  function toggleSelectedHabitat (habitatid: number) {
+    dispatch(mapperActions.toggleSelectedHabitat(habitatid))
+  }
+
+  function toggleSelectAllHabitats (isSelectAll: boolean) {
+    dispatch(mapperActions.toggleSelectAllHabitats(isSelectAll))
   }
 
   function reloadPolygons () {
@@ -72,7 +76,8 @@ export let QueryPanel = () => {
           <MultiSelectDropdown
             options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat};})} 
             selected={state.query.habitatids} 
-            toggleOption={toggleSelectedHabitats}
+            toggleItemFunction={toggleSelectedHabitat}
+            toggleAllFunction={toggleSelectAllHabitats}
             applyFunction={reloadPolygons} />
         </div>
       </div>  
