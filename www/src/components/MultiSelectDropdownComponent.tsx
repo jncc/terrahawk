@@ -1,6 +1,6 @@
 import dropdown from './dropdown.png';
 import './MultiSelectDropdown.css';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 type Option = {
     id: number
@@ -17,8 +17,21 @@ function apply (applyFunction: Function) {
     applyFunction()
  }
 
+ function ensureSelectAllConformity(totalOptions: number, totalSelected: number) {
+    var selectAll = document.getElementById("selectAllCheckbox") as HTMLInputElement
+    if (totalOptions === totalSelected) {
+        selectAll.checked = true
+    } else {
+        selectAll.checked = false
+    }
+ }
+
 export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Array<number>, toggleItemFunction: Function, toggleAllFunction: Function, applyFunction: Function}) => {
 
+    useEffect(() => {
+        ensureSelectAllConformity(props.options.length, props.selected.length)
+    }, [props.selected])
+    
     return (
           <div className="c-multi-select-dropdown">
           <div className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring c-multi-select-dropdown__selected">      
