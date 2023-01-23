@@ -57,7 +57,7 @@ export let QueryPanel = () => {
         </select>
       </div>
 
-      <div className="mb-0.5">
+      <div className="mb-5">
         <label htmlFor="statistic-select" className="little-label-text  mb-1">Statistic</label>
         <select
           name="statistic" id="statistic-select"
@@ -69,18 +69,6 @@ export let QueryPanel = () => {
           }
         </select>
       </div>
-
-      <div className="mb-5">
-        <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label> 
-        <div id="habitat-select">     
-          <MultiSelectDropdown
-            options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat};})} 
-            selected={state.query.habitatids} 
-            toggleItemFunction={toggleSelectedHabitat}
-            toggleAllFunction={toggleSelectAllHabitats}
-            applyFunction={reloadPolygons} />
-        </div>
-      </div>  
 
       <div className="">
         <div className="flex items-center gap-2 mb-2">
@@ -142,6 +130,19 @@ export let QueryPanel = () => {
             </select>
           </div>
         </div>
+
+        <div className="mb-5">
+          <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label> 
+          <div id="habitat-select">     
+            <MultiSelectDropdown
+              options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat};})} 
+              selected={state.query.habitatids} 
+              toggleItemFunction={toggleSelectedHabitat}
+              toggleAllFunction={toggleSelectAllHabitats}
+              applyFunction={reloadPolygons} />
+          </div>
+        </div>
+          
 {/* 
         <div className="flex justify-between items-center mb-2">
           <button
