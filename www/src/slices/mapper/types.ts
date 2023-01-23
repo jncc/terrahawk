@@ -47,6 +47,7 @@ export type FrameworkHabitats = {
 
 export type Poly = {
   polyid: string
+  habitatid: number
   habitat: string
   geojson: any
   partition: string
