@@ -20,7 +20,6 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
     return {
       framework: frameworks[query.framework].defaultQuery.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds)),
-      habitatids: query.habitatids
     }
   }
 
