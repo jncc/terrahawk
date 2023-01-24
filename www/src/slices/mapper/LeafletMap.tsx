@@ -20,7 +20,7 @@ import { faMapMarkerAlt, faClipboardList } from '@fortawesome/free-solid-svg-ico
 
 import ReactDOMServer from 'react-dom/server'
 
-type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string, habitatid: number }
+type CustomPolygonLayer = L.GeoJSON & { polyid: string, habitat: string }
 type CustomFieldDataLayer = L.GeoJSON & { fieldData: FieldData }
 
 let leafletMap: L.Map
@@ -38,58 +38,6 @@ export let LeafletMap = () => {
   let dispatch = useStateDispatcher()
   
   let framework = frameworks[state.query.framework]
-
-  let updatePolygonLayers = () => {
-    // remove layers for polygons that aren't in state.polygons or not included in current habitat filter
-    polyLayerGroup.getLayers()
-    .filter((l: any) => !state.polygons.polys.find(p => p.polyid === l.polyid)
-    || (state.query.habitatids.length !=  0 && !state.query.habitatids.includes(l.habitatid))
-    )
-    .forEach(l => {
-      l.getTooltip()?.remove()
-      polyLayerGroup.removeLayer(l)
-      l.remove() // explictly remove the layer from the map to encourage garbage collection    
-    })
-    
-    // add layers for polygons in state.polygons not already on the map and included in current habitat filter
-    state.polygons.polys.filter(p =>
-      !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
-      && (state.query.habitatids.length == 0 || state.query.habitatids.includes(p.habitatid))
-    ).forEach(p => makePolygonLayer(p, dispatch).addTo(polyLayerGroup))
-  }
-
-  let applyChoroplethToCurrentPolygonLayers = () => {
-    state.choropleth.items.forEach(c => {
-      // we could well have changed position since the choropleth request was made,
-      // so we can't assume that there will still be a polygon layer for any choropleth item
-      let maybeLayer = (polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === c.polyid)
-      
-      if (isChoroplethItem(c)) {
-        let maxZ = getChoroplethMaxZValue(state.query.statistic, c)
-        maybeLayer?.setStyle({ fillColor: getColour(Math.abs(maxZ)) })
-      } else {
-        maybeLayer?.setStyle({ fillColor: 'white' }) // no data
-      }
-
-      let currentlyOpen = maybeLayer && maybeLayer.getTooltip() && maybeLayer.isTooltipOpen()
-
-      maybeLayer?.unbindTooltip()
-      maybeLayer?.bindTooltip(
-        makePolygonTooltipHtml(
-          maybeLayer.polyid,
-          maybeLayer.habitat,
-          state.query.statistic,
-          state.query.indexname,
-          c
-        ),
-        { offset: [80, 0], className:'custom-leaflet-tooltip' }
-      )
-
-      // reopen the currently open tooltip for a much better experience
-      if (currentlyOpen)
-        maybeLayer?.openTooltip()
-    })
-  }
 
   // initialize the Leaflet map
   useEffect(() => {
@@ -167,25 +115,67 @@ export let LeafletMap = () => {
 
   }, [state.query.center, state.query.framework])
 
-  // react to change of habitat ids filter
-  // (use polygon and choropleth data already in state to dispplay the relevant habitats in the existing bounding box)
-  useEffect(() => {
-    updatePolygonLayers()
-    applyChoroplethToCurrentPolygonLayers()
-  }, [
-    state.query.habitatids
-  ])
-
   // react to change of `polygons`
   // (sync the polygons on the leaflet map with the polygons in state)
   useEffect(() => {
-    updatePolygonLayers()   
+
+    // remove layers for polygons that aren't in state.polygons
+    polyLayerGroup.getLayers()
+      .filter((l: any) => !state.polygons.polys.find(p => p.polyid === l.polyid))
+      .forEach(l => {
+        l.getTooltip()?.remove()
+        polyLayerGroup.removeLayer(l)
+        l.remove() // explictly remove the layer from the map to encourage garbage collection    
+      })
+      
+    // add layers for polygons in state.polygons not already on the map
+    state.polygons.polys.filter(p =>
+      !(polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === p.polyid)
+    ).forEach(p => makePolygonLayer(p, dispatch).addTo(polyLayerGroup))
+    // but add them in chunks for a nicer visual effect
+    // todo: but this causes a race-condition
+    // chunk(shuffle(toAdd), toAdd.length / 8).forEach((chunk, i) => {
+    //   setTimeout(() => {
+    //     chunk.forEach(p => makePolygonLayer(p).addTo(polyLayerGroup))
+    //   }, i * 50)
+    // })
   }, [Object.values(state.polygons.params).join(':') + '|' + state.polygons.polys.map(p => p.polyid).join(',')])
 
   // react to change of `choropleth`
   // (sync the polygons layers on the leaflet map with the choropleth items in state)
   useEffect(() => {
-    applyChoroplethToCurrentPolygonLayers()
+
+    state.choropleth.items.forEach(c => {
+      // we could well have changed position since the choropleth request was made,
+      // so we can't assume that there will still be a polygon layer for any choropleth item
+      let maybeLayer = (polyLayerGroup.getLayers() as CustomPolygonLayer[]).find(l => l.polyid === c.polyid)
+      
+      if (isChoroplethItem(c)) {
+        let maxZ = getChoroplethMaxZValue(state.query.statistic, c)
+        maybeLayer?.setStyle({ fillColor: getColour(Math.abs(maxZ)) })
+      } else {
+        maybeLayer?.setStyle({ fillColor: 'white' }) // no data
+      }
+
+      let currentlyOpen = maybeLayer && maybeLayer.getTooltip() && maybeLayer.isTooltipOpen()
+
+      maybeLayer?.unbindTooltip()
+      maybeLayer?.bindTooltip(
+        makePolygonTooltipHtml(
+          maybeLayer.polyid,
+          maybeLayer.habitat,
+          state.query.statistic,
+          state.query.indexname,
+          c
+        ),
+        { offset: [80, 0], className:'custom-leaflet-tooltip' }
+      )
+
+      // reopen the currently open tooltip for a much better experience
+      if (currentlyOpen)
+        maybeLayer?.openTooltip()
+    })
+
   }, [
     Object.values(state.choropleth.params).join(':') + '|' + state.choropleth.items.map(c => c.polyid).join(','),
     state.query.statistic // statistic values are all in the same choropleth item object - simply redraw when this changes 
@@ -372,7 +362,6 @@ let makePolygonLayer = (p: Poly, dispatch: Dispatch<AnyAction>) => {
   // save some custom properties so we can easily find and use the layer later
   ;(layer as CustomPolygonLayer).polyid = p.polyid
   ;(layer as CustomPolygonLayer).habitat = p.habitat
-  ;(layer as CustomPolygonLayer).habitatid = p.habitatid
   
   return layer
 }
