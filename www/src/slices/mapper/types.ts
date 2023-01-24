@@ -32,7 +32,6 @@ export type PolygonsQuery = Pick<Query,
   | 'framework'
 > & {
   bbox: string
-  habitatids: Array<number>
 }
 
 export type Habitat = {
@@ -47,6 +46,7 @@ export type FrameworkHabitats = {
 
 export type Poly = {
   polyid: string
+  habitatid: number
   habitat: string
   geojson: any
   partition: string

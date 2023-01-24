@@ -48,6 +48,7 @@ function getPolygonsQuery(framework: string, filterClause: string) {
      select
         f.polyid,
         f.partition,
+        h.id as habitatid,
         h.habitat,
         ST_AsGeoJSON(f.geometry_4326, 6) as geojson
      from framework_${framework} f
