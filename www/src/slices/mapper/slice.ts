@@ -154,9 +154,6 @@ let slice = createSlice({
         state.query.habitatids = []
       }  
     },
-    reloadPolygons: () => {
-
-    },
   },
 })
 

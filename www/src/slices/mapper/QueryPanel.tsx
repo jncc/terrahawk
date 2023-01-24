@@ -30,10 +30,6 @@ export let QueryPanel = () => {
     dispatch(mapperActions.toggleSelectAllHabitats(isSelectAll))
   }
 
-  function reloadPolygons () {
-    dispatch(mapperActions.reloadPolygons())
-  }
-
   function getFrameworkHabitatsArray() {
     let frameworkHabitats = state.frameworkHabitats.get(frameworks[state.query.framework]);
     if (frameworkHabitats) {
@@ -138,8 +134,7 @@ export let QueryPanel = () => {
               options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat};})} 
               selected={state.query.habitatids} 
               toggleItemFunction={toggleSelectedHabitat}
-              toggleAllFunction={toggleSelectAllHabitats}
-              applyFunction={reloadPolygons} />
+              toggleAllFunction={toggleSelectAllHabitats}/>
           </div>
         </div>
           
