@@ -8,7 +8,7 @@ import { Indexname, Statistic } from './types'
 import { indexnames, statistics } from './helpers/statsHelper'
 import { Panel } from './Panel'
 import { frameworks } from '../../frameworks'
-import { MultiSelectDropdown} from '../../components/MultiSelectDropdownComponent'
+import { MultiSelectDropdown} from '../../components/MultiSelectDropdown'
 
 const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
 const months = [
