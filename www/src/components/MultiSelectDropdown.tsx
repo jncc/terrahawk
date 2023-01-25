@@ -29,9 +29,10 @@ export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Arra
     
     return (
         <div className="c-multi-select-dropdown">
-            <div className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring bg-gray-100 c-multi-select-dropdown__selected">      
+            <div className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring bg-gray-100 c-multi-select-dropdown__selected"
+                onClick={() => toggleOptionsDisplayed ()}>      
                 <div>{props.selected.length} selected</div> 
-                <button className="right-0 mr-0" onClick={() => toggleOptionsDisplayed ()}>
+                <button className="right-0 mr-0">
                     <ChevronDownIcon className="h-5 w-5"/>
                 </button>
             </div>
