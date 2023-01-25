@@ -79,12 +79,16 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
         let key = makeCacheKey(c.polyid, params)
         choroplethCache.set(key, c)
       })
-      return { items: allItems, params: pickKeyParams(params) }
+      // This asynchronous return from the database will replace the immediate synchronous return from the cache
+      // So we need to add the cached items to the retrieved items to avoid the cached ones being blatted out by the asynch return
+      return { items: allItems.concat(cached), params: pickKeyParams(params) }
     })
   )
 
   let cached$ = cached.length ? of({ items: cached, params: pickKeyParams(params) }) : EMPTY
 
+  // (Syntactically hard to understand but observedly results in two returns from the function
+  // Firstly an immediate synchronous return of cached$ and then a later asynchronous return of api$)
   return merge(cached$, needed.length ? api$ : EMPTY)
 }
 
