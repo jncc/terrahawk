@@ -7,7 +7,7 @@ type Option = {
 }
 
 function ensureSelectAllConformity(totalOptions: number, totalSelected: number){
-    var selectAll = document.getElementById("selectAllCheckbox") as HTMLInputElement
+    var selectAll = document.getElementById('selectAllCheckbox') as HTMLInputElement
     if (totalOptions === totalSelected) {
         selectAll.checked = true
     } else {
@@ -15,8 +15,9 @@ function ensureSelectAllConformity(totalOptions: number, totalSelected: number){
     }
 }
 
-export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Array<number>, toggleItemFunction: Function, toggleAllFunction: Function}) => {
-    const [isOptionsDisplayed, setOptionsDisplayed] = useState(false);
+export let MultiSelectDropdown = 
+    (props: {options: Array<Option>, selected: Array<number>, toggleItemFunction: Function, toggleAllFunction: Function}) => {
+    const [isOptionsDisplayed, setOptionsDisplayed] = useState(false)
 
     function toggleOptionsDisplayed(){
         setOptionsDisplayed(!isOptionsDisplayed)
@@ -37,12 +38,12 @@ export let MultiSelectDropdown = (props: {options: Array<Option>, selected: Arra
             </div>
             <div className={isOptionsDisplayed ? 'block' : 'hidden'}>
                 <ul className="p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring bg-gray-50 overflow-y-scroll c-multi-select-dropdown__options">
-                    <li key='0' onClick={() => props.toggleAllFunction((document.getElementById("selectAllCheckbox") as HTMLInputElement).checked)}>
+                    <li key="0" onClick={() => props.toggleAllFunction((document.getElementById('selectAllCheckbox') as HTMLInputElement).checked)}>
                         <input id="selectAllCheckbox" type="checkbox" readOnly></input>
                         <span className="ml-1">Select All</span>
                     </li>   
                     {props.options.map(option => {
-                        const isSelected = props.selected.includes(option.id);
+                        const isSelected = props.selected.includes(option.id)
                         return (
                             <li key={option.id} onClick={() => props.toggleItemFunction(option.id)}>
                                 <input type="checkbox" checked={isSelected} readOnly></input>

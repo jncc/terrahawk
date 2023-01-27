@@ -31,11 +31,11 @@ export let QueryPanel = () => {
   }
 
   function getFrameworkHabitatsArray() {
-    let frameworkHabitats = state.frameworkHabitats.get(frameworks[state.query.framework]);
+    let frameworkHabitats = state.frameworkHabitats.get(frameworks[state.query.framework])
     if (frameworkHabitats) {
-      return frameworkHabitats;
+      return frameworkHabitats
     }
-    return [];
+    return []
   }
 
   return (
@@ -131,7 +131,7 @@ export let QueryPanel = () => {
           <label htmlFor="habitat-select" className="little-label-text  mb-1">Habitat</label> 
           <div id="habitat-select">     
             <MultiSelectDropdown
-              options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat};})} 
+              options={getFrameworkHabitatsArray().map((x) => {return {id:x.id, title:x.habitat}})} 
               selected={state.query.habitatids} 
               toggleItemFunction={toggleSelectedHabitat}
               toggleAllFunction={toggleSelectAllHabitats}/>
