@@ -16,7 +16,22 @@ contexts = {
         "aggregation_trigger_name": "Run aggregate-monthly",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50",
-        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised"
+        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised",
+        "filter_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats",
+            "--TARGET_TABLE_NAME": "raw_stats_filtered_20230125",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/"
+        },
+        "aggregation_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_filtered_20230125",
+            "--TARGET_TABLE_NAME": "aggregated_monthly_20230125",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/"
+        },
+        "compare_monthly_job_params": {
+            "--SOURCE_TABLE_NAME": "aggregated_monthly_20230125",
+            "--TARGET_TABLE_NAME": "monthly_nearest50_20230125",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly_nearest50/"
+        }
     },
     "england_test": {
         "workflow_name": "generate-compare-nearest-50-test",
@@ -25,7 +40,22 @@ contexts = {
         "aggregation_trigger_name": "Run Aggregate Monthly Test",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50 test",
-        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised"
+        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised",
+        "filter_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_test",
+            "--TARGET_TABLE_NAME": "raw_stats_filtered_test",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/"
+        },
+        "aggregation_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_filtered_test",
+            "--TARGET_TABLE_NAME": "aggregated_monthly_test",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/"
+        },
+        "compare_monthly_job_params": {
+            "--SOURCE_TABLE_NAME": "aggregated_monthly_test",
+            "--TARGET_TABLE_NAME": "monthly_nearest50_test",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
+        }
 
     },
     "scotland": {
@@ -35,7 +65,22 @@ contexts = {
         "aggregation_trigger_name": "Run Aggregate Monthly Scotland",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50 for Scotland",
-        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised"
+        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised",
+        "filter_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_scotland",
+            "--TARGET_TABLE_NAME": "raw_stats_filtered_20230125",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/"
+        },
+        "aggregation_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_filtered_20230125",
+            "--TARGET_TABLE_NAME": "aggregated_monthly_20230125",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/"
+        },
+        "compare_monthly_job_params": {
+            "--SOURCE_TABLE_NAME": "aggregated_monthly_20230125",
+            "--TARGET_TABLE_NAME": "monthly_nearest50_20230125",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly_nearest50/"
+        }
     },
     "scotland_test": {
         "workflow_name": "generate-compare-nearest-50-scotland-test",
@@ -44,7 +89,22 @@ contexts = {
         "aggregation_trigger_name": "Run Aggregate Monthly Test for Scotland",
         "aggregation_job_name": "aggregate-monthly-parameterised",
         "compare_monthly_trigger_name": "Run Compare Monthly Nearest 50 test for Scotland",
-        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised"
+        "compare_monthly_job_name": "compare-monthly-nearest50-parameterised",
+        "filter_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_scotland_test",
+            "--TARGET_TABLE_NAME": "raw_stats_filtered_test",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/"
+        },
+        "aggregation_job_params": {
+            "--SOURCE_TABLE_NAME": "raw_stats_filtered_test",
+            "--TARGET_TABLE_NAME": "aggregated_monthly_test",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/"
+        },
+        "compare_monthly_job_params": {
+            "--SOURCE_TABLE_NAME": "aggregated_monthly_test",
+            "--TARGET_TABLE_NAME": "monthly_nearest50_test",
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
+        }
     },
 }
 
@@ -210,8 +270,11 @@ last_run_id = None
 for date_range in date_ranges:
     if last_run_id:
         await_workflow_run_completion(client, context["workflow_name"], last_run_id)
-    set_triggered_job_params(client, filter_trigger, context["filter_job_name"], date_range)    
-    set_triggered_job_params(client, aggregation_trigger, context["aggregation_job_name"], date_range)
+    filter_job_params = context["filter_job_params"].update(date_range)
+    set_triggered_job_params(client, filter_trigger, context["filter_job_name"], filter_job_params)
+    aggregation_job_params = context["aggregation_job_params"].update(date_range)
+    set_triggered_job_params(client, aggregation_trigger, context["aggregation_job_name"], aggregation_job_params)
+    compare_monthly_job_params = context["compare_monthly_job_params"].update(date_range)
     set_triggered_job_params(client, compare_monthly_trigger, context["compare_monthly_job_name"], date_range)
     last_run_id = start_workflow(client, context["workflow_name"])
 
