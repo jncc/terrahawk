@@ -6,7 +6,7 @@ import { combineEpics, ofType, StateObservable } from 'redux-observable'
 import { RootState } from '../../state/store'
 import { globalActions } from '../global/slice'
 import { mapperActions  } from './slice'
-import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchFieldData, fetchHabitats } from './api'
+import { fetchPolygons, fetchChoropleth, fetchPolygon, fetchHabitats } from './api'
 import { frameworks } from '../../frameworks'
 
 let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
@@ -68,7 +68,8 @@ let fetchPolygonStatsEpic = (action$: any, state$: StateObservable<RootState>) =
   )
 )
 
-let fetchFieldDataEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
+// Field data not currently available
+/* let fetchFieldDataEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
     mapperActions.mapZoomChanged.type,
     mapperActions.mapCenterChanged.type,
@@ -83,7 +84,7 @@ let fetchFieldDataEpic = (action$: any, state$: StateObservable<RootState>) => a
       of(globalActions.stopLoading('fieldData')),
     )
   )
-)
+) */
 
 let fetchHabitatsEpic = (action$: any, state$: StateObservable<RootState>) => action$.pipe(
   ofType(
@@ -107,6 +108,6 @@ export let mapperEpics: any = combineEpics(
   fetchPolygonsEpic,
   fetchChoroplethEpic,
   fetchPolygonStatsEpic,
-  fetchFieldDataEpic,
+  //fetchFieldDataEpic,
   fetchHabitatsEpic
 )
