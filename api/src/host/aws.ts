@@ -4,9 +4,6 @@ import { APIGatewayProxyHandler } from 'aws-lambda'
 import { env } from '../env'
 import { getAlive } from '../endpoints/alive'
 import { getPolygons } from '../endpoints/polygons'
-import { getLookups } from '../endpoints/lookups'
-import { getStats } from '../endpoints/stats'
-import { getAthena } from '../endpoints/athena'
 import { getChoropleth } from '../endpoints/choropleth'
 import { getPolygon } from '../endpoints/polygon'
 import { getThumb } from '../endpoints/thumb'
@@ -32,10 +29,6 @@ export let aliveHandler: APIGatewayProxyHandler = async (event) => {
   return success(await getAlive(event.queryStringParameters))
 }
 
-export let athenaHandler: APIGatewayProxyHandler = async (event) => {
-  return success(await getAthena(event.queryStringParameters))
-}
-
 export let choroplethHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
   return success(await getChoropleth(body))
@@ -49,17 +42,6 @@ export let polygonsHandler: APIGatewayProxyHandler = async (event) => {
 export let polygonHandler: APIGatewayProxyHandler = async (event) => {
   let body = JSON.parse(event.body ?? "{}")
   return success(await getPolygon(body))
-}
-
-export let lookupsHandler: APIGatewayProxyHandler = async (event) => {
-  return success(await getLookups(event.queryStringParameters))
-}
-
-export let statsHandler: APIGatewayProxyHandler = async (event) => {
-
-  let body = JSON.parse(event.body ?? "{}")
-  let result = await getStats(body)
-  return success(result)
 }
 
 export let thumbHandler: APIGatewayProxyHandler = async (event) => {
