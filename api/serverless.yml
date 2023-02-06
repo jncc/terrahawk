@@ -104,12 +104,6 @@ functions:
       - httpApi:
           path: /alive
           method: GET
-  athena:
-    handler: built/host/aws.athenaHandler
-    events:
-      - httpApi:
-          path: /athena
-          method: POST
   choropleth:
     handler: built/host/aws.choroplethHandler
     events:
@@ -128,23 +122,11 @@ functions:
       - httpApi:
           path: /polygon
           method: POST
-  lookups:
-    handler: built/host/aws.lookupsHandler
-    events:
-      - httpApi:
-          path: /lookups
-          method: GET
   colours:
     handler: built/host/aws.coloursHandler
     events:
       - httpApi:
           path: /colours
-          method: POST
-  stats:
-    handler: built/host/aws.statsHandler
-    events:
-      - httpApi:
-          path: /stats
           method: POST
   thumb:
     handler: built/host/aws.thumbHandler
