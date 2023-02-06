@@ -125,8 +125,8 @@ if (!state.selectedPolygon)
   }
 }
 
-// field data
-// --------
+// field data - Not Currently used - data not available
+// ----------------------------------------------------
 
 export let fetchFieldData = (query: RootState['mapper']['query']): Observable<FieldDataQueryResult> => {
 
