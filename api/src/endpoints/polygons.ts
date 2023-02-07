@@ -38,8 +38,6 @@ export let getPolygonsImpl = async (q: { framework: string, bbox: string, limit:
     
     let sql = getPolygonsQuery(q.framework, q.limit, ``)
 
-    console.log(sql)
-
     let polygonRows = await query(sql, [q.bbox])
 
     return returnPolygonRows(polygonRows)

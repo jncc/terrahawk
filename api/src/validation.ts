@@ -38,13 +38,17 @@ export function parseHabitatids(args: Args) {
 }
 
 export function parseLimit(args: Args) {
-    if (!args.limit) {
-        return 9999999 as number
+    var limit: number = 10000
+    if (args.limit) {
+        if (!Number.isInteger(args.limit)) {
+            throw `Expected 'limit' to be an integer.`
+        }
+        limit = args.limit as number
+        if (limit > 10000) {
+            limit = 10000
+        }
     }
-    if (!Number.isInteger(args.limit)) {
-        throw `Expected 'limit' to be an integer.`
-    } 
-    return args.limit as number
+    return limit
 }
 
 export function parseIndexname(args: Args) {
