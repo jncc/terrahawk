@@ -2,6 +2,7 @@
 // example: POST /athena
 
 import { athenaExpress } from "../aws"
+// is this used
 
 
 export const getAthena = async (args: any) => {

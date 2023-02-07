@@ -3,6 +3,7 @@ import * as format from 'pg-format'
 
 import { athenaExpress } from "../aws"
 import { parseArgs } from "./choroplethArgParser"
+import { env } from '../env'
 
 /*
     example: POST /choropleth
@@ -67,7 +68,7 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
             max(abs(s.z_max)   ) as max_z_max,
             max(abs(s.z_q1)    ) as max_z_q1,
             max(abs(s.z_q3)    ) as max_z_q3
-        from monthly_nearest50_6 s
+        from ${env.MONTHLY_NEAREST_50_TABLE} s
         where
             framework=%L
             and indexname=%L
