@@ -32,6 +32,7 @@ export type PolygonsQuery = Pick<Query,
   | 'framework'
 > & {
   bbox: string
+  limit: number
 }
 
 export type Habitat = {
