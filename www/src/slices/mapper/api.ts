@@ -150,7 +150,7 @@ export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkH
 
   let getParamsForFetchHabitats = (requiredFramework: Framework): HabitatsQuery => {
     return {
-      framework: requiredFramework.defaultQuery.framework.toLowerCase(),
+      framework: requiredFramework.defaultQuery.framework,
     }
   }
   
