@@ -1,5 +1,5 @@
 
-import { ensureSomeArgs, parseBbox, parseFramework, parseHabitatids, parseIndexname } from '../validation'
+import { ensureSomeArgs, parseBbox, parseFramework, parseHabitatids, parseLimit } from '../validation'
 
 /**
  * Parses an args input map from Express or Lambda.
@@ -11,17 +11,20 @@ import { ensureSomeArgs, parseBbox, parseFramework, parseHabitatids, parseIndexn
     let framework = parseFramework(args)
     let bbox = parseBbox(args)
     let habitatids = parseHabitatids(args)
+    let limit = parseLimit(args)
 
     if (habitatids) {
       return {
             framework,
             bbox,
-            habitatids
+            habitatids,
+            limit
        }
     } else {
         return {
             framework,
-            bbox
+            bbox,
+            limit
        } 
     }
 
