@@ -11,7 +11,6 @@ import * as format from 'pg-format'
 
 import { athenaExpress } from "../aws"
 import { parseArgs } from "./statsArgParser"
-import { env } from '../env'
 
 export const getStats = async (input: any) => {
 
@@ -33,7 +32,7 @@ export const getStats = async (input: any) => {
             max(s.z_max_abs)    as max_z_max_abs,
             max(s.z_q1_abs)     as max_z_q1_abs,
             max(s.z_q3_abs)     as max_z_q3_abs
-        from ${env.MONTHLY_NEAREST_50_TABLE} s
+        from monthly_nearest50 s
         where
             framework=%L
             and indexname=%L
