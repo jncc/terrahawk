@@ -31,10 +31,10 @@ if (!PGUSER) {
 if (!PGPASSWORD) {
     throw(`Environment variable PGPASSWORD is required.`)
 }
-if (NODE_ENV === 'development' && !MONTHLY_NEAREST_50_TEST_TABLE) {
+if (!MONTHLY_NEAREST_50_TEST_TABLE) {
     throw(`Environment variable MONTHLY_NEAREST_50_TEST_TABLE is required.`)
 }
-if ((!NODE_ENV || NODE_ENV === 'production') && !MONTHLY_NEAREST_50_TABLE) {
+if (!MONTHLY_NEAREST_50_TABLE) {
     throw(`Environment variable MONTHLY_NEAREST_50_TABLE is required.`)
 }
 
