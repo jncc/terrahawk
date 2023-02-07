@@ -68,7 +68,7 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
             max(abs(s.z_max)   ) as max_z_max,
             max(abs(s.z_q1)    ) as max_z_q1,
             max(abs(s.z_q3)    ) as max_z_q3
-        from ${env.MONTHLY_NEAREST_50_TABLE} s
+        from %I s
         where
             framework=%L
             and indexname=%L
@@ -78,6 +78,7 @@ export let getMaxZScores = async (q: MaxZScoreQuery) => {
             and polyid in (%L)
         group by polyid
         `,
+        env.MONTHLY_NEAREST_50_TABLE,
         q.framework,
         q.indexname,
         dateFrom,

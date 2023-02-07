@@ -29,7 +29,7 @@ export const getPolygon = async (input: any) => {
 
     let sql = format(`
         select *
-        from ${env.MONTHLY_NEAREST_50_TABLE} s
+        from $%I s
         where
             framework=%L
             and indexname=%L
@@ -37,6 +37,7 @@ export const getPolygon = async (input: any) => {
             and polyid=%L
         order by year, month
         `,
+        env.MONTHLY_NEAREST_50_TABLE,
         args.framework,
         args.indexname,
         args.polyPartition,
