@@ -37,6 +37,20 @@ export function parseHabitatids(args: Args) {
     return args.habitatids
 }
 
+export function parseLimit(args: Args) {
+    var limit: number = 10000
+    if (args.limit) {
+        if (!Number.isInteger(args.limit)) {
+            throw `Expected 'limit' to be an integer.`
+        }
+        limit = args.limit as number
+        if (limit > 10000) {
+            limit = 10000
+        }
+    }
+    return limit
+}
+
 export function parseIndexname(args: Args) {
     if (!args.indexname) {
         throw `Expected 'indexname'.`

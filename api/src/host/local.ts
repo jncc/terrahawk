@@ -6,9 +6,6 @@ import * as asyncHandler from 'express-async-handler'
 import { env } from '../env'
 import { getAlive } from '../endpoints/alive'
 import { getPolygons } from '../endpoints/polygons'
-import { getLookups } from '../endpoints/lookups'
-import { getStats } from '../endpoints/stats'
-import { getAthena } from '../endpoints/athena'
 import { getThumb } from '../endpoints/thumb'
 import { getNpms } from '../endpoints/npms'
 import { getHabitats } from '../endpoints/habitats'
@@ -29,27 +26,9 @@ if (env.NODE_ENV === 'development') {
         res.json(result)
     }))
 
-    app.post('/athena', asyncHandler(async(req, res) => {
-
-        let result = await getAthena(req.query)
-        res.json(result)
-    }))
-
     app.post('/polygons', asyncHandler(async(req, res) => {
 
         let result = await getPolygons(req.body) // req.body for POST
-        res.json(result)
-    }))
-
-    app.get('/lookups', asyncHandler(async(req, res) => {
-
-        let result = await getLookups(req.query) // req.query for GET
-        res.json(result)
-    }))
-
-    app.post('/stats', asyncHandler(async(req, res) => {
-
-        let result = await getStats(req.body)
         res.json(result)
     }))
 

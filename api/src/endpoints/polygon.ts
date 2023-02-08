@@ -3,6 +3,7 @@ import * as format from 'pg-format'
 
 import { athenaExpress } from "../aws"
 import { parseArgs } from "./polygonArgParser"
+import { env } from '../env'
 
 /*
     example: POST /polygon
@@ -28,7 +29,7 @@ export const getPolygon = async (input: any) => {
 
     let sql = format(`
         select *
-        from monthly_nearest50_6 s
+        from %I s
         where
             framework=%L
             and indexname=%L
@@ -36,6 +37,7 @@ export const getPolygon = async (input: any) => {
             and polyid=%L
         order by year, month
         `,
+        env.MONTHLY_NEAREST_50_TABLE,
         args.framework,
         args.indexname,
         args.polyPartition,

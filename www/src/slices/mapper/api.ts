@@ -20,6 +20,7 @@ export let fetchPolygons = (query: RootState['mapper']['query']): Observable<Pol
     return {
       framework: frameworks[query.framework].defaultQuery.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds)),
+      limit: 3001
     }
   }
 
@@ -125,8 +126,8 @@ if (!state.selectedPolygon)
   }
 }
 
-// field data
-// --------
+// field data - Not Currently used - data not available
+// ----------------------------------------------------
 
 export let fetchFieldData = (query: RootState['mapper']['query']): Observable<FieldDataQueryResult> => {
 
@@ -149,7 +150,7 @@ export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkH
 
   let getParamsForFetchHabitats = (requiredFramework: Framework): HabitatsQuery => {
     return {
-      framework: requiredFramework.defaultQuery.framework.toLowerCase(),
+      framework: requiredFramework.defaultQuery.framework,
     }
   }
   
