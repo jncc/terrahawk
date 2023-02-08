@@ -29,7 +29,7 @@ export const getPolygon = async (input: any) => {
 
     let sql = format(`
         select *
-        from $%I s
+        from %I s
         where
             framework=%L
             and indexname=%L
