@@ -46,7 +46,7 @@ sink = glueContext.getSink(
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly-nearest50-20230125")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_20230125")
 sink.setFormat("glueparquet")
 sink.writeFrame(filterQuery)
 
