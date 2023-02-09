@@ -6,6 +6,22 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 
+# Source and destination parameters
+#===================================
+source_table_name = "monthly_nearest50"
+destination_table_name = "monthly_nearest50_20230125"
+destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50-2/"
+destination_partition_keys = ["framework", "indexname", "poly_partition"]
+
+# Data selection query
+#=====================
+
+# source_table is mapped to the table identified byt the "source_table_name" variable above.
+sql = f'''
+    select * from source_table
+'''
+
+
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
     for alias, frame in mapping.items():
         frame.toDF().createOrReplaceTempView(alias)
@@ -22,32 +38,30 @@ job.init(args["JOB_NAME"], args)
 
 source = glueContext.create_dynamic_frame.from_catalog(
     database="statsdb",
-    table_name="monthly_nearest50",
+    table_name=source_table_name,
     transformation_ctx="source",
 )
 
-sql = f'''
-    select * from monthly_nearest50
-'''
 
 filterQuery = sparkSqlQuery(
   glueContext,
   query = sql,
-  mapping = {"monthly_nearest50": source},
+  mapping = {"source_table": source},
   transformation_ctx = "filterQuery")
 
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
-    path = "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50-2/",
+    path = destination_bucket_key,
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
-    partitionKeys = ["framework", "indexname", "poly_partition"],
+    partitionKeys = destination_partition_keys,
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = "monthly_nearest50_20230125")
+sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = destination_table_name)
 sink.setFormat("glueparquet")
 sink.writeFrame(filterQuery)
+
 
 job.commit()
