@@ -104,10 +104,10 @@ if (!state.selectedPolygon)
   throw 'Shouldn\'t get here - no polygon selected'
 
   let params = {
-    framework:     frameworks[state.query.framework].defaultQuery.framework,
-    indexname:     state.query.indexname,
-    polyid:        state.selectedPolygon.polyid,
-    polyPartition: state.selectedPolygon.partition,
+    framework:      frameworks[state.query.framework].defaultQuery.framework,
+    indexname:      state.query.indexname,
+    polyids:        [state.selectedPolygon.polyid],
+    polyPartitions: [state.selectedPolygon.partition],
   }
 
   let cacheKey = `${Object.values(params).join(':')}`

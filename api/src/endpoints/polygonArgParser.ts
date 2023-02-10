@@ -2,8 +2,8 @@
 import { ensureSomeArgs,
     parseFramework,
     parseIndexname,
-    parsePolyid,
-    parsePolyPartition,
+    parsePolyids,
+    parsePolyPartitions,
 } from '../validation'
 
 /**
@@ -15,13 +15,13 @@ import { ensureSomeArgs,
 
     let framework = parseFramework(args)
     let indexname = parseIndexname(args)
-    let polyPartition = parsePolyPartition(args)
-    let polyid = parsePolyid(args)
+    let polyPartitions = parsePolyPartitions(args)
+    let polyids = parsePolyids(args)
 
     return {
         framework,
         indexname,
-        polyPartition,
-        polyid,
+        polyPartitions,
+        polyids,
     }
 }
