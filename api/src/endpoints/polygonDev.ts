@@ -2,7 +2,7 @@
 import * as format from 'pg-format'
 
 import { athenaExpress } from "../aws"
-import { parseArgs } from "./polygonDevArgParser"
+import { parseArgs } from "./polygonArgParser"
 import { env } from '../env'
 
 /*
@@ -10,9 +10,13 @@ import { env } from '../env'
     {
         "framework": "liveng0",
         "indexname": "NDVI",
-        "polyid": "489639",
-        "polyPartition": "SD87"
+        "polyid": ["489639"],
+        "polyPartition": ["SD87"],
+        "yearFrom":2020,"monthFrom":12,"yearTo":2021,"monthTo":3    - Date range optional - if not passed all contents will be returned
     }
+
+    The normal use case is to query for a single polygon / partition, 
+    but specifying the query parameters as arrays allows API users to include multiple if required
 */
 
 export const getPolygonDev = async (input: any) => {
@@ -39,8 +43,8 @@ export const getPolygonDev = async (input: any) => {
             and indexname=%L
             and year || month >= %L
             and year || month <= %L
-            and poly_partition=%L
-            and polyid=%L
+            and poly_partition in (%L)
+            and polyid in (%L)
         order by year, month
         `,
         env.MONTHLY_NEAREST_50_TEST_TABLE,
@@ -48,8 +52,8 @@ export const getPolygonDev = async (input: any) => {
         args.indexname,
         dateFrom,
         dateTo,
-        args.polyPartition,
-        args.polyid
+        args.polyPartitions,
+        args.polyids
     )
 
     console.log(sql)
