@@ -2,7 +2,7 @@
 import * as format from 'pg-format'
 
 import { athenaExpress } from "../aws"
-import { parseArgs } from "./polygonArgParser"
+import { parseArgs } from "./polygonDevArgParser"
 import { env } from '../env'
 
 /*
@@ -21,6 +21,10 @@ export const getPolygonDev = async (input: any) => {
 
     let args = parseArgs(input)
 
+    // get date strings like '202004' (for April 2020)
+    let dateFrom = `${args.yearFrom}${zeroPad(args.monthFrom)}`
+    let dateTo = `${args.yearTo}${zeroPad(args.monthTo)}`
+
     // https://github.com/datalanche/node-pg-format
     // %% outputs a literal % character.
     // %I outputs an escaped SQL identifier.
@@ -33,6 +37,8 @@ export const getPolygonDev = async (input: any) => {
         where
             framework=%L
             and indexname=%L
+            and year || month >= %L
+            and year || month <= %L
             and poly_partition=%L
             and polyid=%L
         order by year, month
@@ -40,6 +46,8 @@ export const getPolygonDev = async (input: any) => {
         env.MONTHLY_NEAREST_50_TEST_TABLE,
         args.framework,
         args.indexname,
+        dateFrom,
+        dateTo,
         args.polyPartition,
         args.polyid
     )
@@ -50,3 +58,5 @@ export const getPolygonDev = async (input: any) => {
     console.log(`At ${(new Date()).toISOString()} - got query result`)
     return result.Items
 }
+
+let zeroPad = (n: number) => String(n).padStart(2, '0')
