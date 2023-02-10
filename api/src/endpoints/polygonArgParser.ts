@@ -2,8 +2,12 @@
 import { ensureSomeArgs,
     parseFramework,
     parseIndexname,
+    parseMonthFrom,
+    parseMonthTo,
     parsePolyids,
     parsePolyPartitions,
+    parseYearFrom,
+    parseYearTo,
 } from '../validation'
 
 /**
@@ -17,11 +21,19 @@ import { ensureSomeArgs,
     let indexname = parseIndexname(args)
     let polyPartitions = parsePolyPartitions(args)
     let polyids = parsePolyids(args)
+    let yearFrom = parseYearFrom(args, 2010)
+    let monthFrom = parseMonthFrom(args, 1)
+    let yearTo = parseYearTo(args, new Date().getFullYear())
+    let monthTo = parseMonthTo(args, new Date().getMonth() + 1)
 
     return {
         framework,
         indexname,
         polyPartitions,
         polyids,
+        yearFrom,
+        monthFrom,
+        yearTo,
+        monthTo,
     }
 }
