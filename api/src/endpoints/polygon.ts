@@ -10,9 +10,12 @@ import { env } from '../env'
     {
         "framework": "liveng0",
         "indexname": "NDVI",
-        "polyid": "489639",
-        "polyPartition": "SD87"
+        "polyid": ["489639"],
+        "polyPartition": ["SD87"]
     }
+
+    The normal use case is to query for a single polygon / partition, 
+    but specifying the query parameters as arrays allows API users to include multiple if required
 */
 
 export const getPolygon = async (input: any) => {
@@ -33,15 +36,15 @@ export const getPolygon = async (input: any) => {
         where
             framework=%L
             and indexname=%L
-            and poly_partition=%L
-            and polyid=%L
+            and poly_partition in (%L)
+            and polyid in (%L)
         order by year, month
         `,
         env.MONTHLY_NEAREST_50_TABLE,
         args.framework,
         args.indexname,
-        args.polyPartition,
-        args.polyid
+        args.polyPartitions,
+        args.polyids
     )
 
     console.log(sql)
