@@ -17,7 +17,7 @@ Define an sql query that excludes the data you want to remove. For example by cr
 
 ```
 select * from source_table
-(year = '2020' and month in ('02', '04','05'))
+where not (year = '2020' and month in ('02', '04','05'))
 ```
 
 ## Process new data into the new table
