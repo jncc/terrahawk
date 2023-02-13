@@ -17,7 +17,7 @@ export let fetchPolygons = (query: RootState['mapper']['query'], currentFramewor
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
     let bounds = getBoundsOfBboxRectangle(query.center, currentFramework)
     return {
-      framework: currentFramework.defaultQuery.framework,
+      framework: currentFramework.defaultQuery.tableName,
       bbox: bboxToWkt(getBboxFromBounds(bounds)),
       limit: 3001
     }
@@ -46,11 +46,23 @@ let makeCacheKey = (polyid: string, params: ChoroplethKeyParams) => {
   return `${Object.values(keyParams).join(':')}::${polyid}`
 }
 
+let makeCacheKeyFromState = (polyid: string, state: RootState['mapper']) => {
+  let keyParams = {
+    framework:            state.currentFramework.defaultQuery.tableName, 
+    indexname:            state.query.indexname,
+    yearFrom:             state.query.yearFrom,
+    monthFrom:            state.query.monthFrom,
+    yearTo:               state.query.yearTo,
+    monthTo:              state.query.monthTo,
+  }  
+  return `${Object.values(keyParams).join(':')}::${polyid}`
+}
+
 export let fetchChoropleth = (state: RootState['mapper']): Observable<ChoroplethQueryResult> => {
 
   let cached = state.polygons.polys
     .map(p => {
-      let key = makeCacheKey(p.polyid, state.query)
+      let key = makeCacheKeyFromState(p.polyid, state)
       return choroplethCache.get(key)
     })
     .filter(item => item !== undefined) as (ChoroplethItem | ChoroplethNone)[]
@@ -58,7 +70,7 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   let needed = state.polygons.polys.filter(p => !cached.find(c => c.polyid === p.polyid))
 
   let params: ChoroplethParams = {
-    framework:            state.currentFramework.defaultQuery.framework, 
+    framework:            state.currentFramework.defaultQuery.tableName, 
     indexname:            state.query.indexname,
     yearFrom:             state.query.yearFrom,
     monthFrom:            state.query.monthFrom,
@@ -103,7 +115,7 @@ if (!state.selectedPolygon)
   throw 'Shouldn\'t get here - no polygon selected'
 
   let params = {
-    framework:      state.currentFramework.defaultQuery.framework,
+    framework:      state.currentFramework.defaultQuery.tableName,
     indexname:      state.query.indexname,
     polyids:        [state.selectedPolygon.polyid],
     polyPartitions: [state.selectedPolygon.partition],
@@ -133,7 +145,7 @@ export let fetchFieldData = (query: RootState['mapper']['query'], currentFramewo
   let bounds = getBoundsOfBboxRectangle(query.center, currentFramework)
 
   let params = {
-    framework: currentFramework.defaultQuery.framework,
+    framework: currentFramework.defaultQuery.tableName,
     bbox: bboxToWkt(getBboxFromBounds(bounds))
   }
 
@@ -149,7 +161,7 @@ export let fetchHabitats = (requiredFramework: Framework): Observable<FrameworkH
 
   let getParamsForFetchHabitats = (requiredFramework: Framework): HabitatsQuery => {
     return {
-      framework: requiredFramework.defaultQuery.framework,
+      framework: requiredFramework.defaultQuery.tableName,
     }
   }
   

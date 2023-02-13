@@ -13,7 +13,7 @@ export type Framework = {
   minZoom: number
   polygonZoomThreshold: number
   defaultQuery: {
-    framework: string
+    tableName: string
     center: {lat: number, lng: number}
     indexname: Indexname
     statistic: Statistic
@@ -28,9 +28,8 @@ export type Framework = {
 
 export type Query = Framework['defaultQuery']
 
-export type PolygonsQuery = Pick<Query,
-  | 'framework'
-> & {
+export type PolygonsQuery = {
+  framework: string
   bbox: string
   limit: number
 }
@@ -58,15 +57,14 @@ export type PolygonsQueryResult = {
   params: { framework: Framework }
 }
 
-export type FieldDataQuery = Pick<Query,
-  | 'framework'
-> & {
+export type FieldDataQuery = {
+  framework: string
   bbox: string
 }
 
-export type HabitatsQuery = Pick<Query,
-  | 'framework'
->
+export type HabitatsQuery = {
+  framework: string
+}
 
 export type FieldData = {
   sampleid: string,
@@ -90,13 +88,14 @@ export type FieldDataQueryResult = {
 }
 
 export type ChoroplethKeyParams = Pick<Query,
-  | 'framework'
   | 'indexname'
   | 'yearFrom'
   | 'monthFrom'
   | 'yearTo'
   | 'monthTo'
->
+> & {
+  framework: string
+}
 
 export type ChoroplethParams = ChoroplethKeyParams & {
   polyids: string[],

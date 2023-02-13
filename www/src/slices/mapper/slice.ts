@@ -20,7 +20,7 @@ let slice = createSlice({
     panToNewFramework: true,
     query: defaultQuery,
     polygons:   { polys: [] as Poly[], params: { framework: defaultFramework } },
-    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
+    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.tableName, indexname: defaultQuery.indexname } },
     fieldData: [] as FieldData[],
     selectedPolygon: undefined as Poly | undefined,
     previousSelectedPolygon: undefined as Poly | undefined,

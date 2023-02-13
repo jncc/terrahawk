@@ -19,7 +19,7 @@ export const frameworks: {[framework: string]: Framework} = {
     // defaultZoom: 13,
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'liveng0',
+      tableName: 'liveng0',
       center: {lat: 54, lng: -1.4},
       // center: {lat: 53.7, lng: -0.45},
       indexname: 'NDVI',
@@ -45,7 +45,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'liveng1',
+      tableName: 'liveng1',
       center: {lat: 54, lng: -1.4},
       indexname: 'NDVI',
       statistic: 'mean',
@@ -68,7 +68,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'habmos_cairngorms',
+      tableName: 'habmos_cairngorms',
       center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
@@ -91,7 +91,7 @@ export const frameworks: {[framework: string]: Framework} = {
     bboxPadding: {latPad: 0.02, lngPad: 0.04},
     polygonZoomThreshold: 13,
     defaultQuery: {
-      framework: 'spaceint_cairngorms',
+      tableName: 'spaceint_cairngorms',
       center: {lat: 57.1, lng: -3.7},
       indexname: 'NDVI',
       statistic: 'mean',
