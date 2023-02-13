@@ -19,7 +19,7 @@ let fetchPolygonsEpic = (action$: any, state$: StateObservable<RootState>) => ac
   switchMap(() =>
     concat(
       of(globalActions.startLoading('polygons')),
-      fetchPolygons(state$.value.mapper.query).pipe(
+      fetchPolygons(state$.value.mapper.query, state$.value.mapper.currentFramework).pipe(
         map(result => mapperActions.fetchPolygonsCompleted(result)),
         catchError(e => of(globalActions.errorOccurred(e.message)))),
       of(globalActions.stopLoading('polygons')),

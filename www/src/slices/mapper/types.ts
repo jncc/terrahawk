@@ -55,7 +55,7 @@ export type Poly = {
 
 export type PolygonsQueryResult = {
   polys:  Poly[]
-  params: { framework: string }
+  params: { framework: Framework }
 }
 
 export type FieldDataQuery = Pick<Query,

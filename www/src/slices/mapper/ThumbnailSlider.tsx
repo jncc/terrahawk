@@ -5,7 +5,6 @@ import { Poly, SimpleDate } from './types'
 import { Thumb } from './Thumbnail'
 import { getPolygonOutline, getReprojectedCoordinates } from '../../thumbnails/thumbnailGenerator'
 import { height, width } from './helpers/thumbnailHelper'
-import { frameworks } from '../../frameworks'
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { Toggle } from '../../components/Toggle'
 import { mapperActions } from './slice'
@@ -14,7 +13,7 @@ import { indexnames } from './helpers/statsHelper'
 export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: SimpleDate}[]}) => {
 
   let dispatch = useStateDispatcher()
-  let framework = useStateSelector(s => s.mapper.query.framework)
+  let framework = useStateSelector(s => s.mapper.currentFramework)
   let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // selectedPolygon can't be undefined in this component
   let showOutlines = useStateSelector(s => s.mapper.showOutlines)
   let useProxy = useStateSelector(s => s.mapper.useProxy)
@@ -22,8 +21,8 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let indexname = useStateSelector(s => s.mapper.query.indexname)
   
   // do calcs common to all the thumbnails up here in the slider
-  let nativeCoords = useMemo(() => getReprojectedCoordinates(selectedPolygon.geojson.coordinates, frameworks[framework].srs),
-                                                            [selectedPolygon.geojson.coordinates, frameworks[framework].srs])
+  let nativeCoords = useMemo(() => getReprojectedCoordinates(selectedPolygon.geojson.coordinates, framework.srs),
+                                                            [selectedPolygon.geojson.coordinates, framework.srs])
   let polygonRings = useMemo(() => getPolygonOutline(nativeCoords, width, height),
                                                     [nativeCoords, width, height])
   let outline = <svg

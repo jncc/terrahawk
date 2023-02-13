@@ -12,13 +12,14 @@ let defaultQuery = defaultFramework.defaultQuery
 let slice = createSlice({
   name: 'mapper',
   initialState: {
+    currentFramework: defaultFramework as Framework,
     showPolygons: true,
     showNpmsData: false,
     zoom: defaultFramework.defaultZoom,
     zoomedEnoughToShowPolygons: false,
     panToNewFramework: true,
     query: defaultQuery,
-    polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
+    polygons:   { polys: [] as Poly[], params: { framework: defaultFramework } },
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
     fieldData: [] as FieldData[],
     selectedPolygon: undefined as Poly | undefined,
@@ -42,25 +43,25 @@ let slice = createSlice({
       state.showNpmsData = !state.showNpmsData
     },
     mapZoomIn: (state) => {
-      if (state.zoom < frameworks[state.query.framework].maxZoom) {
+      if (state.zoom < state.currentFramework.maxZoom) {
         state.zoom++
       }
     },
     mapZoomOut: (state) => {
-      if (state.zoom > frameworks[state.query.framework].minZoom) {
+      if (state.zoom > state.currentFramework.minZoom) {
         state.zoom--
       }
     },
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
-      state.zoomedEnoughToShowPolygons = state.zoom >= frameworks[state.query.framework].polygonZoomThreshold
+      state.zoomedEnoughToShowPolygons = state.zoom >= state.currentFramework.polygonZoomThreshold
       state.panToNewFramework = state.zoom === defaultFramework.defaultZoom
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
     },
     alterQueryFramework: (state, a: PayloadAction<string>) => {
-      state.query.framework = a.payload
+      state.currentFramework = frameworks[a.payload]
       state.query.habitatids = []
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
@@ -148,7 +149,7 @@ let slice = createSlice({
     toggleSelectAllHabitats: (state, a: PayloadAction<boolean>) => {
       if (a.payload) {
         const allFrameworkHabitatIds = 
-          state.frameworkHabitats.get(frameworks[state.query.framework])?.map((x: Habitat) => {return x.id})
+          state.frameworkHabitats.get(state.currentFramework)?.map((x: Habitat) => {return x.id})
         state.query.habitatids = allFrameworkHabitatIds ? allFrameworkHabitatIds : []  
       } else {
         state.query.habitatids = []

@@ -3,7 +3,6 @@ import { Observable, of, merge, EMPTY } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
 import { map  } from 'rxjs/operators'
 import LRUCache from 'lru-cache'
-import { frameworks } from '../../frameworks'
 import { RootState } from '../../state/store'
 import { bboxToWkt, getBboxFromBounds } from '../../utility/geospatialUtility'
 import { ChoroplethItem, ChoroplethKeyParams, ChoroplethParams, ChoroplethQueryResult, ChoroplethNone, PolygonsQueryResult, PolygonsQuery,
@@ -13,18 +12,18 @@ import { getBoundsOfBboxRectangle } from './helpers/bboxHelpers'
 // polygons
 // --------
 
-export let fetchPolygons = (query: RootState['mapper']['query']): Observable<PolygonsQueryResult> => {
+export let fetchPolygons = (query: RootState['mapper']['query'], currentFramework: RootState['mapper']['currentFramework']): Observable<PolygonsQueryResult> => {
 
   let getParamsForFetchPolygons = (query: RootState['mapper']['query']): PolygonsQuery => {
-    let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
+    let bounds = getBoundsOfBboxRectangle(query.center, currentFramework)
     return {
-      framework: frameworks[query.framework].defaultQuery.framework,
+      framework: currentFramework.defaultQuery.framework,
       bbox: bboxToWkt(getBboxFromBounds(bounds)),
       limit: 3001
     }
   }
 
-  let keyParams = { framework: query.framework }
+  let keyParams = { framework: currentFramework }
   
   // todo: we could also cache the polygons...
   return api('polygons', getParamsForFetchPolygons(query)).pipe(
@@ -59,14 +58,14 @@ export let fetchChoropleth = (state: RootState['mapper']): Observable<Choropleth
   let needed = state.polygons.polys.filter(p => !cached.find(c => c.polyid === p.polyid))
 
   let params: ChoroplethParams = {
-    framework:      frameworks[state.query.framework].defaultQuery.framework, 
-    indexname:      state.query.indexname,
-    yearFrom:       state.query.yearFrom,
-    monthFrom:      state.query.monthFrom,
-    yearTo:         state.query.yearTo,
-    monthTo:        state.query.monthTo,
-    polyids:        needed.map(p => p.polyid),
-    polyPartitions: [...new Set(needed.map(p => p.partition))] // distinct
+    framework:            state.currentFramework.defaultQuery.framework, 
+    indexname:            state.query.indexname,
+    yearFrom:             state.query.yearFrom,
+    monthFrom:            state.query.monthFrom,
+    yearTo:               state.query.yearTo,
+    monthTo:              state.query.monthTo,
+    polyids:              needed.map(p => p.polyid),
+    polyPartitions:       [...new Set(needed.map(p => p.partition))] // distinct
   }
 
   let api$ = api('choropleth', params).pipe(
@@ -104,7 +103,7 @@ if (!state.selectedPolygon)
   throw 'Shouldn\'t get here - no polygon selected'
 
   let params = {
-    framework:      frameworks[state.query.framework].defaultQuery.framework,
+    framework:      state.currentFramework.defaultQuery.framework,
     indexname:      state.query.indexname,
     polyids:        [state.selectedPolygon.polyid],
     polyPartitions: [state.selectedPolygon.partition],
@@ -129,12 +128,12 @@ if (!state.selectedPolygon)
 // field data - Not Currently used - data not available
 // ----------------------------------------------------
 
-export let fetchFieldData = (query: RootState['mapper']['query']): Observable<FieldDataQueryResult> => {
+export let fetchFieldData = (query: RootState['mapper']['query'], currentFramework: RootState['mapper']['currentFramework']): Observable<FieldDataQueryResult> => {
 
-  let bounds = getBoundsOfBboxRectangle(query.center, query.framework)
+  let bounds = getBoundsOfBboxRectangle(query.center, currentFramework)
 
   let params = {
-    framework: frameworks[query.framework].defaultQuery.framework,
+    framework: currentFramework.defaultQuery.framework,
     bbox: bboxToWkt(getBboxFromBounds(bounds))
   }
 
