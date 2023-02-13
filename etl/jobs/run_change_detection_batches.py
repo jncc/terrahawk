@@ -270,12 +270,12 @@ last_run_id = None
 for date_range in date_ranges:
     if last_run_id:
         await_workflow_run_completion(client, context["workflow_name"], last_run_id)
-    filter_job_params = context["filter_job_params"].update(date_range)
-    set_triggered_job_params(client, filter_trigger, context["filter_job_name"], filter_job_params)
-    aggregation_job_params = context["aggregation_job_params"].update(date_range)
-    set_triggered_job_params(client, aggregation_trigger, context["aggregation_job_name"], aggregation_job_params)
-    compare_monthly_job_params = context["compare_monthly_job_params"].update(date_range)
-    set_triggered_job_params(client, compare_monthly_trigger, context["compare_monthly_job_name"], date_range)
+    context["filter_job_params"].update(date_range)
+    set_triggered_job_params(client, filter_trigger, context["filter_job_name"], context["filter_job_params"])
+    context["aggregation_job_params"].update(date_range)
+    set_triggered_job_params(client, aggregation_trigger, context["aggregation_job_name"], context["aggregation_job_params"])
+    context["compare_monthly_job_params"].update(date_range)
+    set_triggered_job_params(client, compare_monthly_trigger, context["compare_monthly_job_name"], context["compare_monthly_job_params"])
     last_run_id = start_workflow(client, context["workflow_name"])
 
 job.commit()
