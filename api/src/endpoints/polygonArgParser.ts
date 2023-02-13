@@ -24,7 +24,7 @@ import { ensureSomeArgs,
     let yearFrom = parseYearFrom(args, 2010)
     let monthFrom = parseMonthFrom(args, 1)
     let yearTo = parseYearTo(args, new Date().getFullYear())
-    let monthTo = parseMonthTo(args, new Date().getMonth() + 1)
+    let monthTo = parseMonthTo(args, args.yearTo ? 12 : new Date().getMonth() + 1)
 
     return {
         framework,
