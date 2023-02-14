@@ -20,7 +20,7 @@ export let QueryPanel = () => {
   let dispatch = useStateDispatcher()
   let state = useStateSelector(s => s.mapper)
 
-  let indices = frameworks[state.query.framework].availableIndices
+  let indices = state.currentFramework.availableIndices
 
   function toggleSelectedHabitat (habitatid: number) {
     dispatch(mapperActions.toggleSelectedHabitat(habitatid))
@@ -31,7 +31,7 @@ export let QueryPanel = () => {
   }
 
   function getFrameworkHabitatsArray() {
-    let frameworkHabitats = state.frameworkHabitats.get(frameworks[state.query.framework])
+    let frameworkHabitats = state.frameworkHabitats.get(state.currentFramework.defaultQuery.tableName)
     if (frameworkHabitats) {
       return frameworkHabitats
     }
