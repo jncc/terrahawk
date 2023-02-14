@@ -31,7 +31,7 @@ export let QueryPanel = () => {
   }
 
   function getFrameworkHabitatsArray() {
-    let frameworkHabitats = state.frameworkHabitats.get(state.currentFramework)
+    let frameworkHabitats = state.frameworkHabitats.get(state.currentFramework.defaultQuery.tableName)
     if (frameworkHabitats) {
       return frameworkHabitats
     }

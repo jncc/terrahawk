@@ -19,7 +19,7 @@ let slice = createSlice({
     zoomedEnoughToShowPolygons: false,
     panToNewFramework: true,
     query: defaultQuery,
-    polygons:   { polys: [] as Poly[], params: { framework: defaultFramework } },
+    polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.tableName } },
     choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.tableName, indexname: defaultQuery.indexname } },
     fieldData: [] as FieldData[],
     selectedPolygon: undefined as Poly | undefined,
@@ -30,7 +30,7 @@ let slice = createSlice({
     showOutlines: true,
     useProxy: true,
     thumbType: 'index' as 'colour' | 'index',
-    frameworkHabitats: new Map<Framework, Habitat[]>(),
+    frameworkHabitats: new Map<String, Habitat[]>(),
   },
   reducers: {
     initialise: () => {
@@ -100,7 +100,7 @@ let slice = createSlice({
       state.fieldData = a.payload.fieldData
     },
     fetchHabitatsCompleted: (state, a: PayloadAction<FrameworkHabitats>) => {
-      state.frameworkHabitats.set(a.payload.framework, a.payload.habitats)
+      state.frameworkHabitats.set(a.payload.framework.defaultQuery.tableName, a.payload.habitats)
     },
     selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
       // the new value is `undefined` if deselecting
@@ -149,7 +149,7 @@ let slice = createSlice({
     toggleSelectAllHabitats: (state, a: PayloadAction<boolean>) => {
       if (a.payload) {
         const allFrameworkHabitatIds = 
-          state.frameworkHabitats.get(state.currentFramework)?.map((x: Habitat) => {return x.id})
+          state.frameworkHabitats.get(state.currentFramework.defaultQuery.tableName)?.map((x: Habitat) => {return x.id})
         state.query.habitatids = allFrameworkHabitatIds ? allFrameworkHabitatIds : []  
       } else {
         state.query.habitatids = []

@@ -23,7 +23,7 @@ export let fetchPolygons = (query: RootState['mapper']['query'], currentFramewor
     }
   }
 
-  let keyParams = { framework: currentFramework }
+  let keyParams = { framework: currentFramework.defaultQuery.tableName }
   
   // todo: we could also cache the polygons...
   return api('polygons', getParamsForFetchPolygons(query)).pipe(
