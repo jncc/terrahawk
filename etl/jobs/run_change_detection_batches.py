@@ -96,11 +96,13 @@ contexts = {
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/"
         },
         "aggregation_job_params": {
+            "--FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "--SOURCE_TABLE_NAME": "raw_stats_filtered_test",
             "--TARGET_TABLE_NAME": "aggregated_monthly_test",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/"
         },
         "compare_monthly_job_params": {
+            "--FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "--SOURCE_TABLE_NAME": "aggregated_monthly_test",
             "--TARGET_TABLE_NAME": "monthly_nearest50_test",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
