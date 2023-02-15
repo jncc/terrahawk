@@ -129,7 +129,7 @@ sink = glueContext.getSink(
     path = args['TARGET_PATH'],
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
-    partitionKeys = ["framework", "year", "month", "indexname", "poly_partition"],
+    partitionKeys = ["framework", "indexname", "poly_partition"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
