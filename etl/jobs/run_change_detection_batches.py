@@ -23,11 +23,13 @@ contexts = {
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/"
         },
         "aggregation_job_params": {
+            "--FRAMEWORKS": "'liveng0','liveng1'",
             "--SOURCE_TABLE_NAME": "raw_stats_filtered_20230125",
             "--TARGET_TABLE_NAME": "aggregated_monthly_20230125",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/"
         },
         "compare_monthly_job_params": {
+            "--FRAMEWORKS": "'liveng0','liveng1'",
             "--SOURCE_TABLE_NAME": "aggregated_monthly_20230125",
             "--TARGET_TABLE_NAME": "monthly_nearest50_20230125",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly_nearest50/"
@@ -47,11 +49,13 @@ contexts = {
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/"
         },
         "aggregation_job_params": {
+            "--FRAMEWORKS": "'liveng0','liveng1'",
             "--SOURCE_TABLE_NAME": "raw_stats_filtered_test",
             "--TARGET_TABLE_NAME": "aggregated_monthly_test",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/"
         },
         "compare_monthly_job_params": {
+            "--FRAMEWORKS": "'liveng0','liveng1'",
             "--SOURCE_TABLE_NAME": "aggregated_monthly_test",
             "--TARGET_TABLE_NAME": "monthly_nearest50_test",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
@@ -72,11 +76,13 @@ contexts = {
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/"
         },
         "aggregation_job_params": {
+            "--FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "--SOURCE_TABLE_NAME": "raw_stats_filtered_20230125",
             "--TARGET_TABLE_NAME": "aggregated_monthly_20230125",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/"
         },
         "compare_monthly_job_params": {
+            "--FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "--SOURCE_TABLE_NAME": "aggregated_monthly_20230125",
             "--TARGET_TABLE_NAME": "monthly_nearest50_20230125",
             "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly_nearest50/"
