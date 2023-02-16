@@ -3,7 +3,6 @@ import L, { LatLngBounds } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
 import { enableMapSet } from 'immer'
-import { frameworks } from '../../frameworks'
 import { FieldData, isChoroplethItem, Poly } from './types'
 import { getChoroplethMaxZValue, getColour } from './helpers/choroplethHelpers'
 import { getMarkerColour } from './helpers/fieldDataHelper'
@@ -37,7 +36,7 @@ export let LeafletMap = () => {
   let state = useStateSelector(s => s.mapper)
   let dispatch = useStateDispatcher()
   
-  let framework = frameworks[state.query.framework]
+  let framework = state.currentFramework
 
   let updatePolygonLayers = () => {
     // remove layers for polygons that aren't in state.polygons or not included in current habitat filter
@@ -142,11 +141,11 @@ export let LeafletMap = () => {
   useEffect(() => {
     dispatch(mapperActions.selectPolygon(undefined))
     if (state.panToNewFramework) {
-      leafletMap.setView(frameworks[state.query.framework].defaultQuery.center, state.zoom)  
+      leafletMap.setView(state.currentFramework.defaultQuery.center, state.zoom)  
     }    
     frameworkBoundary.remove()
     frameworkBoundary = L.geoJSON(framework.boundary, { style: frameworkBoundaryStyle }).addTo(leafletMap)
-  }, [state.query.framework])
+  }, [state.currentFramework])
 
   // react to change of `zoom`
   useEffect(() => {
@@ -160,12 +159,12 @@ export let LeafletMap = () => {
       bboxRectangle.remove()
     }
     
-    let bounds = getBoundsOfBboxRectangle(state.query.center, state.query.framework)
+    let bounds = getBoundsOfBboxRectangle(state.query.center, state.currentFramework)
     bboxRectangle = L.rectangle(
       L.latLngBounds(bounds.southWest, bounds.northEast),
       bboxRectangleStyle).addTo(leafletMap)
 
-  }, [state.query.center, state.query.framework])
+  }, [state.query.center, state.currentFramework])
 
   // react to change of habitat ids filter
   // (use polygon and choropleth data already in state to dispplay the relevant habitats in the existing bounding box)

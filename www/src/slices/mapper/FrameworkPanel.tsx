@@ -9,7 +9,7 @@ import { Panel } from './Panel'
 
 export let FrameworkPanel = () => {
   let dispatch = useStateDispatcher()
-  let query = useStateSelector(s => s.mapper.query)
+  let currentFramework = useStateSelector(s => s.mapper.currentFramework)
 
   return (
     <Panel extraClasses="absolute bottom-4 left-6 min-w-[14rem] pl-4 pr-6 py-2 my-1">
@@ -18,7 +18,7 @@ export let FrameworkPanel = () => {
         <div className="leading-tight">            
           <select
             name="frameworkname" id="frameworkname-select"
-            defaultValue={query.framework}
+            defaultValue={currentFramework.defaultQuery.tableName}
             onChange={e => dispatch(mapperActions.alterQueryFramework(e.target.value))}
             className="bg-white hover:bg-gray-200 p-0.5"
             >
@@ -28,7 +28,7 @@ export let FrameworkPanel = () => {
           </select>
 
           <div className="flex gap-2 items-center ml-1.5">
-            <div className="little-label-text ">{frameworks[query.framework].defaultQuery.framework}</div>
+            <div className="little-label-text ">{currentFramework.defaultQuery.tableName}</div>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-1 w-7 " stroke="#ff7800">
               <line x1="0" y1="3" x2="60" y2="3" strokeWidth="3" strokeDasharray="5 5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

@@ -12,14 +12,15 @@ let defaultQuery = defaultFramework.defaultQuery
 let slice = createSlice({
   name: 'mapper',
   initialState: {
+    currentFramework: defaultFramework as Framework,
     showPolygons: true,
     showNpmsData: false,
     zoom: defaultFramework.defaultZoom,
     zoomedEnoughToShowPolygons: false,
     panToNewFramework: true,
     query: defaultQuery,
-    polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.framework } },
-    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.framework, indexname: defaultQuery.indexname } },
+    polygons:   { polys: [] as Poly[], params: { framework: defaultQuery.tableName } },
+    choropleth: { items: [] as (ChoroplethItem | ChoroplethNone)[], params: {framework: defaultQuery.tableName, indexname: defaultQuery.indexname } },
     fieldData: [] as FieldData[],
     selectedPolygon: undefined as Poly | undefined,
     previousSelectedPolygon: undefined as Poly | undefined,
@@ -29,7 +30,7 @@ let slice = createSlice({
     showOutlines: true,
     useProxy: true,
     thumbType: 'index' as 'colour' | 'index',
-    frameworkHabitats: new Map<Framework, Habitat[]>(),
+    frameworkHabitats: new Map<String, Habitat[]>(),
   },
   reducers: {
     initialise: () => {
@@ -42,25 +43,25 @@ let slice = createSlice({
       state.showNpmsData = !state.showNpmsData
     },
     mapZoomIn: (state) => {
-      if (state.zoom < frameworks[state.query.framework].maxZoom) {
+      if (state.zoom < state.currentFramework.maxZoom) {
         state.zoom++
       }
     },
     mapZoomOut: (state) => {
-      if (state.zoom > frameworks[state.query.framework].minZoom) {
+      if (state.zoom > state.currentFramework.minZoom) {
         state.zoom--
       }
     },
     mapZoomChanged: (state, a: PayloadAction<number>) => {
       state.zoom = a.payload
-      state.zoomedEnoughToShowPolygons = state.zoom >= frameworks[state.query.framework].polygonZoomThreshold
+      state.zoomedEnoughToShowPolygons = state.zoom >= state.currentFramework.polygonZoomThreshold
       state.panToNewFramework = state.zoom === defaultFramework.defaultZoom
     },
     mapCenterChanged: (state, a: PayloadAction<{ lat: number, lng: number }>) => {
       state.query.center = a.payload
     },
     alterQueryFramework: (state, a: PayloadAction<string>) => {
-      state.query.framework = a.payload
+      state.currentFramework = frameworks[a.payload]
       state.query.habitatids = []
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
@@ -99,7 +100,7 @@ let slice = createSlice({
       state.fieldData = a.payload.fieldData
     },
     fetchHabitatsCompleted: (state, a: PayloadAction<FrameworkHabitats>) => {
-      state.frameworkHabitats.set(a.payload.framework, a.payload.habitats)
+      state.frameworkHabitats.set(a.payload.framework.defaultQuery.tableName, a.payload.habitats)
     },
     selectPolygon: (state, a: PayloadAction<Poly | undefined>) => {
       // the new value is `undefined` if deselecting
@@ -148,7 +149,7 @@ let slice = createSlice({
     toggleSelectAllHabitats: (state, a: PayloadAction<boolean>) => {
       if (a.payload) {
         const allFrameworkHabitatIds = 
-          state.frameworkHabitats.get(frameworks[state.query.framework])?.map((x: Habitat) => {return x.id})
+          state.frameworkHabitats.get(state.currentFramework.defaultQuery.tableName)?.map((x: Habitat) => {return x.id})
         state.query.habitatids = allFrameworkHabitatIds ? allFrameworkHabitatIds : []  
       } else {
         state.query.habitatids = []

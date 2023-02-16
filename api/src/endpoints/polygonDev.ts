@@ -10,9 +10,13 @@ import { env } from '../env'
     {
         "framework": "liveng0",
         "indexname": "NDVI",
-        "polyid": "489639",
-        "polyPartition": "SD87"
+        "polyid": ["489639"],
+        "polyPartition": ["SD87"],
+        "yearFrom":2020,"monthFrom":12,"yearTo":2021,"monthTo":3    - Date range optional - if not passed all contents will be returned
     }
+
+    The normal use case is to query for a single polygon / partition, 
+    but specifying the query parameters as arrays allows API users to include multiple if required
 */
 
 export const getPolygonDev = async (input: any) => {
@@ -20,6 +24,10 @@ export const getPolygonDev = async (input: any) => {
     console.log(`At ${(new Date()).toISOString()} - entering function`)
 
     let args = parseArgs(input)
+
+    // get date strings like '202004' (for April 2020)
+    let dateFrom = `${args.yearFrom}${zeroPad(args.monthFrom)}`
+    let dateTo = `${args.yearTo}${zeroPad(args.monthTo)}`
 
     // https://github.com/datalanche/node-pg-format
     // %% outputs a literal % character.
@@ -33,15 +41,19 @@ export const getPolygonDev = async (input: any) => {
         where
             framework=%L
             and indexname=%L
-            and poly_partition=%L
-            and polyid=%L
+            and year || month >= %L
+            and year || month <= %L
+            and poly_partition in (%L)
+            and polyid in (%L)
         order by year, month
         `,
         env.MONTHLY_NEAREST_50_TEST_TABLE,
         args.framework,
         args.indexname,
-        args.polyPartition,
-        args.polyid
+        dateFrom,
+        dateTo,
+        args.polyPartitions,
+        args.polyids
     )
 
     console.log(sql)
@@ -50,3 +62,5 @@ export const getPolygonDev = async (input: any) => {
     console.log(`At ${(new Date()).toISOString()} - got query result`)
     return result.Items
 }
+
+let zeroPad = (n: number) => String(n).padStart(2, '0')
