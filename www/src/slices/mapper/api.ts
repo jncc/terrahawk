@@ -21,7 +21,6 @@ export let fetchPolygons = (query: RootState['mapper']['query'],
       framework: currentFramework.defaultQuery.tableName,
       bbox: bboxToWkt(getBboxFromBounds(bounds)),
       limit: 3001
-      limit: 3001
     }
   }
 
