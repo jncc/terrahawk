@@ -32,7 +32,7 @@ contexts = {
             "--FRAMEWORKS": "'liveng0','liveng1'",
             "--SOURCE_TABLE_NAME": "aggregated_monthly_20230125",
             "--TARGET_TABLE_NAME": "monthly_nearest50_20230125",
-            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly_nearest50/"
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50-2/"
         }
     },
     "england_test": {
@@ -85,7 +85,7 @@ contexts = {
             "--FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "--SOURCE_TABLE_NAME": "aggregated_monthly_20230125",
             "--TARGET_TABLE_NAME": "monthly_nearest50_20230125",
-            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly_nearest50/"
+            "--TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50-2/"
         }
     },
     "scotland_test": {
