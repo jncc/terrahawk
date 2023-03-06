@@ -59,7 +59,7 @@ def get_date_ranges(from_year, from_month, to_year, to_month, months_per_run):
 
 def start_job_run(task_args):
     response = client.start_job_run(
-                JobName = context["job_name"],
+                JobName = context["task_name"],
                 Arguments = task_args )
     
     return response["JobRunId"]
@@ -67,14 +67,15 @@ def start_job_run(task_args):
 def await_task_run_completion(client, task_name, run_id):
     while True:
         response = client.get_job_run(
-            Name=task_name,
+            JobName=task_name,
             RunId=run_id,
+            PredecessorsIncluded=False
         )
-        status = response["Run"]["Status"]
-        if status in ['RUNNING', 'STOPPING']:
+        status = response["JobRun"]["JobRunState"]
+        if status in ['STARTING', 'WAITING', 'RUNNING', 'STOPPING']:
             time.sleep(60)
             continue
-        elif status == 'COMPLETED':
+        elif status == 'SUCCEEDED':
             break
         else:
             raise Exception("Encountered unexpected job status: " + status)
@@ -111,13 +112,15 @@ validate_year(args['TO_YEAR'], "TO_YEAR")
 validate_month(args['TO_MONTH'], "TO_MONTH")
 validate_months_per_run(args['MONTHS_PER_RUN'], "MONTHS_PER_RUN")
 
-date_ranges = get_date_ranges(args['FROM_YEAR'], args['FROM_MONTH'], args['TO_YEAR'], args['TO_MONTH'], args['MONTHS_PER_RUN'])
+date_ranges = get_date_ranges(int(args['FROM_YEAR']), int(args['FROM_MONTH'])
+                              , int(args['TO_YEAR']), int(args['TO_MONTH']), int(args['MONTHS_PER_RUN']))
 
 last_run_id = None
 
 for date_range in date_ranges:
 
-    last_run_id = start_job_run(context["params"].update(date_range))
+    context["params"].update(date_range)
+    last_run_id = start_job_run(context["params"])
 
     if last_run_id:
         await_task_run_completion(client, context["task_name"], last_run_id)
