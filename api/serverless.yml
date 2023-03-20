@@ -2,7 +2,7 @@
 service: habmon-api
 
 # Serverless framework version
-frameworkVersion: '2'
+frameworkVersion: '3'
 
 provider:
   name: aws
