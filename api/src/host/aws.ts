@@ -84,6 +84,6 @@ let success = (data: any) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data, (_, v) => typeof v === 'bigint' ? v.toString() : v)
   }
 }
