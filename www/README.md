@@ -7,7 +7,7 @@ Terrahawk web app
 
 Install the `TSLint` VS Code plugin.
 
-    yarn deploy:alpha # build and deploy from local machine to AWS via Serverless 
+    yarn deploy:alpha --no-confirm                        # build and deploy from local machine to AWS via Serverless 
 
 Brief overview
 --------------
