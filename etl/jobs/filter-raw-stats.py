@@ -1,4 +1,5 @@
 import sys
+import boto3
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -14,8 +15,22 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
 
 required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
 optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
-optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
-args = getResolvedOptions(sys.argv, required_params + optional_present)
+workflow_params = ['WORKFLOW_NAME', 'WORKFLOW_RUN_ID']
+
+workflow_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in workflow_params]))
+
+args = {}
+
+if len(workflow_present) == 2:
+    client = boto3.client('glue')
+    
+else:
+    optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
+    args = getResolvedOptions(sys.argv, required_params + optional_present)
+
+
+
+
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
