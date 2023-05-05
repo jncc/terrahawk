@@ -24,12 +24,15 @@ args = {}
 if len(workflow_present) == 2:
     client = boto3.client('glue')
     
+    workflow_name = args['WORKFLOW_NAME']
+    workflow_run_id = args['WORKFLOW_RUN_ID']
+    workflow_params = client.get_workflow_run_properties(Name=workflow_name,RunId=workflow_run_id)
+
+    args = workflow_params["RunProperties"]
+
 else:
     optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
     args = getResolvedOptions(sys.argv, required_params + optional_present)
-
-
-
 
 
 sc = SparkContext()

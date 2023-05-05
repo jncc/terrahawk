@@ -117,17 +117,6 @@ date_ranges = get_date_ranges(int(args['FROM_YEAR']), int(args['FROM_MONTH']),
     int(args['TO_YEAR']), int(args['TO_MONTH']), int(args['MONTHS_PER_RUN']))
     
 max_running_workflows = int(args['MAX_RUNNING_WORKFLOWS'])
-# Add to jobs 
-# workflow_name = args['WORKFLOW_NAME']
-# workflow_run_id = args['WORKFLOW_RUN_ID']
-# workflow_params = glue_client.get_workflow_run_properties(Name=workflow_name,
-#                                     RunId=workflow_run_id)["RunProperties"]
-
-    # add     RunProperties={
-    #       'string': 'string'
-    #   }
-    # contain job args
-
 
 client = boto3.client('glue')
 
