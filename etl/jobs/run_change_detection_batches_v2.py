@@ -9,7 +9,6 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 
-from itertools import islice
 
 contexts = {
     "england": {

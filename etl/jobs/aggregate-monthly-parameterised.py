@@ -15,7 +15,7 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
 
 required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
 optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
-workflow_params = ['WORKFLOW_NAME', 'WORKFLOW_RUN_ID']
+workflow_params = ['WORKFLOW_NAME', 'WORKFLOW_RUN_ID',]
 
 workflow_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in workflow_params]))
 
@@ -28,7 +28,9 @@ if len(workflow_present) == 2:
     workflow_run_id = args['WORKFLOW_RUN_ID']
     workflow_params = client.get_workflow_run_properties(Name=workflow_name,RunId=workflow_run_id)
 
+    job_name = getResolvedOptions(sys.argv, ['JOB_NAME'])
     args = workflow_params["RunProperties"]
+    args.update({'JOB_NAME' : job_name})
 
 else:
     optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))

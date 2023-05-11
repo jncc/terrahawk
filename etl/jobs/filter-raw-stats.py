@@ -29,6 +29,10 @@ if len(workflow_present) == 2:
     workflow_params = client.get_workflow_run_properties(Name=workflow_name,RunId=workflow_run_id)
 
     args = workflow_params["RunProperties"]
+    
+    job_name = getResolvedOptions(sys.argv, ['JOB_NAME'])
+    args = workflow_params["RunProperties"]
+    args.update({'JOB_NAME' : job_name})
 
 else:
     optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
