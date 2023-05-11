@@ -142,3 +142,5 @@ while True:
     # break if we've run a workflow for each date range and there are no more running workflows left
     if workflow_count == len(date_ranges) and len(running_workflows) == 0: 
         break
+
+job.commit()
