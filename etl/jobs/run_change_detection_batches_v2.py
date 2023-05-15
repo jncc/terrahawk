@@ -37,7 +37,7 @@ contexts = {
             "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
             }
         }
-}
+    }
 
 def format_year_month_as_parameter(year, month):
     return str(year) + f'{month:02}'
@@ -125,10 +125,13 @@ date_range_index = 0
 
 while True:
     if len(running_workflows) < max_running_workflows and date_range_index < len(date_ranges) - 1:
+        #add the date range to the parameters for the run
         context["run_properties"].update(date_ranges[date_range_index])
 
+        #start a run
         run_id = start_workflow(client, context["workflow_name"], context["run_properties"])
 
+        #log run and increment
         running_workflows.append(run_id)
         workflow_count = workflow_count + 1 
         date_range_index = date_range_index + 1

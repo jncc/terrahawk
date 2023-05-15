@@ -1,5 +1,6 @@
 import sys
 import boto3
+import json
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -24,18 +25,28 @@ args = {}
 if len(workflow_present) == 2:
     client = boto3.client('glue')
     
-    workflow_name = args['WORKFLOW_NAME']
-    workflow_run_id = args['WORKFLOW_RUN_ID']
-    workflow_params = client.get_workflow_run_properties(Name=workflow_name,RunId=workflow_run_id)
+    job_params = getResolvedOptions(sys.argv, ['JOB_NAME'] + workflow_present)
 
-    job_name = getResolvedOptions(sys.argv, ['JOB_NAME'])
-    args = workflow_params["RunProperties"]
-    args.update({'JOB_NAME' : job_name})
+    workflow_name = job_params['WORKFLOW_NAME']
+    workflow_run_id = job_params['WORKFLOW_RUN_ID']
+
+    workflow_run_properties = client.get_workflow_run_properties(Name=workflow_name,RunId=workflow_run_id)['RunProperties']
+
+    args = {
+        'JOB_NAME'          : job_params['JOB_NAME'],
+        'SOURCE_TABLE_NAME' : workflow_run_properties['FILTERED_TARGET_TABLE_NAME'],
+        'TARGET_TABLE_NAME' : workflow_run_properties['AGGREGATION_TARGET_TABLE_NAME'],
+        'TARGET_PATH'       : workflow_run_properties['AGGREGATION_TARGET_PATH'],
+        'FROM_YEAR_MONTH'   : workflow_run_properties['FROM_YEAR_MONTH'],
+        'TO_YEAR_MONTH'     : workflow_run_properties['TO_YEAR_MONTH']
+    }
+
+    args_string = json.dumps(args)
+    print(f"workflow args: {args_string}")
 
 else:
     optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
     args = getResolvedOptions(sys.argv, required_params + optional_present)
-
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
