@@ -12,7 +12,8 @@ from awsglue.job import Job
 
 contexts = {
     "england": {
-        "workflow_name": "generate-compare-nearest-50",
+        "crawler_name": "raw_stats_crawler",
+        "workflow_name": "generate-compare-nearest-50-parallel",
         "run_properties" : {
             "FRAMEWORKS": "'liveng0','liveng1'",
             "SOURCE_TABLE_NAME": "raw_stats",
@@ -25,7 +26,8 @@ contexts = {
             }
         },
     "england_test": {
-        "workflow_name": "generate-compare-nearest-50-test",
+        "crawler_name": "raw_stats_crawler",
+        "workflow_name": "generate-compare-nearest-50-parallel",
         "run_properties" : {
             "FRAMEWORKS": "'liveng0','liveng1'",
             "SOURCE_TABLE_NAME": "raw_stats_test",
@@ -98,6 +100,22 @@ def check_running_workflows(client, workflow_name, running_workflows):
             running_workflows.remove(run_id)
             print(f"Encountered workflow error: {response['Run']['ErrorMessage']}")
             print(json.dumps(response['Run']['WorkflowRunProperties']))
+        
+        # to prevent exceeding the api rate limit
+        time.sleep(5)
+
+def start_crawler(client, crawler_name):
+    response = client.start_crawler(Name=crawler_name)
+    return response
+
+def check_crawler_running(client, crawler_name):
+    response = client.get_crawler(Name=crawler_name)
+    if response['Crawler']['State'] == "READY":
+        return False
+    elif response['Crawler']['State'] in ('RUNNING','STOPPING'):
+        return True
+    else:
+        raise Exception(f"Unknown crawler state {response['Crawler']['State']}")
 
 
 args = getResolvedOptions(sys.argv, [
@@ -119,9 +137,20 @@ max_running_workflows = int(args['MAX_RUNNING_WORKFLOWS'])
 
 client = boto3.client('glue')
 
+# crawl the source table
+print(f"Running crawler {context['crawler_name']}")
+
+if not check_crawler_running(client, context['crawler_name']):
+    start_crawler(client, context['crawler_name'])
+
+while check_crawler_running(client, context['crawler_name']):
+    time.sleep(5)
+
 running_workflows = []
 workflow_count = 0
 date_range_index = 0
+
+print("running workflow {context['workflow_name']}")
 
 while True:
     if len(running_workflows) < max_running_workflows and date_range_index < len(date_ranges) - 1:
@@ -145,5 +174,8 @@ while True:
     # break if we've run a workflow for each date range and there are no more running workflows left
     if workflow_count == len(date_ranges) and len(running_workflows) == 0: 
         break
+
+    # to prevent exceeding the api rate limit
+    time.sleep(5)
 
 job.commit()

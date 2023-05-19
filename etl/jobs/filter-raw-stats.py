@@ -34,6 +34,7 @@ if len(workflow_present) == 2:
 
     args = {
         'JOB_NAME'          : job_params['JOB_NAME'],
+        'FRAMEWORKS'        : workflow_run_properties['FRAMEWORKS'],
         'SOURCE_TABLE_NAME' : workflow_run_properties['SOURCE_TABLE_NAME'],
         'TARGET_TABLE_NAME' : workflow_run_properties['FILTERED_TARGET_TABLE_NAME'],
         'TARGET_PATH'       : workflow_run_properties['FILTERED_TARGET_PATH'],
@@ -90,7 +91,7 @@ filterSql = f'''
             date, frame, platform, gridsquare, habitat, mean, sd, median, min, max, q1, q3,
             row_number() over (partition by framework, date, polyid, indexname order by gridsquare asc ) as partedrownum
         from raw r0
-        where (r0.platform = 'S2' and exists (select r1.mean 
+        where ((r0.platform = 'S2' and exists (select r1.mean 
                     from raw as r1
                     where r1.indexname = 'NDVI'
                         and r1.polyid = r0.polyid
@@ -98,8 +99,10 @@ filterSql = f'''
                         and r1.frame = r0.frame
                         and r1.mean > 0.1
             ))
-            or r0.platform <> 'S2') ft
-    where partedrownum = 1 {between_date_clause}
+            or r0.platform <> 'S2')
+            and r0.framework in ({args['FRAMEWORKS']})
+            {between_date_clause}) ft
+    where partedrownum = 1
 '''
 
 filterQuery = sparkSqlQuery(

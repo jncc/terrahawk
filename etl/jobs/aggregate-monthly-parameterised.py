@@ -34,6 +34,7 @@ if len(workflow_present) == 2:
 
     args = {
         'JOB_NAME'          : job_params['JOB_NAME'],
+        'FRAMEWORKS'        : workflow_run_properties['FRAMEWORKS'],
         'SOURCE_TABLE_NAME' : workflow_run_properties['FILTERED_TARGET_TABLE_NAME'],
         'TARGET_TABLE_NAME' : workflow_run_properties['AGGREGATION_TARGET_TABLE_NAME'],
         'TARGET_PATH'       : workflow_run_properties['AGGREGATION_TARGET_PATH'],
