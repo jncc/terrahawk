@@ -103,6 +103,7 @@ def check_running_workflows(client, workflow_name, running_workflows):
         
         # to prevent exceeding the api rate limit
         time.sleep(5)
+    
 
 def start_crawler(client, crawler_name):
     response = client.start_crawler(Name=crawler_name)
@@ -147,13 +148,16 @@ while check_crawler_running(client, context['crawler_name']):
     time.sleep(5)
 
 running_workflows = []
-workflow_count = 0
+
 date_range_index = 0
 
-print("running workflow {context['workflow_name']}")
+print(f"running workflow {context['workflow_name']}")
 
-while True:
-    if len(running_workflows) < max_running_workflows and date_range_index < len(date_ranges) - 1:
+while date_range_index <= (len(date_ranges) - 1):
+    # prunes workflows that have completed
+    check_running_workflows(client, context["workflow_name"], running_workflows)
+
+    if len(running_workflows) < max_running_workflows:
         #add the date range to the parameters for the run
         context["run_properties"].update(date_ranges[date_range_index])
 
@@ -162,20 +166,12 @@ while True:
 
         #log run and increment
         running_workflows.append(run_id)
-        workflow_count = workflow_count + 1 
-        date_range_index = date_range_index + 1
 
-    # prunes workflows that have completed
-    check_running_workflows(client, context["workflow_name"], running_workflows)
+        date_range_index += 1
 
     if len(running_workflows) == max_running_workflows:
         time.sleep(60)
-
-    # break if we've run a workflow for each date range and there are no more running workflows left
-    if workflow_count == len(date_ranges) and len(running_workflows) == 0: 
-        break
-
-    # to prevent exceeding the api rate limit
-    time.sleep(5)
+    else:
+        time.sleep(5)
 
 job.commit()
