@@ -30,7 +30,7 @@ contexts = {
         "workflow_name": "generate-compare-nearest-50-parallel",
         "run_properties" : {
             "FRAMEWORKS": "'liveng0','liveng1'",
-            "SOURCE_TABLE_NAME": "raw_stats_test",
+            "SOURCE_TABLE_NAME": "raw_stats",
             "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_test",
             "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/",
             "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_test",
