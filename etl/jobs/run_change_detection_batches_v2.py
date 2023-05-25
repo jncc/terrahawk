@@ -22,7 +22,7 @@ contexts = {
             "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_20230125",
             "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/",
             "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_20230125",
-            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50-2/"
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50/"
             }
         },
     "england_test": {
@@ -38,7 +38,35 @@ contexts = {
             "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_test",
             "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
             }
-        }
+        },
+    "scotland": {
+        "crawler_name": "raw_stats_scotland_crawler",
+        "workflow_name": "generate-compare-nearest-50-parallel",
+        "run_properties" : {
+            "FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
+            "SOURCE_TABLE_NAME": "raw_stats_scotland",
+            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_20230125",
+            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/",
+            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_20230125",
+            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/",
+            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_20230125",
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50/"
+            }
+        },
+    "scotland_test": {
+        "crawler_name": "raw_stats_scotland_crawler",
+        "workflow_name": "generate-compare-nearest-50-parallel",
+        "run_properties" : {
+            "FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
+            "SOURCE_TABLE_NAME": "raw_stats_scotland",
+            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_test",
+            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/",
+            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_test",
+            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/",
+            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_test",
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
+            }
+        },
     }
 
 def format_year_month_as_parameter(year, month):
