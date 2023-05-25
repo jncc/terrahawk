@@ -1,5 +1,6 @@
 import sys
 import boto3
+import botocore
 import json
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
@@ -8,22 +9,25 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
+optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
+workflow_params = ['WORKFLOW_NAME', 'WORKFLOW_RUN_ID',]
+
+database_name = 'statsdb'
+
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
     for alias, frame in mapping.items():
         frame.toDF().createOrReplaceTempView(alias)
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
 
-required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
-optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
-workflow_params = ['WORKFLOW_NAME', 'WORKFLOW_RUN_ID',]
-
 workflow_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in workflow_params]))
 
 args = {}
 
+client = boto3.client('glue')
+
 if len(workflow_present) == 2:
-    client = boto3.client('glue')
     
     job_params = getResolvedOptions(sys.argv, ['JOB_NAME'] + workflow_present)
 
@@ -48,6 +52,20 @@ if len(workflow_present) == 2:
 else:
     optional_present = list(set([i[2:] for i in sys.argv]).intersection([i for i in optional_params]))
     args = getResolvedOptions(sys.argv, required_params + optional_present)
+    
+try:
+    table_info = client.get_table(
+        DatabaseName=database_name,
+        Name=args['TARGET_TABLE_NAME'],
+    )
+    
+    args['TARGET_PATH'] = table_info['Table']['StorageDescriptor']['Location']
+    
+except botocore.exceptions.ClientError as error:
+    if error.response['Error']['Code'] == 'EntityNotFoundException':
+        print(f"table {args['TARGET_TABLE_NAME']} doesnt exist and will be created")
+    else:
+        raise error
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -56,7 +74,7 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 raw = glueContext.create_dynamic_frame.from_catalog(
-  database = "statsdb",
+  database = database_name,
   table_name = args['SOURCE_TABLE_NAME'],
   transformation_ctx = "raw"
   )
@@ -110,7 +128,7 @@ sink = glueContext.getSink(
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )
-sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = args['TARGET_TABLE_NAME'])
+sink.setCatalogInfo(catalogDatabase = database_name, catalogTableName = args['TARGET_TABLE_NAME'])
 sink.setFormat("glueparquet")
 sink.writeFrame(aggregated)
 
