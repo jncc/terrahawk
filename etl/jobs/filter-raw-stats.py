@@ -63,7 +63,7 @@ try:
     
 except botocore.exceptions.ClientError as error:
     if error.response['Error']['Code'] == 'EntityNotFoundException':
-        print(f"table {args['TARGET_TABLE_NAME']} doesnt exist and will be created")
+        print(f"table {args['TARGET_TABLE_NAME']} doesn't exist and will be created")
     else:
         raise error
 
