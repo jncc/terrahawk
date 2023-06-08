@@ -105,6 +105,7 @@ Framework `liveng0` (Living England, Yorkshire subset)
             (select g.tile_name
             from osgb10km g
             where ST_Intersects(p.geometry_4326, g.wkb_geometry)
+            order by g.tile_name
             limit 1  -- choose the first one (assign exactly one gridsquare to each polygon!)
             ) g on true
             
