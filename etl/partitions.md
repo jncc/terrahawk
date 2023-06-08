@@ -45,32 +45,13 @@ Make a table in Athena: (this will need some tweaks when adding additional futur
 
 Convert to Parquet:
 
-    CREATE TABLE statsdb.partitions_deleteme
+    CREATE TABLE statsdb.partitions
     WITH (
         format = 'PARQUET',
         parquet_compression = 'SNAPPY',
-        external_location = 's3://jncc-habmon-alpha-stats-data/partitions-temp/parquet/',
-	partitioned_by = ARRAY['framework']
-    ) AS SELECT polyid, partition, zone, framework FROM partitions_csv
-
-Make the final table:
-
-    CREATE EXTERNAL TABLE statsdb.partitions (
-      `polyid` string, 
-      `partition` string, 
-      `zone` string
-    )
-    PARTITIONED BY (
-      `framework` string
-    )
-    ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
-    STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
-    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
-    LOCATION 's3://jncc-habmon-alpha-stats-data/partitions/parquet/'
-    TBLPROPERTIES (
-        'has_encrypted_data'='false',
-        'parquet.compression'='SNAPPY'
-    )
+        external_location = 's3://jncc-habmon-alpha-stats-data/partitions/parquet/',
+	      partitioned_by = ARRAY['framework']
+    ) AS SELECT polyid, partition, zone, framework FROM partitions_csv order by framework, polyid
 
     -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
     MSCK REPAIR TABLE partitions;

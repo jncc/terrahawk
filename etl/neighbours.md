@@ -78,27 +78,6 @@ WITH (
 ) AS SELECT polyid, neighbour, zone, framework FROM neighbours_nearest50_csv
 
 
--- 👉 load partitions (DON'T FORGET or you'll get zero results)!
-    MSCK REPAIR TABLE neighbours_nearest50;
-
-Obselete -- Make the final table:
-
-    CREATE EXTERNAL TABLE statsdb.neighbours_nearest50 (
-        `polyid` string,
-        `neighbour` string
-    )
-    PARTITIONED BY (
-      `framework` string
-    )
-    ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
-    STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
-    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
-    LOCATION 's3://jncc-habmon-alpha-stats-data/neighbours/nearest50/parquet/'
-    TBLPROPERTIES (
-        'has_encrypted_data'='false',
-        'parquet.compression'='SNAPPY'
-    )
-
-    -- 👉 load partitions (DON'T FORGET or you'll get zero results)!
+-- 👉 load neighbours (DON'T FORGET or you'll get zero results)!
     MSCK REPAIR TABLE neighbours_nearest50;
 
