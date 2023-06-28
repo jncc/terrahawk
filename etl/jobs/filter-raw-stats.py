@@ -116,7 +116,7 @@ filterSql = f'''
                         and r1.polyid = r0.polyid
                         and r1.framework = r0.framework
                         and r1.frame = r0.frame
-                        and r1.mean > 0.1
+                        and r1.mean > 0.2
             ))
             or r0.platform <> 'S2')
             and r0.framework in ({args['FRAMEWORKS']})
