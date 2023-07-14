@@ -144,15 +144,16 @@ ndviSql = '''
         r0.q1, 
         r0.q3
     from nodupes r0 
-    where (r0.platform = 'S2' and exists (select 1 
-            from nodupes as r1
-            where r1.indexname = 'NDVI'
-                and r1.polyid = r0.polyid
-                and r1.framework = r0.framework
-                and r1.frame = r0.frame
-                and r1.mean > 0.2
-        ))
-        or r0.platform <> 'S2'
+    where r0.platform != 'S2' or
+        exists (select 1 
+        from nodupes as r1
+        where r1.indexname = 'NDVI'
+            and r1.polyid = r0.polyid
+            and r1.framework = r0.framework
+            and r1.frame = r0.frame
+            and r1.platform = r0.platform
+            and r1.platform = 'S2'
+            and r1.mean > 0.2)
 '''
 
 ndviFilterQuery = sparkSqlQuery(
