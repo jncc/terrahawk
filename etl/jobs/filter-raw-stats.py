@@ -82,8 +82,8 @@ raw = glueContext.create_dynamic_frame.from_catalog(
 
 between_date_clause = ''
 if args.get('FROM_YEAR_MONTH') and args.get('TO_YEAR_MONTH'):
-    between_date_clause += f"and r0.year||r0.month >= '{args['FROM_YEAR_MONTH']}' and r0.year||r0.month <= '{args['TO_YEAR_MONTH']}'"
-
+    between_date_clause += f"and raw.year||raw.month >= '{args['FROM_YEAR_MONTH']}' and raw.year||raw.month <= '{args['TO_YEAR_MONTH']}'"
+    
 filterSql = f'''
     select
         ft.framework, 
