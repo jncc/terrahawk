@@ -9,7 +9,7 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 
-required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME']
+required_params = ['JOB_NAME','SOURCE_TABLE_NAME','TARGET_PATH','TARGET_TABLE_NAME','FRAMEWORKS']
 optional_params = ['FROM_YEAR_MONTH','TO_YEAR_MONTH']
 workflow_params = ['WORKFLOW_NAME', 'WORKFLOW_RUN_ID']
 
@@ -109,26 +109,58 @@ filterSql = f'''
     from (select framework, frameworkzone, indexname, year, month, polyid, seasonyear, season, 
             date, frame, platform, gridsquare, habitat, mean, sd, median, min, max, q1, q3,
             row_number() over (partition by framework, date, polyid, indexname order by gridsquare asc ) as partedrownum
-        from raw r0
-        where ((r0.platform = 'S2' and exists (select r1.mean 
-                    from raw as r1
-                    where r1.indexname = 'NDVI'
-                        and r1.polyid = r0.polyid
-                        and r1.framework = r0.framework
-                        and r1.frame = r0.frame
-                        and r1.mean > 0.2
-            ))
-            or r0.platform <> 'S2')
-            and r0.framework in ({args['FRAMEWORKS']})
+        from raw
+        where framework in ({args['FRAMEWORKS']})
             {between_date_clause}) ft
     where partedrownum = 1
 '''
 
-filterQuery = sparkSqlQuery(
+nodupes = sparkSqlQuery(
   glueContext,
   query = filterSql,
   mapping = {"raw": raw},
   transformation_ctx = "filterQuery")
+
+ndviSql = '''
+    select
+        r0.framework, 
+        r0.frameworkzone, 
+        r0.indexname, 
+        r0.year, 
+        r0.month, 
+        r0.polyid, 
+        r0.seasonyear, 
+        r0.season, 
+        r0.date, 
+        r0.frame, 
+        r0.platform, 
+        r0.gridsquare, 
+        r0.habitat, 
+        r0.mean, 
+        r0.sd, 
+        r0.median, 
+        r0.min, 
+        r0.max, 
+        r0.q1, 
+        r0.q3
+    from nodupes r0 
+    where r0.platform != 'S2' or
+        exists (select 1 
+        from nodupes as r1
+        where r1.indexname = 'NDVI'
+            and r1.polyid = r0.polyid
+            and r1.framework = r0.framework
+            and r1.frame = r0.frame
+            and r1.platform = r0.platform
+            and r1.platform = 'S2'
+            and r1.mean > 0.2)
+'''
+
+ndviFilterQuery = sparkSqlQuery(
+  glueContext,
+  query = ndviSql,
+  mapping = {"nodupes": nodupes},
+  transformation_ctx = "ndviFilterQuery")
 
 
 sink = glueContext.getSink(
@@ -142,6 +174,6 @@ sink = glueContext.getSink(
 )
 sink.setCatalogInfo(catalogDatabase = database_name, catalogTableName = args['TARGET_TABLE_NAME'])
 sink.setFormat("glueparquet")
-sink.writeFrame(filterQuery)
+sink.writeFrame(ndviFilterQuery)
 
 job.commit()
