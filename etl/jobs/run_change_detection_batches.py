@@ -15,14 +15,14 @@ contexts = {
         "crawler_name": "raw_stats_crawler",
         "workflow_name": "generate-compare-nearest-50-parallel",
         "run_properties" : {
-            "FRAMEWORKS": "'liveng0','liveng1'",
+            "FRAMEWORKS": "'liveng1'",
             "SOURCE_TABLE_NAME": "raw_stats",
-            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_20230125",
-            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/",
-            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_20230125",
-            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/",
-            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_20230125",
-            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50/"
+            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_20230718",
+            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230718/raw-stats-filtered/",
+            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_20230718",
+            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230718/aggregated-monthly/",
+            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_20230718",
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230718/monthly-nearest50/"
             }
         },
     "england_test": {
@@ -31,12 +31,12 @@ contexts = {
         "run_properties" : {
             "FRAMEWORKS": "'liveng0','liveng1'",
             "SOURCE_TABLE_NAME": "raw_stats",
-            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_test",
-            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/",
-            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_test",
-            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/",
-            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_test",
-            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
+            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_test_1",
+            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered_1/",
+            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_test_1",
+            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly_1/",
+            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_test_1",
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50_1/"
             }
         },
     "scotland": {
@@ -45,12 +45,12 @@ contexts = {
         "run_properties" : {
             "FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "SOURCE_TABLE_NAME": "raw_stats_scotland",
-            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_20230125",
-            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/raw-stats-filtered/",
-            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_20230125",
-            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/aggregated-monthly/",
-            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_20230125",
-            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50/"
+            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_20230718",
+            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230718/raw-stats-filtered/",
+            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_20230718",
+            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230718/aggregated-monthly/",
+            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_20230718",
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/20230718/monthly-nearest50/"
             }
         },
     "scotland_test": {
@@ -59,12 +59,12 @@ contexts = {
         "run_properties" : {
             "FRAMEWORKS": "'habmos_cairngorms','spaceint_cairngorms'",
             "SOURCE_TABLE_NAME": "raw_stats_scotland",
-            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_test",
-            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered/",
-            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_test",
-            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly/",
-            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_test",
-            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly_nearest50/"
+            "FILTERED_TARGET_TABLE_NAME": "raw_stats_filtered_test_3",
+            "FILTERED_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/raw-stats-filtered_3/",
+            "AGGREGATION_TARGET_TABLE_NAME": "aggregated_monthly_test_3",
+            "AGGREGATION_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/aggregated-monthly_3/",
+            "NEAREST50_TARGET_TABLE_NAME": "monthly_nearest50_test_3",
+            "NEAREST50_TARGET_PATH": "s3://jncc-habmon-alpha-stats-data/testing/monthly-nearest50_3/"
             }
         },
     }
