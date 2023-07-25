@@ -18,6 +18,19 @@ Dev locally:
 
 Deploy to an AWS environment:
 
-    deploy:alpha
+    yarn deploy:alpha
+
+Node Canvas
+============
 
 Missing shared libraries and size limitations mean that we need to include the canvas dependency as a lambda layer. Prebuilt lambda layers taken from [node-canvas-lambda](https://github.com/jwerre/node-canvas-lambda) for convenience. Instructions to rebuild can be found in that repo.
+
+To make this work I had to make the following changes to the docker file: 
+
+Change it to pull from the standard amazonlinux container
+
+line 1    FROM amazonlinux:latest
+
+Upgrade Python to 39
+
+line 12   python39 \
