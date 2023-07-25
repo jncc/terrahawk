@@ -29,8 +29,5 @@ To make this work I had to make the following changes to the docker file:
 
 Change it to pull from the standard amazonlinux container
 
-line 1    FROM amazonlinux:latest
+line 1    FROM amazonlinux:2
 
-Upgrade Python to 39
-
-line 12   python39 \
