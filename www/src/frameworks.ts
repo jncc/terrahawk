@@ -102,5 +102,28 @@ export const frameworks: {[framework: string]: Framework} = {
       habitatids: [],
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+  },
+  spaceint2022Cairngorms: {
+    name: `Space Intelligence 2022: Cairngorms subset`,
+    srs: `osgb`,
+    boundary: cairngormsBoundary,
+    maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
+    defaultZoom: 8,
+    maxZoom: 18,
+    minZoom: 7,
+    bboxPadding: {latPad: 0.02, lngPad: 0.04},
+    polygonZoomThreshold: 13,
+    defaultQuery: {
+      tableName: 'spaceint2022_cairngorms',
+      center: {lat: 57.1, lng: -3.7},
+      indexname: 'NDVI',
+      statistic: 'mean',
+      yearFrom: 2020,
+      monthFrom: 1,
+      yearTo: 2021,
+      monthTo: 12,
+      habitatids: [],
+    },
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   }
 }
