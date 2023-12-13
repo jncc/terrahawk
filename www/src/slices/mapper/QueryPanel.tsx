@@ -10,7 +10,7 @@ import { Panel } from './Panel'
 import { frameworks } from '../../frameworks'
 import { MultiSelectDropdown} from '../../components/MultiSelectDropdown'
 
-const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
+const years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
 const months = [
   [1, 'Jan'], [2, 'Feb'], [3, 'Mar'], [4, 'Apr'], [5, 'May'], [6, 'Jun'], [7, 'Jul'], [8, 'Aug'], [9, 'Sep'], [10, 'Oct'], [11, 'Nov'], [12, 'Dec']
 ]

@@ -120,7 +120,7 @@ export const frameworks: {[framework: string]: Framework} = {
       statistic: 'mean',
       yearFrom: 2020,
       monthFrom: 1,
-      yearTo: 2021,
+      yearTo: 2023,
       monthTo: 12,
       habitatids: [],
     },
