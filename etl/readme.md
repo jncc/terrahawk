@@ -251,4 +251,11 @@ Example parameters:
 
 (With the above parameters, the live england workflow would be submitted twice in series, firstly for Nov-Dec 2020 and then for Jan-Feb 2021)
 
+Viewing Parquet files
+---------------------
+The files genearted by the etl job steps aren't individually perticularly useful as glue subdivides the data from a job across multiple files according to it's own designs. However the raw files are the output for a perticular job run.
+
+There are few tools for reading parquet but one useful one is TAD, a selfcontained tool for analyzing tabular data. It has the ability to pivot data for summarising.
+
+https://www.tadviewer.com/
 
