@@ -124,6 +124,6 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
       habitatids: [],
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI', 'RVI', 'VVVH', 'VHVV', 'RFDI']
   }
 }
