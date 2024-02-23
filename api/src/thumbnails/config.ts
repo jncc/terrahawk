@@ -34,12 +34,22 @@ export const thumbnailConfig : Dictionary<any> = {
   rvi: {
     text: 'RVI',
     domain: [1, 1.6],
-    colourScale: 'rvi'
+    colourScale: 'sar'
   },
-  rviv: {
-    text: 'RVIv',
-    domain: [0, 4],
-    colourScale: 'rviv'
+  vvvh: {
+    text: 'VVVH',
+    domain: [1, 1.6],
+    colourScale: 'sar'
+  },
+  vhvv: {
+    text: 'VHVV',
+    domain: [1, 1.6],
+    colourScale: 'sar'
+  },
+  rfdi: {
+    text: 'RFDI',
+    domain: [1, 1.6],
+    colourScale: 'sar'
   },
   ndmi: {
     text: 'NDMI',
@@ -95,13 +105,8 @@ export const colourScales = [
     positions: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
   },
   {
-    name: 'rvi',
+    name: 'sar',
     colours: ['#440154', '#443a83', '#31688e', '#20908d', '#35b779', '#8fd744', '#fde725'],
     positions: [0, 0.16666, 0.33333, 0.49999, 0.66666, 0.83333, 1]
-  },
-  {
-    name: 'rviv',
-    colours: ['#440154', '#462c7b', '#3a528b', '#2b728e', '#20908d', '#27ae80', '#5dc962', '#abdc32', '#fde725'],
-    positions: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
   }
 ]
