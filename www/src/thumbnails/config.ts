@@ -1,6 +1,3 @@
-export const ardUrlBase = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/data'
-export const indicesUrlBase = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/indices'
-
 interface Dictionary<T> {
   [Key: string]: T
 }
