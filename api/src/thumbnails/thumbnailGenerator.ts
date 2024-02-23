@@ -7,7 +7,6 @@ import { getArdUrl, getIndexUrl } from './urlHelper'
 import { renderColorScaleToCanvas, renderWithColourScale } from './colourScaleHelper'
 import { createCanvas } from 'canvas'
 
-
 export class ThumbnailGenerator {
   ardUrlBase: string
   indicesUrlBase: string
@@ -189,9 +188,18 @@ export class ThumbnailGenerator {
           
           if (satellite === 's1') {
             if (data[0][totalPixelCount] && data[1][totalPixelCount]) {
-              red = this.stretchColour(thumbnailConfig.falseColour.rgbDomains.red, thumbnailConfig.trueColour.rgbDomains.red, data[0][totalPixelCount])
-              green = this.stretchColour(thumbnailConfig.falseColour.rgbDomains.green, thumbnailConfig.trueColour.rgbDomains.green, data[1][totalPixelCount])
-              blue =  this.stretchColour(thumbnailConfig.falseColour.rgbDomains.blue, thumbnailConfig.trueColour.rgbDomains.blue, Math.round(red/green))
+              red = this.stretchColour(
+                thumbnailConfig.falseColour.rgbDomains.red,
+                thumbnailConfig.trueColour.rgbDomains.red,
+                data[0][totalPixelCount])
+              green = this.stretchColour(
+                thumbnailConfig.falseColour.rgbDomains.green,
+                thumbnailConfig.trueColour.rgbDomains.green,
+                data[1][totalPixelCount])
+              blue =  this.stretchColour(
+                thumbnailConfig.falseColour.rgbDomains.blue,
+                thumbnailConfig.trueColour.rgbDomains.blue,
+                Math.round(red/green))
             } else {
               alpha = 0
             }

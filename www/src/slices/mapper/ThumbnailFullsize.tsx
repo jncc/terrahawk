@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react'
 
 import { useStateSelector } from '../../state/hooks'
 
-import { getPolygonOutline, getThumbnail, getReprojectedCoordinates, getBoundingBoxWithBuffer } from '../../thumbnails/thumbnailGenerator'
+import { ThumbnailGenerator } from '../../thumbnails/thumbnailGenerator'
+
+const ARD_URL_BASE = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/data'
+const INDICES_URL_BASE = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/indices'
 
 export let ThumbnailFullsize = (props: {frame: string, showOutline: boolean}) => {
 
@@ -17,10 +20,12 @@ export let ThumbnailFullsize = (props: {frame: string, showOutline: boolean}) =>
   let [height, setHeight] = useState(0)
   let [src, setSrc] = useState('http://placekitten.com/100/100')
 
+  let thumbnailGenerator = new ThumbnailGenerator(ARD_URL_BASE, INDICES_URL_BASE)
+
   useEffect(() => {
     if (!loaded && selectedPolygon) {
-      let bbox = getBoundingBoxWithBuffer(reprojectedCoords, 0.05)
-      getThumbnail(props.frame, bbox, 'trueColour').then((canvas) => {
+      let bbox = ThumbnailGenerator.getBoundingBoxWithBuffer(reprojectedCoords, 0.05)
+      thumbnailGenerator.getThumbnail(props.frame, bbox, 'trueColour').then((canvas) => {
         let imgSrc = canvas.toDataURL('image/png')
         setSrc(imgSrc)
       })
@@ -28,11 +33,11 @@ export let ThumbnailFullsize = (props: {frame: string, showOutline: boolean}) =>
     }
   }, [loaded])
 
-  let reprojectedCoords = getReprojectedCoordinates(selectedPolygon.geojson.coordinates, 'osgb')
+  let reprojectedCoords = ThumbnailGenerator.getReprojectedCoordinates(selectedPolygon.geojson.coordinates, 'osgb')
 
   let polygonRings : string[] = []
   if (loaded) {
-    polygonRings = getPolygonOutline(reprojectedCoords, width, height)
+    polygonRings = ThumbnailGenerator.getPolygonOutline(reprojectedCoords, width, height)
   }
 
   return (
