@@ -167,9 +167,9 @@ export function parsePolyids(args: Args) {
         if (typeof s !== 'string') {
             throw `All 'polyids' must be a string.`
         }
-        if (s.length < 3) {
-            throw `Value '${s}' is surely too short for a polyid.`
-        }
+        // if (s.length < 3) {
+        //     throw `Value '${s}' is surely too short for a polyid.`
+        // }
         if (s.length > 10) {
             throw `Value '${s}' is surely too long for a polyid.`
         }
