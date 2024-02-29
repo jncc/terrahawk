@@ -1,5 +1,5 @@
 
-export type Indexname = 'EVI' | 'NBR' | 'NDMI' | 'NDVI' | 'NDWI'
+export type Indexname = 'NBR' | 'NDMI' | 'NDVI' | 'NDWI' | 'RVI' | 'VVVH' | 'VHVV' | 'RFDI'
 export type Statistic = 'mean' | 'median' | 'min' | 'max' | 'Q1' | 'Q3'
 
 export type Framework = {

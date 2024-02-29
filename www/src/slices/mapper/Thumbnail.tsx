@@ -5,13 +5,17 @@ import { fromIntersection } from 'rxjs-web-observers'
 import { debounceTime, tap, mergeMap, filter, } from 'rxjs/operators'
 
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
-import { getBoundingBoxWithBuffer, getThumbnail } from '../../thumbnails/thumbnailGenerator'
+import { ThumbnailGenerator } from '../../thumbnails/thumbnailGenerator'
 import { getDisplayDate } from './helpers/dateHelper'
 import { mapperActions } from './slice'
 import { Indexname, Poly, SimpleDate } from './types'
 import { height, width, getThumbnailTypeArgument } from './helpers/thumbnailHelper'
 import { getCacheItem , setCacheItem } from './helpers/cacheHelper'
 import { RootState } from '../../state/store'
+
+const ARD_URL_BASE = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/data'
+const INDICES_URL_BASE = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/indices'
+const API_URL_BASE = 'https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com'
 
 export let Thumb = (props: {
   frame:        string,
@@ -23,13 +27,16 @@ export let Thumb = (props: {
   }) => {
 
   let dispatch = useStateDispatcher()
-  let selectedPolygon = useStateSelector(s => s.mapper.selectedPolygon) as Poly // can't be undefined down here
-  let hoveredFrame    = useStateSelector(s => s.mapper.hoveredFrame)
-  let selectedFrame   = useStateSelector(s => s.mapper.selectedFrame)
-  let showOutlines    = useStateSelector(s => s.mapper.showOutlines)
-  let useProxy        = useStateSelector(s => s.mapper.useProxy)
+  let selectedPolygon  = useStateSelector(s => s.mapper.selectedPolygon) as Poly // can't be undefined down here
+  let hoveredFrame     = useStateSelector(s => s.mapper.hoveredFrame)
+  let selectedFrame    = useStateSelector(s => s.mapper.selectedFrame)
+  let showOutlines     = useStateSelector(s => s.mapper.showOutlines)
+  let useProxy         = useStateSelector(s => s.mapper.useProxy)
+  let currentFramework = useStateSelector(s => s.mapper.currentFramework)
   // let thumbType       = useStateSelector(s => s.mapper.thumbType)
   // let indexname       = useStateSelector(s => s.mapper.query.indexname)
+
+  let thumbnailGenerator = new ThumbnailGenerator(ARD_URL_BASE, INDICES_URL_BASE)
 
   let [load, setLoad]         = useState(false)
   let [loaded, setLoaded]     = useState(false)
@@ -74,9 +81,9 @@ export let Thumb = (props: {
   useEffect(() => {
 
     if (load && !loaded) {
-      let bbox = getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
+      let bbox = ThumbnailGenerator.getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
       if (useProxy) {
-        let url = `https://xnqk0s6yzh.execute-api.eu-west-2.amazonaws.com/thumb?framename=${props.frame}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
+        let url = `${API_URL_BASE}/thumb?framename=${props.frame}&framework=${currentFramework.defaultQuery.tableName}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
         getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, thumbnailType).then((imgSrc) => setSrc(imgSrc))
@@ -135,20 +142,20 @@ export let Thumb = (props: {
 
     </div>
   )
-}
 
-async function getThumbnailWithCache(frameId: string, polygonId: string, box: number[], thumbnailType: string) {
-  let thumbnailString = ''
-
-  let thumbnailKey = `thumbs_${frameId}_${polygonId}_${thumbnailType}`
-  let cachedValue = getCacheItem(thumbnailKey)
-  if (cachedValue && cachedValue != null) {
-    thumbnailString = cachedValue
-  } else {
-    let canvas = await getThumbnail(frameId, box, thumbnailType)
-    thumbnailString = canvas.toDataURL('image/png')
-    setCacheItem(thumbnailKey, thumbnailString)
+  async function getThumbnailWithCache(frameId: string, polygonId: string, box: number[], thumbnailType: string) {
+    let thumbnailString = ''
+  
+    let thumbnailKey = `thumbs_${frameId}_${polygonId}_${thumbnailType}`
+    let cachedValue = getCacheItem(thumbnailKey)
+    if (cachedValue && cachedValue != null) {
+      thumbnailString = cachedValue
+    } else {
+      let canvas = await thumbnailGenerator.getThumbnail(frameId, box, thumbnailType)
+      thumbnailString = canvas.toDataURL('image/png')
+      setCacheItem(thumbnailKey, thumbnailString)
+    }
+  
+    return thumbnailString
   }
-
-  return thumbnailString
 }

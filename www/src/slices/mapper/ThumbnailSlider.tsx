@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 
 import { Poly, SimpleDate } from './types'
 import { Thumb } from './Thumbnail'
-import { getPolygonOutline, getReprojectedCoordinates } from '../../thumbnails/thumbnailGenerator'
+import { ThumbnailGenerator } from '../../thumbnails/thumbnailGenerator'
 import { height, width } from './helpers/thumbnailHelper'
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { Toggle } from '../../components/Toggle'
@@ -21,9 +21,9 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let indexname = useStateSelector(s => s.mapper.query.indexname)
   
   // do calcs common to all the thumbnails up here in the slider
-  let nativeCoords = useMemo(() => getReprojectedCoordinates(selectedPolygon.geojson.coordinates, framework.srs),
+  let nativeCoords = useMemo(() => ThumbnailGenerator.getReprojectedCoordinates(selectedPolygon.geojson.coordinates, framework.srs),
                                                             [selectedPolygon.geojson.coordinates, framework.srs])
-  let polygonRings = useMemo(() => getPolygonOutline(nativeCoords, width, height),
+  let polygonRings = useMemo(() => ThumbnailGenerator.getPolygonOutline(nativeCoords, width, height),
                                                     [nativeCoords, width, height])
   let outline = <svg
                   className="col-span-full row-span-full animate-quickfadein"
