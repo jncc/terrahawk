@@ -59,6 +59,9 @@ provider:
     PGPASSWORD: ${file(./.env.${env:ENVNAME}.yml):PGPASSWORD}
     MONTHLY_NEAREST_50_TABLE: ${file(./.env.${env:ENVNAME}.yml):MONTHLY_NEAREST_50_TABLE}
     MONTHLY_NEAREST_50_TEST_TABLE: ${file(./.env.${env:ENVNAME}.yml):MONTHLY_NEAREST_50_TEST_TABLE}
+    CEDA_ARD_URL_BASE: ${file(./.env.${env:ENVNAME}.yml):CEDA_ARD_URL_BASE}
+    CEDA_INDICES_URL_BASE: ${file(./.env.${env:ENVNAME}.yml):CEDA_INDICES_URL_BASE}
+    GWS_INDICES_URL_BASE: ${file(./.env.${env:ENVNAME}.yml):GWS_INDICES_URL_BASE}
 
 # you can add packaging information here
 #package:
