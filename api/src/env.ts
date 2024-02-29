@@ -13,6 +13,9 @@ let PGUSER                          = process.env.PGUSER
 let PGPASSWORD                      = process.env.PGPASSWORD
 let MONTHLY_NEAREST_50_TABLE        = process.env.MONTHLY_NEAREST_50_TABLE
 let MONTHLY_NEAREST_50_TEST_TABLE   = process.env.MONTHLY_NEAREST_50_TEST_TABLE
+let CEDA_ARD_URL_BASE               = process.env.CEDA_ARD_URL_BASE
+let CEDA_INDICES_URL_BASE           = process.env.CEDA_INDICES_URL_BASE
+let GWS_INDICES_URL_BASE            = process.env.GWS_INDICES_URL_BASE
 
 if (NODE_ENV === 'development') {
     if (!AWS_PROFILE) {
@@ -37,6 +40,15 @@ if (!MONTHLY_NEAREST_50_TEST_TABLE) {
 if (!MONTHLY_NEAREST_50_TABLE) {
     throw(`Environment variable MONTHLY_NEAREST_50_TABLE is required.`)
 }
+if (!CEDA_ARD_URL_BASE) {
+    throw(`Environment variable CEDA_ARD_URL_BASE is required.`)
+}
+if (!CEDA_INDICES_URL_BASE) {
+    throw(`Environment variable CEDA_INDICES_URL_BASE is required.`)
+}
+if (!GWS_INDICES_URL_BASE) {
+    throw(`Environment variable GWS_INDICES_URL_BASE is required.`)
+}
 
 /**
  * Provides the environment variables for the application.
@@ -46,7 +58,10 @@ export const env = {
     AWS_PROFILE,
     PGHOST,
     MONTHLY_NEAREST_50_TABLE,
-    MONTHLY_NEAREST_50_TEST_TABLE
+    MONTHLY_NEAREST_50_TEST_TABLE,
+    CEDA_ARD_URL_BASE,
+    CEDA_INDICES_URL_BASE,
+    GWS_INDICES_URL_BASE
     // the PG env vars are actually accessed from process.env directly by the libraries
     // so we don't actually need to export them
 }

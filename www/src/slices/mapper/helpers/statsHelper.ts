@@ -14,11 +14,14 @@ export let getStatValues = (statistic: Statistic, s: MonthStats): StatValues => 
 
 // todo: make this the source of truth in `types`, then define the union from it
 export const indexnames: {[name in Indexname]: { description: string}} = {
-  'EVI':  {description: 'vegetation', },
   'NBR':  {description: 'burn',       },
   'NDMI': {description: 'moisture',   },
   'NDVI': {description: 'vegetation', },
   'NDWI': {description: 'water',      },
+  'RVI':  {description: 'SAR vegetation', },
+  'VVVH':  {description: 'SAR cross-ratio', },
+  'VHVV':  {description: 'SAR cross-ratio', },
+  'RFDI':  {description: 'SAR forest degredation', }
 }
 
 // todo: make this the source of truth in `types`, then define the union from it
