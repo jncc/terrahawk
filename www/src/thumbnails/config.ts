@@ -30,22 +30,22 @@ export const thumbnailConfig : Dictionary<any> = {
   },
   rvi: {
     text: 'RVI',
-    domain: [1, 1.6],
+    domain: [0.40, 1.03],
     colourScale: 'sar'
   },
   vvvh: {
     text: 'VVVH',
-    domain: [1, 1.6],
+    domain: [0.50, 0.72],
     colourScale: 'sar'
   },
   vhvv: {
     text: 'VHVV',
-    domain: [1, 1.6],
+    domain: [1.34, 1.96],
     colourScale: 'sar'
   },
   rfdi: {
     text: 'RFDI',
-    domain: [1, 1.6],
+    domain: [0.48, 0.80],
     colourScale: 'sar'
   },
   ndmi: {
