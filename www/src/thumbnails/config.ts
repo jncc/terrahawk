@@ -11,7 +11,7 @@ export const thumbnailBuffer = 0.05 // percent to add around the edge
 
 export const thumbnailConfig : Dictionary<any> = {
   trueColour: {
-    text: 'trueColour',
+    text: 'True colour',
     rgbDomains: {
       red: [0, 256],
       green: [0, 256],
@@ -20,7 +20,7 @@ export const thumbnailConfig : Dictionary<any> = {
     colourScale: 'rgb'
   },
   falseColour: {
-    text: 'falseColour',
+    text: 'Backscatter',
     rgbDomains: {
       red: [-20, 20],
       green: [-30, 20],
@@ -34,12 +34,12 @@ export const thumbnailConfig : Dictionary<any> = {
     colourScale: 'sar'
   },
   vvvh: {
-    text: 'VVVH',
+    text: 'VV/VH',
     domain: [0.50, 0.72],
     colourScale: 'sar'
   },
   vhvv: {
-    text: 'VHVV',
+    text: 'VH/VV',
     domain: [1.34, 1.96],
     colourScale: 'sar'
   },

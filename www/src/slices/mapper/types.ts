@@ -1,5 +1,14 @@
 
-export type Indexname = 'NBR' | 'NDMI' | 'NDVI' | 'NDWI' | 'RVI' | 'VVVH' | 'VHVV' | 'RFDI'
+export type Indexname = 'RVI' | 'VVVH' | 'VHVV' | 'RFDI' | 'NBR' | 'NDMI' | 'NDVI' | 'NDWI'
+
+export function isS1Index(s: Indexname): s is Indexname {
+  return ['RVI', 'VVVH', 'VHVV', 'RFDI'].includes(s)
+}
+
+export function isS2Index(s: Indexname): s is Indexname {
+  return ['NBR', 'NDMI', 'NDVI', 'NDWI'].includes(s)
+}
+
 export type Statistic = 'mean' | 'median' | 'min' | 'max' | 'Q1' | 'Q3'
 
 export type Framework = {

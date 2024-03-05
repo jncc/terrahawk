@@ -7,8 +7,8 @@ export const width  = 100
 
 export const getThumbnailTypeArgument = (thumbType: RootState['mapper']['thumbType'], indexname: Indexname) => {
   switch (thumbType) {
-    // todo: support S1 falseColour as well as S2 trueColour
-    case 'colour': return 'trueColour' 
+    case 'trueColour': return 'trueColour'
+    case 'falseColour': return 'falseColour'
     case 'index' : return indexname.toLowerCase()
   }
 }

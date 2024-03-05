@@ -48,7 +48,7 @@ export let QueryPanel = () => {
           onChange={e => dispatch(mapperActions.alterQueryIndexname(e.target.value as Indexname))}
           className="h-9 p-1 w-full border-2 border-gray-300 text-gray-900 rounded-lg custom-ring">
           {
-            indices.map((name) => <option key={name} value={name}>{`${name}`} {`(${indexnames[name].description})`}</option>)
+            indices.map((name) => <option key={name} value={name}>{`${indexnames[name].name}`} {`(${indexnames[name].description})`}</option>)
           }
         </select>
       </div>

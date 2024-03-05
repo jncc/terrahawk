@@ -1,10 +1,11 @@
 
 import React, { useMemo } from 'react'
 
-import { Poly, SimpleDate } from './types'
+import { Poly, SimpleDate, isS1Index } from './types'
 import { Thumb } from './Thumbnail'
 import { ThumbnailGenerator } from '../../thumbnails/thumbnailGenerator'
 import { height, width } from './helpers/thumbnailHelper'
+import { thumbnailConfig } from '../../thumbnails/config'
 import { useStateDispatcher, useStateSelector } from '../../state/hooks'
 import { Toggle } from '../../components/Toggle'
 import { mapperActions } from './slice'
@@ -19,6 +20,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let useProxy = useStateSelector(s => s.mapper.useProxy)
   let thumbType = useStateSelector(s => s.mapper.thumbType)
   let indexname = useStateSelector(s => s.mapper.query.indexname)
+  let rgbThumbType = isS1Index(indexname) ? 'falseColour' : 'trueColour'
   
   // do calcs common to all the thumbnails up here in the slider
   let nativeCoords = useMemo(() => ThumbnailGenerator.getReprojectedCoordinates(selectedPolygon.geojson.coordinates, framework.srs),
@@ -52,11 +54,11 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
                 type="radio"
                 className="custom-ring cursor-pointer"
                 name="thumbnailtype"
-                value="colour"
-                checked={thumbType === 'colour'}
+                value={rgbThumbType}
+                checked={thumbType === rgbThumbType}
                 onChange={() => dispatch(mapperActions.toggleThumbType())}
               />
-              <span className="ml-1">True colour</span>
+              <span className="ml-1">{thumbnailConfig[rgbThumbType].text}</span>
             </label>
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input
@@ -67,7 +69,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
                 checked={thumbType === 'index'}
                 onChange={() => dispatch(mapperActions.toggleThumbType())}
               />
-              <span className="ml-1">Index ({indexnames[indexname].description})</span>
+              <span className="ml-1">{indexnames[indexname].name} ({indexnames[indexname].description})</span>
             </label>
         </div>
         <div className="flex-grow"></div>

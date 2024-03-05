@@ -1,8 +1,8 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Framework, Indexname, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
-  FieldData, FieldDataQueryResult, Statistic, MonthStats, SimpleDate, Habitat, FrameworkHabitats } from './types'
+import { Poly, ChoroplethItem, Framework, Indexname, isS1Index, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
+  FieldData, FieldDataQueryResult, Statistic, MonthStats, Habitat, FrameworkHabitats } from './types'
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
@@ -29,7 +29,7 @@ let slice = createSlice({
     hoveredFrame: undefined as string | undefined,
     showOutlines: true,
     useProxy: true,
-    thumbType: 'index' as 'colour' | 'index',
+    thumbType: 'index' as 'trueColour' | 'falseColour' | 'index',
     frameworkHabitats: new Map<String, Habitat[]>(),
   },
   reducers: {
@@ -136,7 +136,11 @@ let slice = createSlice({
       state.useProxy = !state.useProxy
     },
     toggleThumbType: (state) => {
-      state.thumbType = state.thumbType === 'colour' ? 'index' : 'colour' 
+      if (isS1Index(state.query.indexname)) {
+        state.thumbType = state.thumbType === 'falseColour' ? 'index' : 'falseColour' 
+      } else {
+        state.thumbType = state.thumbType === 'trueColour' ? 'index' : 'trueColour' 
+      }
     },
     toggleSelectedHabitat: (state, a: PayloadAction<number>) => {
       const oldHabitatIds = [...state.query.habitatids]
