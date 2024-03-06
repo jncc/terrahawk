@@ -11,6 +11,8 @@ export const getThumb = async (input: any) => {
   let thumbType = args.thumbType
   let framework = args.framework
 
+  console.log(`Generating ${thumbType} thumbnail for frame ${frame} with bbox ${bbox}`)
+
   let ardUrlBase = env.CEDA_ARD_URL_BASE
   let indicesUrlBase = env.CEDA_INDICES_URL_BASE
 

@@ -11,7 +11,8 @@ export const thumbnailBuffer = 0.05 // percent to add around the edge
 
 export const thumbnailConfig : Dictionary<any> = {
   trueColour: {
-    text: 'True colour',
+    text: 'trueColour',
+    displayName: 'True colour',
     rgbDomains: {
       red: [0, 256],
       green: [0, 256],
@@ -20,7 +21,8 @@ export const thumbnailConfig : Dictionary<any> = {
     colourScale: 'rgb'
   },
   falseColour: {
-    text: 'Backscatter',
+    text: 'falseColour',
+    displayName: 'Backscatter',
     rgbDomains: {
       red: [-20, 20],
       green: [-30, 20],
@@ -30,46 +32,49 @@ export const thumbnailConfig : Dictionary<any> = {
   },
   rvi: {
     text: 'RVI',
+    displayName: 'RVI',
     domain: [0.40, 1.03],
     colourScale: 'sar'
   },
   vvvh: {
-    text: 'VV/VH',
+    text: 'VVVH',
+    displayName: 'VV/VH',
     domain: [0.50, 0.72],
     colourScale: 'sar'
   },
   vhvv: {
-    text: 'VH/VV',
+    text: 'VHVV',
+    displayName: 'VH/VV',
     domain: [1.34, 1.96],
     colourScale: 'sar'
   },
   rfdi: {
     text: 'RFDI',
+    displayName: 'RFDI',
     domain: [0.48, 0.80],
     colourScale: 'sar'
   },
   ndmi: {
     text: 'NDMI',
+    displayName: 'NDMI',
     domain: [-1, 1],
     colourScale: 'ndmi'
   },
   ndvi: {
     text: 'NDVI',
+    displayName: 'NDVI',
     domain: [-1, 1],
     colourScale: 'ndvi'
   },
   ndwi: {
     text: 'NDWI',
+    displayName: 'NDWI',
     domain: [-1, 1],
     colourScale: 'ndwi'
   },
-  evi: {
-    text: 'EVI',
-    domain: [-2, 3],
-    colourScale: 'evi'
-  },
   nbr: {
     text: 'NBR',
+    displayName: 'NBR',
     domain: [-1, 1],
     colourScale: 'nbr'
   }
@@ -90,11 +95,6 @@ export const colourScales = [
     name: 'ndwi',
     colours: ['#cde3f9', '#94c5df', '#73b3d8', '#57a0cf', '#3e8ec4', '#2879b9', '#1563aa', '#084b94', '#08306b'],
     positions: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
-  },
-  {
-    name: 'evi',
-    colours: ['#f7fcf5', '#d5efcf', '#9ed898', '#54b567', '#1d8641', '#00441b'],
-    positions: [0,0.2,0.4,0.6,0.8,1]
   },
   {
     name: 'ndvi',

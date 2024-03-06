@@ -21,7 +21,6 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let thumbType = useStateSelector(s => s.mapper.thumbType)
   let indexname = useStateSelector(s => s.mapper.query.indexname)
   let platform = useStateSelector(s => s.mapper.platform)
-  let thumbLabel = platform === 's1' ? thumbnailConfig['falseColour'].text : thumbnailConfig['trueColour'].text
   
   // do calcs common to all the thumbnails up here in the slider
   let nativeCoords = useMemo(() => ThumbnailGenerator.getReprojectedCoordinates(selectedPolygon.geojson.coordinates, framework.srs),
@@ -60,7 +59,8 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
                 checked={thumbType === 'ard'}
                 onChange={() => dispatch(mapperActions.toggleThumbType())}
               />
-              <span className="ml-1">{thumbLabel}</span>
+              <span className="ml-1">{platform === 's1' ? thumbnailConfig['falseColour'].displayName : 
+                thumbnailConfig['trueColour'].displayName}</span>
             </label>
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input
