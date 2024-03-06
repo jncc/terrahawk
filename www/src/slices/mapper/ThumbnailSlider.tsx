@@ -20,7 +20,8 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
   let useProxy = useStateSelector(s => s.mapper.useProxy)
   let thumbType = useStateSelector(s => s.mapper.thumbType)
   let indexname = useStateSelector(s => s.mapper.query.indexname)
-  let rgbThumbType = isS1Index(indexname) ? 'falseColour' : 'trueColour'
+  let platform = useStateSelector(s => s.mapper.platform)
+  let thumbLabel = platform === 's1' ? thumbnailConfig['falseColour'].text : thumbnailConfig['trueColour'].text
   
   // do calcs common to all the thumbnails up here in the slider
   let nativeCoords = useMemo(() => ThumbnailGenerator.getReprojectedCoordinates(selectedPolygon.geojson.coordinates, framework.srs),
@@ -42,6 +43,7 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
           frame={x.frame}
           date={x.date}
           thumbType={thumbType}
+          platform={platform}
           indexname={indexname}
           nativeCoords={nativeCoords}
           outlineSvg={outline}/>)
@@ -54,11 +56,11 @@ export let ThumbnailSlider = (props: {framesWithDate: {frame: string, date: Simp
                 type="radio"
                 className="custom-ring cursor-pointer"
                 name="thumbnailtype"
-                value={rgbThumbType}
-                checked={thumbType === rgbThumbType}
+                value="ard"
+                checked={thumbType === 'ard'}
                 onChange={() => dispatch(mapperActions.toggleThumbType())}
               />
-              <span className="ml-1">{thumbnailConfig[rgbThumbType].text}</span>
+              <span className="ml-1">{thumbLabel}</span>
             </label>
             <label className="inline-flex items-center cursor-pointer text-sm ">
               <input

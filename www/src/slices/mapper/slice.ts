@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Poly, ChoroplethItem, Framework, Indexname, isS1Index, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
+import { Poly, ChoroplethItem, Framework, Indexname, isS1Index, isS2Index, PolygonsQueryResult, ChoroplethQueryResult, ChoroplethNone,
   FieldData, FieldDataQueryResult, Statistic, MonthStats, Habitat, FrameworkHabitats } from './types'
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
@@ -29,7 +29,8 @@ let slice = createSlice({
     hoveredFrame: undefined as string | undefined,
     showOutlines: true,
     useProxy: true,
-    thumbType: 'index' as 'trueColour' | 'falseColour' | 'index',
+    thumbType: 'index' as 'ard' | 'index',
+    platform: 's2' as 's1' | 's2',
     frameworkHabitats: new Map<String, Habitat[]>(),
   },
   reducers: {
@@ -66,6 +67,15 @@ let slice = createSlice({
     },
     alterQueryIndexname: (state, a: PayloadAction<Indexname>) => {
       state.query.indexname = a.payload
+
+      // platform change
+      if ((isS1Index(state.query.indexname) && state.platform !== 's1') || isS2Index(state.query.indexname) && state.platform !== 's2') {
+        state.platform = isS1Index(state.query.indexname) ? 's1' : 's2'
+        state.selectedPolygonStats = undefined
+        state.previousSelectedPolygon = undefined
+        state.selectedFrame = undefined
+        state.hoveredFrame = undefined
+      }
     },
     alterQueryStatistic: (state, a: PayloadAction<Statistic>) => {
       state.query.statistic = a.payload
@@ -136,11 +146,7 @@ let slice = createSlice({
       state.useProxy = !state.useProxy
     },
     toggleThumbType: (state) => {
-      if (isS1Index(state.query.indexname)) {
-        state.thumbType = state.thumbType === 'falseColour' ? 'index' : 'falseColour' 
-      } else {
-        state.thumbType = state.thumbType === 'trueColour' ? 'index' : 'trueColour' 
-      }
+      state.thumbType = state.thumbType === 'ard' ? 'index' : 'ard'
     },
     toggleSelectedHabitat: (state, a: PayloadAction<number>) => {
       const oldHabitatIds = [...state.query.habitatids]

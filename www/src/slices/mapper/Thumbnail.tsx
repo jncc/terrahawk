@@ -23,7 +23,8 @@ export let Thumb = (props: {
   nativeCoords: number[][][][],
   outlineSvg:   ReactElement
   indexname:    Indexname,
-  thumbType:    RootState['mapper']['thumbType']
+  thumbType:    RootState['mapper']['thumbType'],
+  platform:     RootState['mapper']['platform']
   }) => {
 
   let dispatch = useStateDispatcher()
@@ -49,7 +50,7 @@ export let Thumb = (props: {
 
   let div = useRef<HTMLDivElement>(null)
 
-  let thumbnailType = getThumbnailTypeArgument(props.thumbType, props.indexname)
+  let thumbnailType = getThumbnailTypeArgument(props.thumbType, props.indexname, props.platform)
 
   // set load to true when the div becomes visible
   useEffect(() => {
