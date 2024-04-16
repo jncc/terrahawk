@@ -8,19 +8,39 @@ from awsglue.dynamicframe import DynamicFrame
 
 # Source and destination parameters
 #===================================
-source_table_name = "monthly_nearest50"
-destination_table_name = "monthly_nearest50_20230125"
-destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/20230125/monthly-nearest50-2/"
-destination_partition_keys = ["framework", "indexname", "poly_partition"]
+source_table_name = "aggregated_monthly_20230718"
+destination_table_name = "aggregated_monthly_test_20240416"
+destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/testing/aggregated_monthly_test_20240416/"
+destination_partition_keys = ["framework", "year", "month"]
 
 # Data selection query
 #=====================
 
 # source_table is mapped to the table identified by the "source_table_name" variable above.
 sql = f'''
-    select * from source_table
+SELECT 
+  framework, 
+  cast(year as int) as year, 
+  cast(month as int) as month,
+  count , 
+  frameworkzone , 
+  indexname , 
+  polyid , 
+  seasonyear , 
+  season , 
+  date , 
+  frame, 
+  platform , 
+  habitat , 
+  mean , 
+  sd , 
+  median , 
+  min , 
+  max , 
+  q1 , 
+  q3 
+  FROM source;
 '''
-
 
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
     for alias, frame in mapping.items():
@@ -35,20 +55,17 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-
 source = glueContext.create_dynamic_frame.from_catalog(
     database="statsdb",
     table_name=source_table_name,
     transformation_ctx="source",
 )
 
-
 filterQuery = sparkSqlQuery(
   glueContext,
   query = sql,
   mapping = {"source_table": source},
   transformation_ctx = "filterQuery")
-
 
 sink = glueContext.getSink(
     format_options = {"compression": "snappy"},
@@ -62,6 +79,5 @@ sink = glueContext.getSink(
 sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = destination_table_name)
 sink.setFormat("glueparquet")
 sink.writeFrame(filterQuery)
-
 
 job.commit()
