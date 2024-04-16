@@ -39,7 +39,7 @@ SELECT
   max , 
   q1 , 
   q3 
-  FROM source;
+  FROM source_table;
 '''
 
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
