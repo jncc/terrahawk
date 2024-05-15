@@ -104,7 +104,8 @@ aggregateSql = f'''
         min(min) as min,
         max(max) as max,
         avg(q1) as q1,
-        avg(q3) as q3
+        avg(q3) as q3,
+        make_date(year, month, 1) as periodstartdate
     from raw 
     where framework in ({args['FRAMEWORKS']}) 
     {between_date_clause}
@@ -124,7 +125,7 @@ sink = glueContext.getSink(
     path = args['TARGET_PATH'],
     connection_type = "s3",
     updateBehavior = "UPDATE_IN_DATABASE",
-    partitionKeys = ["framework", "year", "month"],
+    partitionKeys = ["framework", "periodstartdate"],
     enableUpdateCatalog = True,
     transformation_ctx = "sink"
 )

@@ -9,8 +9,9 @@ from awsglue.dynamicframe import DynamicFrame
 # Source and destination parameters
 #===================================
 source_table_name = "aggregated_monthly_20230718"
-destination_table_name = "aggregated_monthly_test_20240416"
-destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/testing/aggregated_monthly_test_20240416/"
+filer_table_name = "Burn_plough_Surrey_Berkshire_polyids"
+destination_table_name = "aggregated_monthly_test_burn_plough_test"
+destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/testing/aggregated_monthly_test_burn_plough_test/"
 destination_partition_keys = ["framework", "year", "month"]
 
 # Data selection query
@@ -20,12 +21,12 @@ destination_partition_keys = ["framework", "year", "month"]
 sql = f'''
 SELECT 
   framework, 
-  cast(year as int) as year, 
-  cast(month as int) as month,
+  year, 
+  month,
   count , 
   frameworkzone , 
   indexname , 
-  polyid , 
+  source_table.polyid , 
   seasonyear , 
   season , 
   date , 
@@ -38,8 +39,11 @@ SELECT
   min , 
   max , 
   q1 , 
-  q3 
-  FROM source_table;
+  q3 ,
+  make_date(year, month, 1) as periodstartdate
+  FROM source_table
+   inner join poly_table on source_table.polyid = poly_table.polyid
+  WHERE framework in ('liveng1');
 '''
 
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
@@ -61,10 +65,17 @@ source = glueContext.create_dynamic_frame.from_catalog(
     transformation_ctx="source",
 )
 
+polyFilter = glueContext.create_dynamic_frame.from_catalog(
+    database="statsdb",
+    table_name=filer_table_name,
+    transformation_ctx="polyfilter",
+)
+
 filterQuery = sparkSqlQuery(
   glueContext,
   query = sql,
-  mapping = {"source_table": source},
+  mapping = {"source_table": source,
+             "poly_table": polyFilter},
   transformation_ctx = "filterQuery")
 
 sink = glueContext.getSink(
