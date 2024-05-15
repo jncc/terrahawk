@@ -12,7 +12,7 @@ source_table_name = "aggregated_monthly_20230718"
 filer_table_name = "Burn_plough_Surrey_Berkshire_polyids"
 destination_table_name = "aggregated_monthly_test_burn_plough_test"
 destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/testing/aggregated_monthly_test_burn_plough_test/"
-destination_partition_keys = ["framework", "year", "month"]
+destination_partition_keys = ["framework", "periodstartdate"]
 
 # Data selection query
 #=====================
