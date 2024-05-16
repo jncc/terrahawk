@@ -9,8 +9,8 @@ from awsglue.dynamicframe import DynamicFrame
 # Source and destination parameters
 #===================================
 source_table_name = "aggregated_monthly_test_burn_plough_test"
-destination_table_name = "polygon-monthly-change-test"
-destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/testing/polygon-monthly-change-test/"
+destination_table_name = "polygon_monthly_change_burn_plough_test"
+destination_bucket_key = "s3://jncc-habmon-alpha-stats-data/testing/polygon-monthly-change-burn-plough-test/"
 destination_partition_keys = ["framework", "year", "month"]
 
 # Data selection query
@@ -28,6 +28,8 @@ sql = f'''
         a.season,
         a.platform,
         a.habitat,
+        array_union(a.date, b.date) as dates,
+        array_union(a.frame, b.frame) as frames,
         (a.mean - b.mean)/2 as pm_mean_change,
         (a.sd - b.sd)/2 as pm_sd_change,
         (a.median - b.median)/2 as pm_median_change,
@@ -36,12 +38,12 @@ sql = f'''
         (a.q1 - b.q1)/2 as pm_q1_change,
         (a.q3 - b.q3)/2 as pm_q3_change
     from source_table as a
-        inner source_table as b on a.framework = b.framework 
+        inner join source_table as b on a.framework = b.framework 
         and a.polyid = b.polyid
         and a.indexname = b.indexname
         and b.periodstartdate = add_months(a.periodstartdate, -1)
     where a.platform = 'S2'
-    and a.framework = 'liveng1'
+    and a.framework = 'liveng1
 '''
 
 
@@ -85,6 +87,5 @@ sink = glueContext.getSink(
 sink.setCatalogInfo(catalogDatabase = "statsdb", catalogTableName = destination_table_name)
 sink.setFormat("glueparquet")
 sink.writeFrame(filterQuery)
-
 
 job.commit()
