@@ -43,7 +43,7 @@ sql = f'''
         and a.indexname = b.indexname
         and b.periodstartdate = add_months(a.periodstartdate, -1)
     where a.platform = 'S2'
-    and a.framework = 'liveng1
+    and a.framework = 'liveng1'
 '''
 
 
