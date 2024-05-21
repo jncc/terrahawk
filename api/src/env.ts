@@ -2,7 +2,7 @@
 // Validate and provide environment variables
 
 import * as dotenv from 'dotenv'
-import { projections } from './thumbnails/config'
+
 dotenv.config()
 
 let NODE_ENV                        = process.env.NODE_ENV as 'development' | 'production' | undefined
@@ -57,6 +57,9 @@ export const env = {
     NODE_ENV,
     AWS_PROFILE,
     PGHOST,
+    PGDATABASE,
+    PGUSER,
+    PGPASSWORD,
     MONTHLY_NEAREST_50_TABLE,
     MONTHLY_NEAREST_50_TEST_TABLE,
     CEDA_ARD_URL_BASE,
