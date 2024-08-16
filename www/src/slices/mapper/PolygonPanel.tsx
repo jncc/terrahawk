@@ -80,7 +80,7 @@ let makeLoadedPolygonDetails = (selectedPolygonStats: MonthStats[], query: Query
   // group stats into years
   let statsGroupedByYears = groupBy(filteredStats, s => s.year)
 
-  // frames displayed need to be the year of the selected frame, or else (if none selected) a sensible default
+  // thumbnails displayed need to be the year of the selected frame, or else (if none selected) a sensible default
   let yearOfSelectedFrame = framesWithDate.filter(x => x.frame === selectedFrame).map(x => x.date.year.toString()).find(() => true) // ie, first()
   let yearOfFramesToUse = yearOfSelectedFrame ? yearOfSelectedFrame : mostRecentFullYear
   let oneYearOfFramesWithDate = framesWithDate.filter(x => x.date.year === Number.parseInt(yearOfFramesToUse))

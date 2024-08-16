@@ -34,8 +34,7 @@ function getYearMonthDayString(frameId : string) {
 function getArdFilename(frameId : string) {
   let ardFilename = null
   if (frameId.toLocaleLowerCase().startsWith('s1')) {
-    let ardProductName = frameId.substring(0, frameId.length - 3) // remove the two letter OSGB code from the end, e.g. _SD
-    ardFilename = ardProductName + '.tif'
+    ardFilename = frameId + '.tif'
   } else {
     ardFilename = frameId + '_vmsk_sharp_rad_srefdem_stdsref.tif'
   }

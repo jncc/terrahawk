@@ -12,6 +12,7 @@ import { Indexname, Poly, SimpleDate } from './types'
 import { height, width, getThumbnailTypeArgument } from './helpers/thumbnailHelper'
 import { getCacheItem , setCacheItem } from './helpers/cacheHelper'
 import { RootState } from '../../state/store'
+import { frameworks } from '../../frameworks'
 
 const ARD_URL_BASE = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/data'
 const INDICES_URL_BASE = 'https://dap.ceda.ac.uk/neodc/sentinel_ard/indices'
@@ -51,6 +52,7 @@ export let Thumb = (props: {
   let div = useRef<HTMLDivElement>(null)
 
   let thumbnailType = getThumbnailTypeArgument(props.thumbType, props.indexname, props.platform)
+  let frameId = getFixedFrameId(props.frame, props.indexname, currentFramework.defaultQuery.tableName)
 
   // set load to true when the div becomes visible
   useEffect(() => {
@@ -84,10 +86,10 @@ export let Thumb = (props: {
     if (load && !loaded) {
       let bbox = ThumbnailGenerator.getBoundingBoxWithBuffer(props.nativeCoords, 0.05)
       if (useProxy) {
-        let url = `${API_URL_BASE}/thumb?framename=${props.frame}&framework=${currentFramework.defaultQuery.tableName}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
+        let url = `${API_URL_BASE}/thumb?framename=${frameId}&framework=${currentFramework.defaultQuery.tableName}&thumbType=${thumbnailType}&bbox=${JSON.stringify(bbox)}`
         setSrc(url)
       } else {
-        getThumbnailWithCache(props.frame, selectedPolygon.polyid, bbox, thumbnailType).then((imgSrc) => setSrc(imgSrc))
+        getThumbnailWithCache(frameId, selectedPolygon.polyid, bbox, thumbnailType).then((imgSrc) => setSrc(imgSrc))
       } 
     }
 
@@ -158,5 +160,29 @@ export let Thumb = (props: {
     }
   
     return thumbnailString
+  }
+
+  // todo: clean the data instead of doing this hack to handle the older Scotland S1
+  // Need to revisit the concept of "frames" as the CEDA indices files will no longer be gridded.
+  // Scotland frame name: S1A_20170418_30_asc_175858_175923_VVVH_G0_GB_OSGB_RTCK_SpkRL_NH
+  // Scotland index file: S1A_20160223_30_asc_175856_175921_VVVH_G0_GB_OSGB_RTCK_SpkRL_NH_RVI.tif
+  // England frame name: S1A_20231108_132_asc_175013_175038_VVVH_G0_GB_OSGB_RTCK_SpkRL_RVI_TL
+  // England index file: S1A_20231108_125_desc_063725_063750_VVVH_G0_GB_OSGB_RTCK_SpkRL_RVI.tif
+  function getFixedFrameId(frame: string, indexname: string, framework: string) {
+    let frameId = frame
+    
+    if (frameId.startsWith('S1')) {
+      // remove two letter grid ref, e.g. _TL
+      frameId =  frameId.slice(0, -3)
+    }
+    
+    if (framework != frameworks.spaceint2022Cairngorms.defaultQuery.tableName) {
+      // remove index name, e.g. _RVI
+      let indexNameCharCount = indexname.length
+      let end = (indexNameCharCount+1) * -1
+      frameId = frameId.slice(0, end)
+    }
+
+    return frameId
   }
 }
