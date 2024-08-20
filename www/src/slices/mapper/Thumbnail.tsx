@@ -52,7 +52,7 @@ export let Thumb = (props: {
   let div = useRef<HTMLDivElement>(null)
 
   let thumbnailType = getThumbnailTypeArgument(props.thumbType, props.indexname, props.platform)
-  let frameId = getFixedFrameId(props.frame, props.indexname, currentFramework.defaultQuery.tableName)
+  let frameId = getFixedFrameId(props.frame, props.indexname, thumbnailType, currentFramework.defaultQuery.tableName)
 
   // set load to true when the div becomes visible
   useEffect(() => {
@@ -162,25 +162,37 @@ export let Thumb = (props: {
     return thumbnailString
   }
 
-  // todo: clean the data instead of doing this hack to handle the older Scotland S1
+  // todo: clean the data instead of doing this hack to handle the older Scotland S1 and older England S2
   // Need to revisit the concept of "frames" as the CEDA indices files will no longer be gridded.
-  // Scotland frame name: S1A_20170418_30_asc_175858_175923_VVVH_G0_GB_OSGB_RTCK_SpkRL_NH
-  // Scotland index file: S1A_20160223_30_asc_175856_175921_VVVH_G0_GB_OSGB_RTCK_SpkRL_NH_RVI.tif
-  // England frame name: S1A_20231108_132_asc_175013_175038_VVVH_G0_GB_OSGB_RTCK_SpkRL_RVI_TL
-  // England index file: S1A_20231108_125_desc_063725_063750_VVVH_G0_GB_OSGB_RTCK_SpkRL_RVI.tif
-  function getFixedFrameId(frame: string, indexname: string, framework: string) {
+  // Scotland S1 frame name: S1A_20170418_30_asc_175858_175923_VVVH_G0_GB_OSGB_RTCK_SpkRL_NH
+  // Scotland S1 index file: S1A_20160223_30_asc_175856_175921_VVVH_G0_GB_OSGB_RTCK_SpkRL_NH_RVI.tif
+  // Scotland S2 frame name: S2A_20170108_lat57lon375_T30VVJ_ORB080_utm30n_osgb
+  // Scotland S2 index file: S2B_20231231_latn572lonw0037_T30VVJ_ORB123_20231231122953_utm30n_osgb_NDVI.tif
+  // England S1 frame name: S1A_20231108_132_asc_175013_175038_VVVH_G0_GB_OSGB_RTCK_SpkRL_RVI_TL
+  // England S1 index file: S1A_20231108_125_desc_063725_063750_VVVH_G0_GB_OSGB_RTCK_SpkRL_RVI.tif
+  // England S2 frame names: S2A_20151209_lat54lon081_T31UCV_ORB137_utm31n_osgb
+  //                         S2B_20220507_lat54lon368_T30UVE_ORB080_utm30n_osgb_NDVI
+  // England S2 index file: S2B_20221014_lat55lon37_T30UVF_ORB080_utm30n_osgb_NDVI.tif
+  function getFixedFrameId(frame: string, indexname: string, thumbType: string, framework: string) {
     let frameId = frame
     
-    if (frameId.startsWith('S1')) {
-      // remove two letter grid ref, e.g. _TL
-      frameId =  frameId.slice(0, -3)
-    }
-    
     if (framework != frameworks.spaceint2022Cairngorms.defaultQuery.tableName) {
-      // remove index name, e.g. _RVI
-      let indexNameCharCount = indexname.length
-      let end = (indexNameCharCount+1) * -1
-      frameId = frameId.slice(0, end)
+      if (frameId.startsWith('S1') ) {
+        // remove two letter grid ref, e.g. _TL
+        frameId =  frameId.slice(0, -3)
+      }
+
+      if (frameId.endsWith(indexname)) {
+        // remove index name, e.g. _RVI
+        let indexNameCharCount = indexname.length
+        let end = (indexNameCharCount+1) * -1
+        frameId = frameId.slice(0, end)
+      }
+    } else {
+      if (frameId.startsWith('S1') && thumbType != indexname.toLowerCase()) {
+        // remove two letter grid ref for falseColour thumbs only
+        frameId =  frameId.slice(0, -3)
+      }
     }
 
     return frameId
