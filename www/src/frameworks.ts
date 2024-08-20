@@ -2,7 +2,6 @@
 import { Framework } from './slices/mapper/types'
 
 // could dynamically load framework boundaries in the future to avoid bundling them
-import liveng0Boundary from './assets/frameworks/liveng0-boundary.json'
 import liveng1Boundary from './assets/frameworks/liveng1-boundary.json'
 import cairngormsBoundary from './assets/frameworks/cairngorms-boundary.json'
 
@@ -124,6 +123,6 @@ export const frameworks: {[framework: string]: Framework} = {
       monthTo: 12,
       habitatids: [],
     },
-    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI', 'RVI', 'VVVH', 'VHVV', 'RFDI']
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI', 'RVI', 'RFDI']
   }
 }
