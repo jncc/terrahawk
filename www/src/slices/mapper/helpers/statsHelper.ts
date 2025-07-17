@@ -18,6 +18,7 @@ export const indexnames: {[name in Indexname]: { name: string, description: stri
   'NDMI': {name: 'NDMI',  description: 'moisture',   },
   'NDVI': {name: 'NDVI',  description: 'vegetation', },
   'NDWI': {name: 'NDWI',  description: 'water',      },
+  'EVI2': {name: 'EVI2',  description: 'enhanced vegetation', },
   'RVI':  {name: 'RVI',   description: 'SAR vegetation', },
   'VVVH': {name: 'VV/VH', description: 'SAR cross-ratio', },
   'VHVV': {name: 'VH/VV', description: 'SAR cross-ratio', },

@@ -56,6 +56,30 @@ export const frameworks: {[framework: string]: Framework} = {
     },
     availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI']
   },
+  liveng2: {
+    name: `Living England 2022`,
+    srs: `osgb`,
+    boundary: liveng1Boundary,
+    maxBounds: {northEast: {lat: 60, lng: 3}, southWest: {lat: 48, lng: -11}},
+    defaultZoom: 8,
+    maxZoom: 18,
+    minZoom: 7,
+    // defaultZoom: 13,
+    bboxPadding: {latPad: 0.02, lngPad: 0.04},
+    polygonZoomThreshold: 13,
+    defaultQuery: {
+      tableName: 'liveng2',
+      center: {lat: 54, lng: -1.4},
+      indexname: 'NDVI',
+      statistic: 'mean',
+      yearFrom: 2022,
+      monthFrom: 1,
+      yearTo: 2022,
+      monthTo: 12,
+      habitatids: [],
+    },
+    availableIndices: ['NBR', 'NDMI', 'NDVI', 'NDWI', 'EVI2', 'VHVV']
+  },
   habmosCairngorms: {
     name: `Habitat Map of Scotland: Cairngorms subset`,
     srs: `osgb`,

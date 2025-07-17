@@ -77,6 +77,12 @@ export const thumbnailConfig : Dictionary<any> = {
     displayName: 'NBR',
     domain: [-1, 1],
     colourScale: 'nbr'
+  },
+  evi2: {
+    text: 'EVI2',
+    displayName: 'EVI2',
+    domain: [-1, 1],
+    colourScale: 'evi2'
   }
 }
 
@@ -98,6 +104,11 @@ export const colourScales = [
   },
   {
     name: 'ndvi',
+    colours: ['#f2f2f2', '#f0c9c0', '#edb48e', '#ebb25e', '#e8c32e', '#e6e600', '#8bd000', '#3ebb00', '#00a600'],
+    positions: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
+  },
+  {
+    name: 'evi2',
     colours: ['#f2f2f2', '#f0c9c0', '#edb48e', '#ebb25e', '#e8c32e', '#e6e600', '#8bd000', '#3ebb00', '#00a600'],
     positions: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1]
   },

@@ -6,7 +6,7 @@ import { Poly, ChoroplethItem, Framework, Indexname, isS1Index, isS2Index, Polyg
 import { frameworks } from '../../frameworks'
 import { getFramesWithDate } from './helpers/frameHelpers'
 
-let defaultFramework = frameworks['liveng1']
+let defaultFramework = frameworks['liveng2']
 let defaultQuery = defaultFramework.defaultQuery
 
 let slice = createSlice({
